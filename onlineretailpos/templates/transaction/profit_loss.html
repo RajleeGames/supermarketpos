@@ -1,0 +1,214 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}Profit & Loss{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="card shadow mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <div>
+        <h6 class="m-0 font-weight-bold text-primary">Profit &amp; Loss</h6>
+
+        {% if is_filtered %}
+          <small class="text-muted">
+            Active filters:
+            {% if start_date %}<span class="badge badge-info mr-1">From: {{ start_date }}</span>{% endif %}
+            {% if end_date %}<span class="badge badge-info">To: {{ end_date }}</span>{% endif %}
+          </small>
+        {% else %}
+          <small class="text-muted">Showing: <span class="font-weight-medium">All time</span></small>
+        {% endif %}
+      </div>
+
+      <form class="form-inline" method="get" id="pl-filter-form">
+        <label class="mr-2 small text-muted">From</label>
+        <input type="date" name="start_date" class="form-control form-control-sm mr-2" value="{{ start_date|default_if_none:'' }}">
+        <label class="mr-2 small text-muted">To</label>
+        <input type="date" name="end_date" class="form-control form-control-sm mr-2" value="{{ end_date|default_if_none:'' }}">
+
+        <button class="btn btn-sm btn-primary mr-1" type="submit"><i class="fas fa-filter"></i> Filter</button>
+
+        {# Reset link — clears all GET params by going to the same path without query string #}
+        <a href="{{ request.path }}" class="btn btn-sm btn-outline-danger" title="Clear filters"><i class="fas fa-undo"></i> Reset</a>
+      </form>
+    </div>
+
+    <div class="card-body">
+      <div class="row mb-4">
+        <div class="col-md-8">
+          <div id="plBar" style="height:360px;"></div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="card mb-3 border-left-success">
+            <div class="card-body">
+              <h6 class="mb-2">Summary</h6>
+              <table class="table table-borderless table-sm mb-0">
+                <tr>
+                  <th>Period</th>
+                  <td>
+                    {% if start_date or end_date %}
+                      {{ start_date|default:"—" }} — {{ end_date|default:"—" }}
+                    {% else %}
+                      All time
+                    {% endif %}
+                  </td>
+                </tr>
+                <tr>
+                  <th>Total Revenue</th>
+                  <td class="text-success format-money">
+                    {{ currency_symbol|default:"TZS" }} {{ total_revenue|default:0|floatformat:2|intcomma }}
+                  </td>
+                </tr>
+                <tr>
+                  <th>Cost of Goods Sold</th>
+                  <td class="text-warning format-money">
+                    {{ currency_symbol|default:"TZS" }} {{ total_cogs|default:0|floatformat:2|intcomma }}
+                  </td>
+                </tr>
+                <tr>
+                  <th>Taxes</th>
+                  <td class="text-info format-money">
+                    {{ currency_symbol|default:"TZS" }} {{ total_tax|default:0|floatformat:2|intcomma }}
+                  </td>
+                </tr>
+                <tr>
+                  <th>Expenses</th>
+                  <td class="text-danger format-money">
+                    {{ currency_symbol|default:"TZS" }} {{ total_expenses|default:0|floatformat:2|intcomma }}
+                  </td>
+                </tr>
+                <tr class="border-top">
+                  <th>Gross Profit</th>
+                  <td><strong class="format-money">{{ currency_symbol|default:"TZS" }} {{ gross_profit|default:0|floatformat:2|intcomma }}</strong></td>
+                </tr>
+                <tr>
+                  <th>Net Profit</th>
+                  <td><strong class="format-money">{{ currency_symbol|default:"TZS" }} {{ net_profit|default:0|floatformat:2|intcomma }}</strong></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-body">
+              <h6 class="mb-2">Actions</h6>
+              <a href="{% url 'expenses_add' %}" class="btn btn-sm btn-outline-primary btn-block mb-2">
+                <i class="fas fa-plus-circle"></i> Add Expense
+              </a>
+              <a href="{% url 'expenses_list' %}" class="btn btn-sm btn-outline-secondary btn-block">
+                <i class="fas fa-list"></i> View All Expenses
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Optional breakdown table -->
+      <div class="row">
+        <div class="col-12">
+          <div class="card border-left-info">
+            <div class="card-body">
+              <h6 class="font-weight-bold text-info">Breakdown</h6>
+              <div class="table-responsive">
+                <table class="table table-sm mb-0">
+                  <thead>
+                    <tr><th>Item</th><th class="text-right">Amount ({{ currency_symbol|default:"TZS" }})</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Revenue</td>
+                      <td class="text-right text-success format-money">{{ currency_symbol|default:"TZS" }} {{ total_revenue|default:0|floatformat:2|intcomma }}</td>
+                    </tr>
+                    <tr>
+                      <td>COGS</td>
+                      <td class="text-right text-warning format-money">{{ currency_symbol|default:"TZS" }} {{ total_cogs|default:0|floatformat:2|intcomma }}</td>
+                    </tr>
+                    <tr>
+                      <td>Taxes</td>
+                      <td class="text-right text-info format-money">{{ currency_symbol|default:"TZS" }} {{ total_tax|default:0|floatformat:2|intcomma }}</td>
+                    </tr>
+                    <tr>
+                      <td>Expenses</td>
+                      <td class="text-right text-danger format-money">{{ currency_symbol|default:"TZS" }} {{ total_expenses|default:0|floatformat:2|intcomma }}</td>
+                    </tr>
+                    <tr class="border-top">
+                      <td><strong>Net Profit</strong></td>
+                      <td class="text-right"><strong class="format-money">{{ currency_symbol|default:"TZS" }} {{ net_profit|default:0|floatformat:2|intcomma }}</strong></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div> <!-- /.card-body -->
+  </div> <!-- /.card -->
+</div> <!-- /.container-fluid -->
+
+{% block script %}
+  {# Plotly CDN (safe to include even if your base already loads it) #}
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+  <script>
+    // Use numeric defaults to avoid JS errors if context variables are missing.
+    const revenue = Number({{ total_revenue|default:0 }});
+    const cogs = Number({{ total_cogs|default:0 }});
+    const taxes = Number({{ total_tax|default:0 }});
+    const expenses = Number({{ total_expenses|default:0 }});
+    const gross = Number({{ gross_profit|default:0 }});
+    const net = Number({{ net_profit|default:0 }});
+
+    const values = [revenue, cogs, taxes, expenses, gross, net];
+
+    const trace = {
+      x: ['Revenue','COGS','Taxes','Expenses','Gross Profit','Net Profit'],
+      y: values,
+      type: 'bar',
+      marker: {
+        color: ['#2ecc71', '#f39c12', '#3498db', '#e74c3c', '#1abc9c', '#9b59b6']
+      },
+      // show comma separated with two decimals
+      text: values.map(v => (v || 0).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})),
+      textposition: 'auto'
+    };
+
+    const layout = {
+      margin: {t:30, r:20, l:40, b:80},
+      yaxis: {title: 'Amount ({{ currency_symbol|default:"TZS" }})'},
+      xaxis: {tickangle: -30},
+      height: 360
+    };
+
+    Plotly.newPlot('plBar', [trace], layout, {responsive: true});
+
+    // Small fallback: format numeric-looking elements that didn't get server-side commas.
+    (function formatFallback(){
+      const currency = "{{ currency_symbol|default:'TZS' }}";
+      function looksPlainNumeric(text){
+        if (!text) return false;
+        // allow optional leading currency letters, but we only format if the content is digits/dot/comma/space/minus
+        return /^[\d\-\.\s]+$/.test(text.trim());
+      }
+      document.querySelectorAll('.format-money').forEach(function(el){
+        try {
+          const raw = (el.innerText || '').trim();
+          // if it already contains a comma or currency letters, skip (assume server-side formatted)
+          if (raw.indexOf(',') !== -1 || /[A-Za-z]/.test(raw)) return;
+          if (looksPlainNumeric(raw)) {
+            const n = Number(raw.replace(/[, ]/g,''));
+            if (!isNaN(n)) {
+              el.innerText = currency + ' ' + n.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            }
+          }
+        } catch(e){ /* ignore */ }
+      });
+    })();
+
+  </script>
+{% endblock %}
+{% endblock %}

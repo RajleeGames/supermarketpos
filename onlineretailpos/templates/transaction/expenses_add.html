@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Add Expense{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-lg-8">
+      <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+          <h6 class="m-0 font-weight-bold text-primary">Add Expense</h6>
+          <a href="{% url 'expenses_list' %}" class="btn btn-sm btn-secondary">View Expenses</a>
+        </div>
+        <div class="card-body">
+          <form method="post" novalidate>
+            {% csrf_token %}
+            <div class="form-row">
+              <div class="form-group col-md-4">
+                <label for="id_amount">Amount</label>
+                {{ form.amount }}
+              </div>
+              <div class="form-group col-md-4">
+                <label for="id_category">Category</label>
+                {{ form.category }}
+              </div>
+              <div class="form-group col-md-4">
+                <label class="d-block">&nbsp;</label>
+                <button type="submit" class="btn btn-primary btn-block">Save Expense</button>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="id_note">Note (optional)</label>
+              {{ form.note }}
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="card shadow mb-4 border-left-info">
+        <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-info">Quick Tips</h6>
+        </div>
+        <div class="card-body">
+          <p class="small text-muted">
+            - Use meaningful notes so you remember why the expense was recorded.<br>
+            - Categories help group expenses for monthly reporting.<br>
+            - You can view Profit &amp; Loss to see how expenses affect your net profit.
+          </p>
+        </div>
+      </div>
+
+      <div class="card shadow mb-4 border-left-success">
+        <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-success">Shortcuts</h6>
+        </div>
+        <div class="card-body">
+          <a class="btn btn-outline-primary btn-block mb-2" href="{% url 'profit_loss' %}">View Profit &amp; Loss</a>
+          <a class="btn btn-outline-secondary btn-block" href="{% url 'expenses_list' %}">All Expenses</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

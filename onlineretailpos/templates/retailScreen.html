@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 {% load mathfilters %}
+{% load humanize %}
+{% load static %}
 
 {% block title %}
 Register | Online Retail POS
@@ -13,15 +15,32 @@ Register | Online Retail POS
 <div class="row" style="width: 100%;padding-right: 0px;">
     <div class="col-lg-6">
         <div class="row mb-0" style="padding-bottom:5px;">
-            <form class="form col-lg-6" action="{{ request.get_full_path }}" method = "POST" style="width:100%;padding-bottom: 10px;padding:10px;padding-top: 15px;">
+
+            <!-- ===== product search + existing barcode form (paste in place of your existing form block) ===== -->
+            <!-- Search input (autocomplete) -->
+            <div class="mb-2" style="width:100%; padding:10px 10px 0 10px;">
+              <label class="small text-dark">Search product (type name or barcode)</label>
+              <div style="position:relative;">
+                <input id="product-search-input" class="form-control" type="text" autocomplete="off" placeholder="Search products by name or barcode..." style="width:100%;" />
+                <div id="product-search-list" style="position:absolute;left:0;right:0;z-index:1050;background:#fff;border:1px solid rgba(0,0,0,.08);max-height:320px;overflow:auto;display:none;"></div>
+              </div>
+            </div>
+
+            <!-- Your original form kept intact (scan / manual barcode entry) -->
+            <form class="form col-lg-6" action="{{ request.get_full_path }}" method="POST" style="width:100%;padding-bottom: 10px;padding:10px;padding-top: 15px;">
                 {% csrf_token %}
                 <div class="row" style="width:100%;justify-content: center;">
                 {% for field in form %}
-                <ul style="padding-left:25px;width:300px;"><strong style="color:black;width:100%;padding-right: 15px;padding-left: 10px;">{{ field.label }} :</strong> {{ field }}</ul>
+                <ul style="padding-left:25px;width:300px;">
+                    <strong style="color:black;width:100%;padding-right: 15px;padding-left: 10px;">{{ field.label }} :</strong>
+                    {{ field }}
+                </ul>
                 {% endfor %}
                 </div>
                 <input class="btn btn-primary"  style="width:100%;margin-top: 10px;" id="submit-barcode" type="submit" value="Submit">
             </form>
+            <!-- ===== end search + form ===== -->
+
             <div class="col-lg-6 card border-left-success shadow-sm h-100 py-2" style="width:100%;margin-top:10px;margin-bottom: 10px;">
                 <div class="card-header py-2">
                     <h6 class="mb-0 font-weight-bold text-uppercase text-success ">Transaction Info</h6>
@@ -30,22 +49,27 @@ Register | Online Retail POS
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">
-                                <strong>Sub Total : </strong>{{ total|sub:tax_total|floatformat:2 }}
+                                <strong>Sub Total : </strong>{{ total|sub:tax_total|floatformat:2|intcomma }}
                             </div>
                             <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">
-                                <strong>Tax Total : </strong>{{ tax_total|floatformat:2 }}</div>
+                                <strong>Tax Total : </strong>{{ tax_total|floatformat:2|intcomma }}
+                            </div>
                             <div class="text-xl font-weight-bold text-success text-uppercase mb-1">
-                                <strong>Total : </strong></div>
-                            <div class="h3 mb-0 font-weight-bold text-gray-800" style="text-align:right;" >{{ total|floatformat:2 }}</div>
+                                <strong>Total : </strong>
+                            </div>
+                            <div class="h3 mb-0 font-weight-bold text-gray-800" style="text-align:right;">
+                                {{ currency }} {{ total|floatformat:2|intcomma }}
+                            </div>
                         </div>
                         <div class="col-auto">
-                            <i class="fas fa-dollar-sign fa-3x text-gray-300"></i>
+                            <span class="h3 mb-0 font-weight-bold text-gray-300">{{ currency }}</span>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="row mb-2" id="cart_display"  style="padding-top: 10px; padding-bottom: 0px;">
+
+        <div class="row mb-2" id="cart_display" style="padding-top: 10px; padding-bottom: 0px;">
             {% if no_product %}
             <div class="loginPopup" id='popup'>
                 <div class="formPopup" id="popupForm" style="display:block">
@@ -56,6 +80,18 @@ Register | Online Retail POS
                 </div>
             </div>
             {% endif %}
+
+            {# STOCK ERROR ALERT FROM VIEWS (plays sound) #}
+            {% if stock_error %}
+            <div class="alert alert-danger text-center fw-bold" role="alert" id="stock-error-alert">
+                {{ stock_error }}
+            </div>
+            <script>
+                // play sound when server reported a stock error
+                setTimeout(function(){ try{ playStockAlert(); }catch(e){} }, 50);
+            </script>
+            {% endif %}
+
             <div class="card shadow-sm" style="width:100%;height:465px;">
                 <div class="card-header py-3">
                     <h6 class="m-0 font-weight-bold text-primary">Transaction Details</h6>
@@ -64,7 +100,6 @@ Register | Online Retail POS
                     <table class="table" style="text-align:right;">
                         <tr>
                             <th style="font-family: bold;color:rgba(0, 0, 0, 0.623)" >Barcode/Name</th>
-                            <!-- <th style="font-family: bold;color:rgba(0, 0, 0, 0.623)">Name</th> -->
                             <th style="font-family: bold;color:rgba(0, 0, 0, 0.623)">Qty</th>
                             <th style="font-family: bold;color:rgba(0, 0, 0, 0.623)">Price</th>
                             <th style="font-family: bold;color:rgba(0, 0, 0, 0.623)">L-Total<br>Tax</th>
@@ -72,23 +107,42 @@ Register | Online Retail POS
                             <th style="font-family: bold;color:rgba(0, 0, 0, 0.623)">Line<br>Total</th>
                         </tr>
                         {% for key, value in cart.items %}
-                        <tr>
-                            <th style="text-align:left">{{key}} <br> {{value.name}}</th>
-                            <!-- <td>{{value.name}}</td> -->
-                            <td>{{value.quantity}}</td>
-                            <td>{{value.price}}</td>
-                            <td>{{value.tax_value}}</td>
-                            <td>{{value.deposit_value}}</td>
-                            <td>{{value.line_total}}</td>
+                        <tr data-barcode="{{ key }}">
+                            <th style="text-align:left; vertical-align: middle;">
+                                {{ key }} <br> {{ value.name }}
+
+                                {# low-stock indicator (uses cart item flags provided by Cart) #}
+                                {% if value.low_stock %}
+                                    <div style="margin-top:6px;">
+                                        {% if value.stock_left|default:0 <= 0 %}
+                                            <span style="display:inline-block;padding:4px 8px;background:#b02a37;color:#fff;border-radius:6px;font-weight:700;margin-top:4px;">OUT OF STOCK</span>
+                                        {% else %}
+                                            <span style="display:inline-block;padding:4px 8px;background:#ffc107;color:#000;border-radius:6px;font-weight:700;margin-top:4px;">
+                                                ⚠ LOW STOCK — {{ value.stock_left }} left
+                                            </span>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+                            </th>
+
+                            <!-- Qty column: simplified static display to save space (no +/- or update controls) -->
+                            <td style="vertical-align: middle;text-align:center;">
+                                <div style="font-weight:600;">{{ value.quantity }}</div>
+                            </td>
+
+                            <td>{{ currency }} {{ value.price|floatformat:2|intcomma }}</td>
+                            <td>{{ currency }} {{ value.tax_value|floatformat:2|intcomma }}</td>
+                            <td>{{ currency }} {{ value.deposit_value|floatformat:2|intcomma }}</td>
+                            <td>{{ currency }} {{ value.line_total|floatformat:2|intcomma }}</td>
                         </tr>
                         {% endfor %}
-                    </table> 
+                    </table>
                 </div>
             </div>
         </div>
-        
-        
+
     </div>
+
     <div class="col-lg-6" >
         <hr >
         <div class="btn-block" style="padding-top: 10px;text-align:center">
@@ -98,72 +152,226 @@ Register | Online Retail POS
             <button id="disable_4" onclick="return window.open('/register/cart_clear/',target='_self')" class="btn btn-danger" style="width:23%;margin:2px;height:60px;margin-bottom:5px"> Clear<br>Transaction </button>
         </div>
         <hr >
+
+        <!-- Payment buttons: only Debit/Credit, EBT and CASH (no quick dollar shortcuts) -->
         <div class="btn-block" style="padding-top: 10px;text-align:center" >
-            <button id="disable_P_1" onclick="return window.open('/endTransaction/card/DEBIT_CREDIT/',target='_self')" class="btn btn-success" style="width:23%;height:60px; margin:2px;margin-bottom:5px;background-color:darkgreen" > Debit/<br>Credit </button>
-            <button id="disable_P_2" onclick="endTransactionCash(5,'{{ total }}')" class="btn btn-success" style="width:23%;margin:2px;height:60px;margin-bottom:5px"> 5$ </button>
-            <button id="disable_P_3" onclick="endTransactionCash(10,'{{ total }}')" class="btn btn-success" style="width:23%;margin:2px;height:60px;margin-bottom:5px"> 10$ </button>
-            <button id="disable_P_4" onclick="endTransactionCash('Next','{{ total }}')" class="btn btn-success" style="width:23%;margin:2px;height:60px;margin-bottom:5px;background-color:rgb(27, 66, 27)"> Next<br>Dollar </button>
-            <button id="disable_P_5" onclick="return window.open('/endTransaction/card/EBT/',target='_self')" class="btn btn-success" style="width:23%;margin: 2px;height:60px;margin-bottom:5px;background-color:darkgreen"> EBT </button>
-            <button id="disable_P_6" onclick="endTransactionCash(20,'{{ total }}')" class="btn btn-success" style="width:23%;margin:2px;height:60px;margin-bottom:5px" > 20$ </button>
-            <button id="disable_P_7" onclick="endTransactionCash(50,'{{ total }}')" class="btn btn-success" style="width:23%;margin: 2px;height:60px;margin-bottom:5px"> 50$ </button>
-            <button id="disable_P_8" onclick="endTransactionCash('CASH','{{ total }}')" class="btn btn-success" style="width:23%;margin:2px;height:60px;margin-bottom:5px;background-color:rgb(27, 66, 27)"> CASH </button>
+            <button id="disable_P_1" onclick="return window.open('/endTransaction/card/DEBIT_CREDIT/',target='_self')" class="btn btn-success" style="width:32%;height:60px; margin:2px;margin-bottom:5px;background-color:darkgreen" > Debit/<br>Credit </button>
+
+            <button id="disable_P_5" onclick="return window.open('/endTransaction/card/EBT/',target='_self')" class="btn btn-success" style="width:32%;margin: 2px;height:60px;margin-bottom:5px;background-color:darkgreen"> EBT </button>
+
+            <button id="disable_P_8" onclick="endTransactionCash('CASH','{{ total }}')" class="btn btn-success" style="width:32%;margin:2px;height:60px;margin-bottom:5px;background-color:rgb(27, 66, 27)"> CASH </button>
         </div>
+
         <div class="loginPopup" id='cash_popup'> </div>
         <hr >
+
         <div class="btn-block"  style="height: 353px;overflow:scroll;text-align:center;padding-top: 7px;">
             {% for i in displayed_items %}
-             <!-- only 24 buttons to be added per section  -->
             {% if i.variable_price %}
-            <button onclick="variableAmount('{{i.barcode}}','{{ i.display_name }}','{{ i.display_info }}')" class="btn btn-primary" style="width:23%;margin:2px;height:60px;margin-bottom:5px;margin-top:5px;background-color:'{{ i.display_color }}'"> {{ i.display_name }} </a>
+            <button onclick="variableAmount('{{i.barcode}}','{{ i.display_name }}','{{ i.display_info }}')" class="btn btn-primary" style="width:23%;margin:2px;height:60px;margin-bottom:5px;margin-top:5px;background-color:'{{ i.display_color }}'"> {{ i.display_name }} </button>
             {% else %}
             <button onclick="return window.open('/cart/add/{{i.barcode}}/1/',target='_self')" class="btn btn-dark" style="width:23%;margin:2px;height:60px;margin-bottom:5px;background-color:'{{ i.display_color }}'" >  {{ i.display_name }} </button>
             {% endif %}
             {% endfor %}
         </div>
-        <hr style="margin-right: 4%;">
+        <hr style="margin-right: 4%;"> 
+
     </div>
 </div>
-    {% if total == 0.0 %}
-    <script>
-        var elements = document.querySelectorAll('[id^="disable_"]');
-        for (var i = 0; i < elements.length; i++){ elements[i].disabled = true; }
-    </script>
-    {% endif %}
+
+{% if total == 0.0 %}
 <script>
-    function endTransactionCash(value,total){
-        var total = Number(total)
-        if (value=="Next"){
-            value = Math.ceil(total) }
-        var value = Number(value)
-        if (total<=value){
-            window.open("/endTransaction/cash/"+value+"/", target="_self")
-        }else{
-            // var cash = Number(prompt("Enter Cash Amount...\n\n"))
-            document.getElementById("cash_popup").innerHTML = '<div class="formPopup" id="popupForm" style="display:block"><form action="#" onsubmit="return endForm(this,'+total+')" class="formContainer"> <div class="h3 mb-4 text-gray-800">Please Enter <br>Cash Amount....</div><input class="mb-3" type="text" id="cashAmount" placeholder="Cash Amount..." autocomplete="off" required /><button type="submit" class="btn btn-success btn-lg btn-block">Enter</button><button type="button" class="btn btn-danger btn-lg btn-block" onclick="closeForm()">Close</button></form></div>'
-            $( "#cashAmount" ).focus();
+    var elements = document.querySelectorAll('[id^="disable_"]');
+    for (var i = 0; i < elements.length; i++){ elements[i].disabled = true; }
+    // also disable payment buttons if total is zero
+    var payEls = document.querySelectorAll('#disable_P_1,#disable_P_5,#disable_P_8');
+    payEls.forEach(function(el){ el.disabled = true; });
+</script>
+{% endif %}
+
+{# Alert sound element (short beep) #}
+<audio id="stockAlertSound" preload="auto">
+  <source src="{% static 'sounds/alert.mp3' %}" type="audio/mpeg">
+</audio>
+
+<script>
+    function playStockAlert(){
+        try {
+            var sound = document.getElementById("stockAlertSound");
+            if (sound) {
+                sound.currentTime = 0;
+                // browsers may block autoplay; catch errors silently
+                sound.play().catch(function(e){ /* ignore */ });
+            }
+        } catch (e) {
+            // ignore
         }
     }
-    function endForm(form,total){
-        closeForm()
-        endTransactionCash(form.cashAmount.value,total)
+
+    /* ========= Cash & Variable functions (unchanged) ========= */
+
+    // Open a popup to collect cash amount from cashier, then submit to endTransaction
+    function endTransactionCash(mode, total){
+        var totalNum = Number(total) || 0;
+        // Only 'CASH' mode is supported here (quick amounts removed)
+        if (mode === 'CASH'){
+            document.getElementById("cash_popup").innerHTML =
+                '<div class="formPopup" id="popupForm" style="display:block">' +
+                '<form action="#" onsubmit="return endForm(this)" class="formContainer">' +
+                '<div class="h3 mb-4 text-gray-800">Enter Cash Amount (numbers only)</div>' +
+                '<input class="mb-3 form-control" name="cashAmount" id="cashAmount" type="text" placeholder="Cash Amount..." autocomplete="off" required />' +
+                '<button type="submit" class="btn btn-success btn-lg btn-block">Enter</button>' +
+                '<button type="button" class="btn btn-danger btn-lg btn-block" onclick="closeForm()">Close</button>' +
+                '</form></div>';
+            // focus after adding to DOM
+            setTimeout(function(){ var f = document.getElementById("cashAmount"); if(f) f.focus(); }, 50);
+        } else {
+            // fallback: if a numeric value somehow passed, treat as amount
+            var amount = Number(mode);
+            if (!isNaN(amount) && amount > 0){
+                window.open("/endTransaction/cash/"+amount+"/", target="_self");
+            }
+        }
+    }
+
+    function endForm(form){
+        var amountRaw = form.cashAmount.value.replace(/,/g, '').trim();
+        var amount = Number(amountRaw);
+        if (isNaN(amount) || amount <= 0){
+            alert("Please enter a valid number.");
+            return false;
+        }
+        closeForm();
+        window.open("/endTransaction/cash/"+amount+"/", target="_self");
         return false;
     }
+
     function closeForm(){
-        document.getElementById("popupForm").style.display = "none";
+        var f = document.getElementById("popupForm");
+        if (f) f.style.display = "none";
+        document.getElementById("cash_popup").innerHTML = "";
     }
-    
+
     function variableAmount(barcode,name,info){
-        document.getElementById("cash_popup").innerHTML = '<div class="formPopup" id="popupForm" style="display:block"><form action="#" onsubmit="return amountProductFunc(this);" class="formContainer"><label id="department_value" class="h5 text-primary">'+barcode+'</label><hr><div class="h5 text-success mb-3">'+name+'</div><div class="h6 mb-1 text-gray-800" style="text-align:left">Please Enter Amount...</div><input class="mb-3" type="text" id="cashAmount" placeholder="Variable Amount..." autocomplete="off" required /><button type="submit" class="btn btn-success btn-lg btn-block">Enter</button><button type="button" class="btn btn-danger btn-lg btn-block" onclick="closeForm()">Close</button><div style="text-align:left"><br>'+info+'</div></form></div>'
-        $( "#cashAmount" ).focus();
+        document.getElementById("cash_popup").innerHTML =
+            '<div class="formPopup" id="popupForm" style="display:block">' +
+            '<form action="#" onsubmit="return amountProductFunc(this);" class="formContainer">' +
+            '<label id="department_value" class="h5 text-primary">'+barcode+'</label><hr>' +
+            '<div class="h5 text-success mb-3">'+name+'</div>' +
+            '<div class="h6 mb-1 text-gray-800" style="text-align:left">Please Enter Amount...</div>' +
+            '<input class="mb-3 form-control" type="text" id="cashAmount" name="cashAmount" placeholder="Variable Amount..." autocomplete="off" required />' +
+            '<button type="submit" class="btn btn-success btn-lg btn-block">Enter</button>' +
+            '<button type="button" class="btn btn-danger btn-lg btn-block" onclick="closeForm()">Close</button>' +
+            '<div style="text-align:left"><br>'+info+'</div></form></div>';
+        setTimeout(function(){ var f = document.getElementById("cashAmount"); if(f) f.focus(); }, 50);
     }
+
     function amountProductFunc(form){
         closeForm()
-        department = form.firstElementChild.innerHTML
-        amount = Number(form.cashAmount.value)
-        if (amount){
-            window.open("/register/"+department+"/"+amount+"/",target="_self")
+        var department = form.firstElementChild.innerHTML;
+        var amountRaw = form.cashAmount.value.replace(/,/g, '').trim();
+        var amount = Number(amountRaw)
+        if (amount && !isNaN(amount)){
+            window.open("/register/"+department+"/"+amount+"/",target='_self')
+        } else {
+            alert("Enter a valid amount");
         }
         return false
     }
 </script>
+
+<!-- ===== Autocomplete JS (place just once near bottom of template, after other scripts) ===== -->
+<script>
+(function(){
+  const input = document.getElementById('product-search-input');
+  const list = document.getElementById('product-search-list');
+  let timer = null;
+  let selectedIndex = -1;
+  let currentItems = [];
+
+  function escapeHtml(s){ return String(s).replace(/[&<>"']/g, function(m){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]; }); }
+
+  function render(items){
+    currentItems = items || [];
+    selectedIndex = -1;
+    if(!items || items.length === 0){
+      list.style.display = 'none';
+      list.innerHTML = '';
+      return;
+    }
+    let html = '<div style="padding:6px 8px;border-bottom:1px solid rgba(0,0,0,.06);font-weight:700;color:#333">Products</div>';
+    for(let i=0;i<items.length;i++){
+      const it = items[i];
+      const qty = Number(it.qty) || 0;
+      const stockBadge = (qty === 0) ? '<span style="padding:2px 6px;background:#b02a37;color:#fff;border-radius:4px;margin-left:8px;font-weight:700;">OUT</span>' : (qty <= 5 ? '<span style="padding:2px 6px;background:#ffc107;color:#000;border-radius:4px;margin-left:8px;font-weight:700;">LOW</span>' : '');
+      html += `<div class="ps-item" data-i="${i}" style="padding:8px 10px;border-top:1px solid rgba(0,0,0,.02);cursor:pointer;display:flex;justify-content:space-between;align-items:center;">
+                 <div style="max-width:72%"><div style="font-weight:600">${escapeHtml(it.name)}</div><div style="font-size:12px;color:#666">${escapeHtml(it.barcode)} • ${it.sales_price}</div></div>
+                 <div style="text-align:right">${stockBadge}</div>
+               </div>`;
+    }
+    list.innerHTML = html;
+    list.style.display = 'block';
+  }
+
+  function doSearch(q){
+    if(!q || q.length < 1){ render([]); return; }
+    fetch(`/ajax/product_search/?q=${encodeURIComponent(q)}`, { credentials: 'same-origin' })
+      .then(r => r.json())
+      .then(json => {
+        const items = json.results || [];
+        render(items);
+      }).catch(()=> render([]));
+  }
+
+  input.addEventListener('input', function(e){
+    clearTimeout(timer);
+    const q = (this.value || '').trim();
+    timer = setTimeout(()=> doSearch(q), 220); // debounce 220ms
+  });
+
+  // keyboard navigation
+  input.addEventListener('keydown', function(e){
+    const items = list.querySelectorAll('.ps-item');
+    if(!items || items.length === 0) return;
+    if(e.key === 'ArrowDown'){
+      e.preventDefault();
+      selectedIndex = (selectedIndex + 1) % items.length;
+      items.forEach((el, idx)=> el.style.background = idx === selectedIndex ? 'rgba(0,0,0,.04)' : '');
+    } else if(e.key === 'ArrowUp'){
+      e.preventDefault();
+      selectedIndex = (selectedIndex - 1 + items.length) % items.length;
+      items.forEach((el, idx)=> el.style.background = idx === selectedIndex ? 'rgba(0,0,0,.04)' : '');
+    } else if(e.key === 'Enter'){
+      e.preventDefault();
+      if(selectedIndex >=0 && currentItems[selectedIndex]){
+        const it = currentItems[selectedIndex];
+        window.location.href = `/cart/add/${encodeURIComponent(it.barcode)}/1/`;
+      }
+    } else if(e.key === 'Escape'){
+      list.style.display = 'none';
+    }
+  });
+
+  // click on suggestion
+  list.addEventListener('click', function(e){
+    let el = e.target;
+    while(el && !el.classList.contains('ps-item')) el = el.parentElement;
+    if(!el) return;
+    const idx = parseInt(el.getAttribute('data-i'), 10);
+    if(isNaN(idx) || !currentItems[idx]) return;
+    const it = currentItems[idx];
+    // redirect to add 1 to cart (reuse existing endpoint)
+    window.location.href = `/cart/add/${encodeURIComponent(it.barcode)}/1/`;
+  });
+
+  // click outside closes the list
+  document.addEventListener('click', function(e){
+    if(!input.contains(e.target) && !list.contains(e.target)){
+      list.style.display = 'none';
+    }
+  });
+})();
+</script>
+<!-- ===== end Autocomplete JS ===== -->
+
 {% endblock %}

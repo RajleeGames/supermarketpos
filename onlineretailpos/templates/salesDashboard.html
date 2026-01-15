@@ -1,79 +1,231 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}
 Sales Dashboard | Online Retail POS
 {% endblock %}
 
 {% block nav-item %}
-<div class="mb-0 font-weight-bold  h5 text-gray-500 text-uppercase p-3 "> Sales Dashboard </div>
+<div class="mb-0 font-weight-bold h5 text-gray-700 text-uppercase p-3">Sales Dashboard</div>
 {% endblock %}
-
 
 {% block content %}
 <div class="row col-lg-12">
-    <div class="col-lg-5" style="width:100%;">
-        <div class="fluid">
-            <div class="card border-left-success shadow-sm mb-3">
-                <div class="card-header">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-md font-weight-bold text-success text-uppercase mb-1"> Today's Sales </div>
-                            <div class="h3 mb-1 font-weight-bold text-gray-800" style="text-align:right">{{ today_total_sales|floatformat:2 }}</div>
-                        </div>    
-                        <div class="col-auto">
-                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+
+    <!-- LEFT COLUMN: Today's Sales + Info Cards -->
+    <div class="col-lg-5">
+        <!-- Today's Sales Card -->
+        <div class="card shadow-sm border-left-success mb-3 rounded-lg">
+            <div class="card-header py-3 bg-success text-white rounded-top">
+                <div class="d-flex justify-content-between align-items-center w-100">
+                    <div class="font-weight-bold text-uppercase">Today's Sales</div>
+                    <div class="d-flex align-items-center">
+                        <div class="h3 font-weight-bold mr-2" id="today-sales" data-raw="{{ today_total_sales|default:0 }}">
+                            {{ today_total_sales|default:"0" }}
                         </div>
+                        <div class="h5 ml-2">{{ currency|default:"TZS" }}</div>
                     </div>
-                </div>
-                <div class="card-body m-0 p-1">
-                    {{ day_payment_graph|safe}}
                 </div>
             </div>
+            <div class="card-body p-3">
+                {{ day_payment_graph|safe }}
+            </div>
         </div>
-        <hr>
-        <div class="row col-lg-12 m-0 p-0" >
+
+        <!-- Other info cards (Yesterday, Last 7 Days, WTD, MTD, YTD) -->
+        <div class="row m-0 p-0">
             {% for key, value in add_info.items %}
-            <div class="col-lg-6 mb-2" style="height:85px;width:100%">
-                <div class="card border-left-info shadow-sm" style="width:100%;height:100%">
-                    <div class="card-body" style="width:100%">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1"> {{ key}} </div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">${{ value|floatformat:2 }}</div>
-                            </div>    
-                            <div class="col-auto">
-                                <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+            <div class="col-6 mb-3">
+                <div class="card shadow-sm rounded-lg border-left-info h-100">
+                    <div class="card-body p-3 bg-light">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="text-xs font-weight-bold text-info text-uppercase">{{ key }}</div>
+                            <div class="h5 font-weight-bold text-gray-800 money-raw" data-raw="{{ value|default:'' }}">
+                                {{ value }}
                             </div>
+                            <div class="h6 text-gray-500 ml-1">{{ currency|default:"TZS" }}</div>
                         </div>
                     </div>
                 </div>
-            </div>  
+            </div>
             {% endfor %}
         </div>
     </div>
-    <div class="col-lg-7" >
-        <!-- <div class="row">
-            <a class="col-lg-6 p-3" href="{% url 'dashboard_department' %}">
-                <button class="btn btn-primary btn-lg" style="width:100%;">
-                    Go to Department Dashboard
-                </button>
-            </a>
-            <a class="col-lg-6 p-3" href="{% url 'dashboard_department' %}">
-                <button class="btn btn-primary btn-lg" style="width:100%;">
-                    Go to Inventory Dashboard
-                </button>
-            </a>
-        </div> -->
-        <div class="card shadow">
-            <div class="card-header">
-                <div class="font-weight-bold text-primary h5 text-center"> Last 30-Days Sales Chart </div>
-                <div> Total Sales - {{30_Days_Total_Sales|floatformat:2 }} $  <br> Average - {{ 30_Days_Avg_Sales|floatformat:2 }} $</div> 
+
+    <!-- RIGHT COLUMN: 30-Days Sales Chart -->
+    <div class="col-lg-7">
+        <div class="card shadow-sm rounded-lg border-left-primary">
+            <div class="card-header bg-primary text-white rounded-top text-center py-3">
+                <div class="h5 font-weight-bold">Last 30-Days Sales Chart</div>
+                <div class="mt-2">
+                    <span class="mr-3">Total Sales: <span class="money-raw" data-raw="{{ 30_Days_Total_Sales|default:0 }}">{{ 30_Days_Total_Sales }}</span></span>
+                    <span>Average: <span class="money-raw" data-raw="{{ 30_Days_Avg_Sales|default:0 }}">{{ 30_Days_Avg_Sales }}</span></span>
+                </div>
             </div>
-            <div class="card-body " >
-                {{ 30_day_sales_graph |safe}}
+            <div class="card-body p-3">
+                {{ 30_day_sales_graph|safe }}
             </div>
         </div>
     </div>
 </div>
+
 <hr>
+
+<!-- Client-side money formatter -->
+<script>
+(function() {
+    const currency = "{{ currency|default:'TZS' }}";
+
+    function formatNumber(n, decimals=2) {
+        if (isNaN(n)) return null;
+        let fixed = Number(n).toFixed(decimals);
+        let parts = fixed.split('.');
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return parts.join('.');
+    }
+
+    function parseNumber(s) {
+        if (!s) return NaN;
+        let cleaned = String(s).replace(/[^0-9.\-]/g,'');
+        const firstDot = cleaned.indexOf('.');
+        if(firstDot !== -1) cleaned = cleaned.slice(0, firstDot + 1) + cleaned.slice(firstDot + 1).replace(/\./g,'');
+        return cleaned ? Number(cleaned) : NaN;
+    }
+
+    function formatElement(el) {
+        let raw = el.getAttribute('data-raw') || el.innerText || '';
+        let num = parseNumber(raw);
+        if(!isNaN(num)) {
+            // Keep no decimal if decimals are .00? Adjust to show 2 decimals consistently
+            el.innerText = currency + ' ' + formatNumber(num, 2);
+        }
+    }
+
+    // Format main today sales
+    const todayEl = document.getElementById('today-sales');
+    if (todayEl) formatElement(todayEl);
+
+    // Format all cards amounts
+    document.querySelectorAll('.money-raw').forEach(el => {
+        if (el.id !== 'today-sales') formatElement(el);
+    });
+})();
+</script>
+
+<style>
+/* Clean, non-animated dashboard styles */
+:root{
+  --card-bg: #ffffff;
+  --page-bg: #f7f8fa;
+  --muted: #6c757d;
+  --success: #28a745;
+  --info: #17a2b8;
+  --primary: #007bff;
+  --text: #111827;
+  --card-border: rgba(16,24,40,0.04);
+  --card-shadow: 0 4px 10px rgba(16,24,40,0.05);
+  --radius: 10px;
+}
+
+/* Page-level */
+body {
+  background: var(--page-bg);
+  color: var(--text);
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  margin: 0;
+  padding: 0;
+}
+
+/* Cards — flat, subtle shadow, no animation */
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  box-shadow: var(--card-shadow);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: none !important;
+}
+
+/* Colored left border accents */
+.border-left-success { border-left: 4px solid var(--success) !important; }
+.border-left-info    { border-left: 4px solid var(--info) !important; }
+.border-left-primary { border-left: 4px solid var(--primary) !important; }
+
+/* Card headers — consistent padding, bold text, simple */
+.card-header {
+  padding: 0.85rem 1rem;
+  font-weight: 700;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Keep primary / success header backgrounds readable */
+.card-header.bg-success { background: var(--success); color: #ffffff; }
+.card-header.bg-primary { background: var(--primary); color: #ffffff; }
+
+/* Body spacing */
+.card-body {
+  padding: 1rem;
+  color: var(--text);
+  background: transparent;
+}
+
+/* Typography resets for header sizes */
+.h3, .h5, .h6 {
+  margin: 0;
+  line-height: 1.1;
+}
+
+/* Today sales styling */
+#today-sales {
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: #ffffff;
+}
+
+/* Info cards inside left column */
+.card .card-body.bg-light {
+  background: #fbfcfd;
+  padding: 0.75rem;
+  border-radius: calc(var(--radius) - 4px);
+}
+
+/* Money formatting visuals */
+.money-raw {
+  font-weight: 700;
+  font-size: 1rem;
+  color: #1f2937;
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* Smaller muted text */
+.text-gray-500 { color: var(--muted) !important; font-size: 0.9rem; }
+
+/* Tiny helpers */
+.text-xs { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.6px; color: var(--info); }
+
+/* Make header title area slightly taller and centered */
+.card-header.text-center { text-align: center; flex-direction: column; gap: 0.25rem; }
+
+/* Responsive tweaks */
+@media (max-width: 767px) {
+  #today-sales { font-size: 1.25rem; }
+  .card-header { padding: 0.65rem; }
+  .card-body { padding: 0.75rem; }
+}
+
+/* Remove any accidental animation classes */
+* {
+  -webkit-transition: none !important;
+  transition: none !important;
+  -webkit-animation: none !important;
+  animation: none !important;
+}
+</style>
+
 {% endblock %}

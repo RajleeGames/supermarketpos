@@ -1,7 +1,7 @@
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
-from .models import product as Product
-from .models import product
+from .models import Product as Product
+from .models import Product
 from django import forms
 from django.forms import TextInput
 from cart.models import Cart
@@ -25,8 +25,8 @@ def product_lookup(request):
         form = ProductLookup(request.POST)
         if form.is_valid():
             try:
-                obj = product.objects.get(barcode=form.cleaned_data['barcode'])
-            except product.DoesNotExist:
+                obj = Product.objects.get(barcode=form.cleaned_data['barcode'])
+            except Product.DoesNotExist:
                 obj = None
                 notFound= True
     form = ProductLookup()
@@ -67,13 +67,13 @@ def inventoryAdd(request):
         form = AddProduct(request.POST)
         if form.is_valid():
             try:
-                obj = product.objects.get(barcode=form.cleaned_data['barcode'])
+                obj = Product.objects.get(barcode=form.cleaned_data['barcode'])
                 # 'product_added':  True if "ProductNotFound" in request.path else False, 
                 context['p_qty'] = obj.qty
                 context['n_qty'] = int(form.cleaned_data['qty'])
                 obj.qty = obj.qty + context['n_qty']
                 obj.save()
-            except product.DoesNotExist:
+            except Product.DoesNotExist:
                 obj = None
                 context['notFound']= form.cleaned_data['barcode']
             context['obj'] = obj

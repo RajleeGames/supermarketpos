@@ -1,42 +1,346 @@
 {% extends 'base.html' %}
-
-{% block title %}
-Department Dashboard | Online Retail POS
-{% endblock %}
+{% block title %}Department Dashboard | Online Retail POS{% endblock %}
 
 {% block nav-item %}
-<div class="mb-0 font-weight-bold  h5 text-gray-500 text-uppercase p-3 ">Sales by Department Dashboard</div>
+<div class="mb-0 font-weight-bold h5 text-gray-500 text-uppercase p-3">
+  Sales by Department Dashboard ({{ currency|default:"TZS" }})
+</div>
 {% endblock %}
 
 {% block content %}
-<div class="row col-lg-12" style="width:100%;">
-    <div style="text-align:right">*Note: You will need to generate dashboard first in order to create report</div>
-</div>
-<div class="row col-lg-12">
-    <div class="col-lg-10 pr-0 mr-0" style="width:100%;">
-        <form class="row col-lg-12 form mb-1 pr-0" action="{{ request.get_full_path }}" method = "POST" style="width:100%;justify-content:center;text-align:center ;">
-            {% csrf_token %}
-            {% for field in form %}
-            <ul class="col-lg-5" style="margin-top:20px;margin-bottom:20px"><strong style="color:black;">{{ field.label }} :</strong> {{ field }}</ul>
-            {% endfor %}
-            <input class="col-lg-2 btn btn-primary" style="width:100%;height:50px;margin-top:10px;padding-left: 0%;padding-right:0%;padding-right:0%"  id="submit-barcode" type="submit" value="Generate Dashboard">
-        </form>
+<style>
+/* Table layout improvements */
+.dashboard-wrapper .table-responsive table {
+  table-layout: fixed;
+  width: 100%;
+  min-width: 720px; /* keep reasonable minimum for wide tables */
+}
+
+.dashboard-wrapper .table-responsive th,
+.dashboard-wrapper .table-responsive td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+/* Column width hints (applies to tables inside .dashboard-wrapper) */
+.dashboard-wrapper .table-responsive table thead th:nth-child(1),
+.dashboard-wrapper .table-responsive table tbody td:nth-child(1) { width: 35%; } /* name / long text */
+.dashboard-wrapper .table-responsive table thead th:nth-child(2),
+.dashboard-wrapper .table-responsive table tbody td:nth-child(2) { width: 18%; } /* amount */
+.dashboard-wrapper .table-responsive table thead th:nth-child(3),
+.dashboard-wrapper .table-responsive table tbody td:nth-child(3) { width: 18%; } /* other */
+.dashboard-wrapper .table-responsive table thead th:nth-child(4),
+.dashboard-wrapper .table-responsive table tbody td:nth-child(4) { width: 18%; } /* date */
+.dashboard-wrapper .table-responsive table thead th:nth-child(5),
+.dashboard-wrapper .table-responsive table tbody td:nth-child(5) { width: 11%; } /* actions */
+
+/* Truncated text style for cells we want to ellipsize */
+.truncate-col {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+  max-width: 100%;
+}
+
+/* Make numeric cells right-aligned */
+.table-number {
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* Small responsive tweak: allow horizontal scroll on very small screens */
+@media (max-width: 768px) {
+  .dashboard-wrapper .table-responsive { overflow-x: auto; }
+}
+
+/* Make the dashboard figures area look neat */
+.dashboard-fig-card .card-body { min-height: 150px; }
+</style>
+
+<div class="container-fluid dashboard-wrapper">
+
+  <div class="row mb-2">
+    <div class="col-12 text-end small text-muted">*Note: you must generate dashboard first to create/print the report</div>
+  </div>
+
+  <!-- Filters & Actions -->
+  <div class="card mb-3">
+    <div class="card-body">
+      <div class="row gy-2 align-items-center">
+        <div class="col-md-6">
+          <strong class="text-dark">Filters</strong>
+          {% if request.GET %}
+            <div class="small text-muted mt-1">
+              Active:
+              {% for k, v in request.GET.items %}
+                {% if v %}
+                  <span class="badge bg-info text-dark me-1">{{ k|capfirst }}: {{ v }}</span>
+                {% endif %}
+              {% endfor %}
+            </div>
+          {% else %}
+            <div class="small text-muted mt-1">No active filters — showing defaults</div>
+          {% endif %}
+        </div>
+
+        <div class="col-md-6 text-md-end mt-2 mt-md-0">
+          <div class="btn-group btn-group-sm" role="group" aria-label="presets">
+            <button type="button" class="btn btn-outline-secondary" id="preset-today">Today</button>
+            <button type="button" class="btn btn-outline-secondary" id="preset-yesterday">Yesterday</button>
+            <button type="button" class="btn btn-outline-secondary" id="preset-week">This Week</button>
+            <button type="button" class="btn btn-outline-secondary" id="preset-month">This Month</button>
+          </div>
+
+          <a href="{{ report_link|default:'#' }}" target="_blank" class="btn btn-dark btn-sm ms-2">
+            <i class="fas fa-file-alt"></i> View / Print Report
+          </a>
+
+          <a href="{{ request.path }}" class="btn btn-outline-secondary btn-sm ms-2" id="reset-btn">
+            <i class="fas fa-undo"></i> Reset
+          </a>
+        </div>
+      </div>
+
+      <!-- Filter form: GET so filters persist in URL -->
+      <form id="dashboard-filters" method="get" class="row mt-3 g-2 align-items-end">
+        {% for field in form %}
+          <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+            <label class="form-label small text-muted mb-1">{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}
+              <div class="invalid-feedback d-block">{{ field.errors|striptags }}</div>
+            {% endif %}
+          </div>
+        {% endfor %}
+
+        <div class="col-6 col-md-3 d-grid">
+          <button type="submit" class="btn btn-primary" id="generate-btn" style="height:44px;">
+            <i class="fas fa-chart-line me-1"></i> Generate Dashboard
+          </button>
+        </div>
+
+        <div class="col-6 col-md-3 d-grid">
+          <a href="{{ request.path }}" class="btn btn-outline-secondary" style="height:44px;" id="quick-reset">
+            <i class="fas fa-eraser me-1"></i> Reset Filters
+          </a>
+        </div>
+      </form>
     </div>
-    <div class="col-lg-2">
-        <a href="{{report_link}}"  target="_blank" >
-        <button class="btn btn-dark" style="width:100%;height:50px;margin-top:10px;padding-left: 0%;padding-right:0%;padding-right:0%">
-            View/Print Report
-        </button>
-        </a>
+  </div>
+
+  <!-- Dashboard content -->
+  <div class="row">
+    <div class="col-lg-4 mb-3">
+      <div class="card dashboard-fig-card mb-3">
+        <div class="card-body">
+          <h6 class="small text-muted">Table</h6>
+          <div class="table-responsive">
+            {# Wrap server table in a container so table CSS applies #}
+            <div class="server-table-wrap">
+              {{ table_fig|safe }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card dashboard-fig-card">
+        <div class="card-body">
+          <h6 class="small text-muted">Department Share</h6>
+          <div class="overflow-auto" style="min-height:220px;">
+            {{ pie_fig|safe }}
+          </div>
+        </div>
+      </div>
     </div>
-</div>
-<div class="row col-lg-12 mt-4" style="width:100%">
-    <div class="col-lg-4">
-        {{ table_fig|safe }}
-        {{ pie_fig|safe }}
+
+    <div class="col-lg-8 mb-3">
+      <div class="card h-100">
+        <div class="card-body">
+          <h6 class="small text-muted">Sales by Department</h6>
+          <div style="min-height:420px;">
+            {{ bar_fig|safe }}
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="col-lg-8">
-        {{ bar_fig|safe }}
-    </div>
-</div>
+  </div>
+
+</div> <!-- /.dashboard-wrapper -->
+
+{# Money formatting and table polishing JS #}
+<script>
+(function(){
+  const currency = "{{ currency|default:'TZS' }}";
+
+  function parseNumberFromString(s){
+    if (s === null || s === undefined) return NaN;
+    let cleaned = String(s).replace(/[^0-9.\-]/g,'');
+    const firstDot = cleaned.indexOf('.');
+    if (firstDot !== -1){
+      cleaned = cleaned.slice(0, firstDot+1) + cleaned.slice(firstDot+1).replace(/\./g,'');
+    }
+    return cleaned === '' ? NaN : Number(cleaned);
+  }
+
+  function numberWithCommasFixed(n, decimals){
+    if (isNaN(n)) return null;
+    const fixed = Number(n).toFixed(decimals);
+    const parts = fixed.split('.');
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return parts.join('.');
+  }
+
+  function looksLikeNumericOnly(text){
+    if (!text) return false;
+    text = text.trim();
+    return /^[\d\.,\-\s]+$/.test(text);
+  }
+
+  // Format numeric-like cells and set class .table-number (right align)
+  document.querySelectorAll('.dashboard-wrapper .table-responsive table').forEach(function(tbl){
+    try {
+      // Make header and body fixed layout applied already via CSS.
+      const cells = tbl.querySelectorAll('td, th');
+      cells.forEach(function(cell){
+        const txt = (cell.innerText || '').trim();
+        if (!txt) return;
+
+        // If numeric-like, format and align
+        if (looksLikeNumericOnly(txt) && txt.replace(/[, ]/g, '').length <= 20) {
+          const num = parseNumberFromString(txt);
+          if (!isNaN(num)){
+            const decimals = (Math.abs(num) % 1 === 0) ? 0 : 2;
+            const formatted = numberWithCommasFixed(num, decimals);
+            if (formatted !== null) {
+              cell.innerText = currency + ' ' + formatted;
+              cell.classList.add('table-number');
+            }
+          }
+          return;
+        }
+
+        // For long textual cells: add truncation class and a tooltip (title)
+        if (txt.length > 30) {
+          // Wrap text inside a span.truncate-col (helps with ellipsis)
+          if (!cell.querySelector('.truncate-col')) {
+            const span = document.createElement('span');
+            span.className = 'truncate-col';
+            span.innerText = txt;
+            // move children/content into span
+            cell.innerHTML = '';
+            cell.appendChild(span);
+          }
+          // add title attribute so full text is shown on hover
+          const inner = cell.innerText || '';
+          cell.setAttribute('title', inner.trim());
+        }
+      });
+
+      // Also ensure first column (likely long names) gets truncation if not already
+      const rows = tbl.querySelectorAll('tbody tr');
+      rows.forEach(function(r){
+        const firstCell = r.querySelector('td:nth-child(1)');
+        if (firstCell){
+          const t = (firstCell.innerText || '').trim();
+          if (t.length > 25 && !firstCell.querySelector('.truncate-col')) {
+            const span = document.createElement('span');
+            span.className = 'truncate-col';
+            span.innerText = t;
+            firstCell.innerHTML = '';
+            firstCell.appendChild(span);
+            firstCell.setAttribute('title', t);
+          }
+        }
+      });
+
+    } catch(e){
+      console.warn("table polish error", e);
+    }
+  });
+
+  // Format elements explicitly tagged .money-raw (data-raw attr or innerText)
+  document.querySelectorAll('.money-raw').forEach(function(el){
+    try {
+      var raw = el.getAttribute('data-raw') || el.innerText || '';
+      var num = parseNumberFromString(raw);
+      if (!isNaN(num)){
+        var formatted = numberWithCommasFixed(num, 2);
+        el.innerText = currency + ' ' + formatted;
+      }
+    } catch(e){ console.warn('money-raw format error', e); }
+  });
+
+  // Tooltips: simple hover mobile fallback (title already set)
+  // If you prefer fancier tooltips, integrate tippy.js or bootstrap tooltips.
+
+})();
+</script>
+
+{% endblock %}
+
+{% block script %}
+  {# flatpickr for nicer date pickers; optional but recommended #}
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+  <script>
+  (function(){
+    // Initialize flatpickr for inputs that look like dates
+    var dateInputs = document.querySelectorAll('input[type="date"], input[name*="date"], input[id*="date"]');
+    dateInputs.forEach(function(el){
+      if (el._flatpickr) return;
+      flatpickr(el, {
+        altInput: true,
+        altFormat: "F j, Y",
+        dateFormat: "Y-m-d",
+        allowInput: true,
+        clickOpens: true
+      });
+    });
+
+    // Presets helpers (set start_date / end_date then submit)
+    function ymd(d){ return d.toISOString().slice(0,10); }
+
+    document.getElementById('preset-today')?.addEventListener('click', function(){
+      var t = new Date();
+      setAndSubmit(ymd(t), ymd(t));
+    });
+    document.getElementById('preset-yesterday')?.addEventListener('click', function(){
+      var d = new Date(); d.setDate(d.getDate()-1);
+      setAndSubmit(ymd(d), ymd(d));
+    });
+    document.getElementById('preset-week')?.addEventListener('click', function(){
+      var now = new Date();
+      var day = now.getDay() || 7; // sunday=0 -> 7
+      var monday = new Date(now); monday.setDate(now.getDate() - day + 1);
+      var sunday = new Date(monday); sunday.setDate(monday.getDate() + 6);
+      setAndSubmit(ymd(monday), ymd(sunday));
+    });
+    document.getElementById('preset-month')?.addEventListener('click', function(){
+      var now = new Date();
+      var start = new Date(now.getFullYear(), now.getMonth(), 1);
+      var end = new Date(now.getFullYear(), now.getMonth()+1, 0);
+      setAndSubmit(ymd(start), ymd(end));
+    });
+
+    function setAndSubmit(start, end){
+      var startEl = document.querySelector('input[name="start_date"]');
+      var endEl = document.querySelector('input[name="end_date"]');
+      if (startEl) startEl.value = start;
+      if (endEl) endEl.value = end;
+      var form = document.getElementById('dashboard-filters');
+      if (form) form.submit();
+    }
+
+    // Reset button clears querystring and reloads
+    document.getElementById('reset-btn')?.addEventListener('click', function(e){
+      e.preventDefault();
+      window.location.href = window.location.pathname;
+    });
+
+  })();
+  </script>
 {% endblock %}

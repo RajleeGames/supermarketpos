@@ -81,6 +81,16 @@
           background-color: #ddd;
           outline: none;
         }
+
+        /* small style tweak for long menu labels */
+        .sidebar .nav-item .nav-link .menu-text {
+            display: inline-block;
+            vertical-align: middle;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 180px;
+        }
     </style>
 
 </head>
@@ -90,14 +100,7 @@
     <audio id="notification-audio" preload="auto" autoplay>
         <source src="{% static 'note.mp3' %}" type="audio/mpeg">
     </audio>
-    <!-- <script>
-        // Check if the page is being reloaded
-        if (performance.navigation.type === 1) {
-            var audio = document.getElementById('notification-audio');
-            audio.play();
-        }
-    </script> -->
-    
+
     <!-- Page Wrapper -->
     <div id="wrapper" >
         {% block sidebar %}
@@ -111,39 +114,50 @@
                 <div class="sidebar-brand-text">Online Retail POS System</div>
             </a>
             <hr class="sidebar-divider my-0">
-            <!-- Divider -->
-            <li class="nav-item active" style="padding-top:20px;padding-bottom:20px">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-                        <i class="fas fa-fw fa-desktop"></i>
-                        <span>Dashboards</span>
+
+            <!-- Dashboards (unique collapse id) -->
+            <li class="nav-item" style="padding-top:20px;padding-bottom:20px">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseDashboards" aria-expanded="true" aria-controls="collapseDashboards">
+                        <i class="fas fa-fw fa-tachometer-alt"></i>
+                        <span class="menu-text">Dashboards</span>
                 </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div id="collapseDashboards" class="collapse" aria-labelledby="headingDashboards" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <!-- <h6 class="collapse-header">Dashboards</h6> -->
-                        <a class="collapse-item" href="{% url 'dashboard_sales' %}"><i class="fas fa-fw fa-chart-line"></i> Sales Dashboard</a>
-                        <a class="collapse-item" href="{% url 'dashboard_department' %}"><i class="fas fa-fw fa-chart-bar"></i> Department Dashboard</a>
-                        <a class="collapse-item" href="{% url 'dashboard_products' %}"><i class="fas fa-fw fa-table"></i> Products Dashboard</a>
+                        <a class="collapse-item" href="{% url 'dashboard_sales' %}"><i class="fas fa-fw fa-chart-line"></i> <span class="menu-text">Sales Dashboard</span></a>
+                        <a class="collapse-item" href="{% url 'dashboard_department' %}"><i class="fas fa-fw fa-chart-bar"></i> <span class="menu-text">Department Dashboard</span></a>
+                        <a class="collapse-item" href="{% url 'dashboard_products' %}"><i class="fas fa-fw fa-table"></i> <span class="menu-text">Products Dashboard</span></a>
                     </div>
                 </div>
             </li>
-            <!-- Nav Item - Dashboard -->
+
             <hr class="sidebar-divider">
             <div class="sidebar-heading">
                 Register 
             </div>
-            <li class="nav-item active">
+
+            <li class="nav-item">
                 <a class="nav-link" href="{% url 'register' %}" >
                     <i class="fas fa-cash-register"></i>
-                    <span>Register</span>
+                    <span class="menu-text">Register</span>
                 </a>
                 <a class="nav-link" href="{% url 'transactionView' %}" >
                     <i class="fas fa-list-alt"></i>
-                    <span>Transactions</span>
+                    <span class="menu-text">Transactions</span>
                 </a>
-                <a class="nav-link" href="{% url 'retail_display' %}" target="_blank" >
-                    <i class="far fa-window-maximize"></i>
-                    <span>Customer Screen</span>
+
+                <!-- Financials (unique collapse id) -->
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFinancials" aria-expanded="true" aria-controls="collapseFinancials">
+                    <i class="fas fa-fw fa-file-invoice-dollar"></i>
+                    <span class="menu-text">Financials</span>
                 </a>
+                <div id="collapseFinancials" class="collapse" aria-labelledby="headingFinancials" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        
+                        <a class="collapse-item" href="{% url 'expenses_add' %}"><i class="fas fa-fw fa-plus-circle"></i> <span class="menu-text">Add Expense</span></a>
+                        
+                        <a class="collapse-item" href="{% url 'profit_loss' %}"><i class="fas fa-fw fa-balance-scale"></i> <span class="menu-text">Profit &amp; Loss</span></a>   
+                    </div>
+                </div>
                 
             </li>
             
@@ -151,14 +165,14 @@
             <div class="sidebar-heading">
                 Other
             </div>
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link" href="{% url 'product_lookup_default' %}" >
                     <i class="fas fa-search"></i>
-                    <span>Price Lookup</span>
+                    <span class="menu-text">Price Lookup</span>
                 </a>
                 <a class="nav-link" href="{% url 'inventory_add' %}" >
                     <i class="fas fa-dolly"></i>
-                    <span>Add Inventory</span>
+                    <span class="menu-text">Add Inventory</span>
                 </a>
             </li>
             <hr class="sidebar-divider">
@@ -166,18 +180,14 @@
             <div class="sidebar-heading">
                 Staff
             </div>
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link" href="{% url 'admin:login' %}" target="_blank" >
                     <i class="fas fa-laptop-house"></i>
-                    <span>Data Administration</span>
+                    <span class="menu-text">Data Administration</span>
                 </a>
             </li>
             <hr class="sidebar-divider">
             {% endif %}
-            <!-- Sidebar Toggler (Sidebar) -->
-            <!-- <div class="text-center d-none d-md-inline">
-                <button class="rounded-circle border-0" id="sidebarToggle"></button>
-            </div> -->
         </ul>
         {% endblock %}
         <div id="content-wrapper" class="d-flex flex-column">

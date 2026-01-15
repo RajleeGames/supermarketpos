@@ -1,0 +1,3066 @@
+[
+    {
+        "label": "colorfield.fields",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "colorfield.fields",
+        "description": "colorfield.fields",
+        "detail": "colorfield.fields",
+        "documentation": {}
+    },
+    {
+        "label": "ColorField",
+        "importPath": "colorfield.fields",
+        "description": "colorfield.fields",
+        "isExtraImport": true,
+        "detail": "colorfield.fields",
+        "documentation": {}
+    },
+    {
+        "label": "migrations",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "models",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "migrations",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "migrations",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "models",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "migrations",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "models",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "models",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "migrations",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "models",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "migrations",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "models",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "migrations",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "migrations",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "models",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "migrations",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "models",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "migrations",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "models",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "migrations",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "models",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "models",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "migrations",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "models",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "migrations",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "models",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "migrations",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "models",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "migrations",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "models",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "models",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "transaction",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "connection",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "admin",
+        "importPath": "django.contrib",
+        "description": "django.contrib",
+        "isExtraImport": true,
+        "detail": "django.contrib",
+        "documentation": {}
+    },
+    {
+        "label": "admin",
+        "importPath": "django.contrib",
+        "description": "django.contrib",
+        "isExtraImport": true,
+        "detail": "django.contrib",
+        "documentation": {}
+    },
+    {
+        "label": "admin",
+        "importPath": "django.contrib",
+        "description": "django.contrib",
+        "isExtraImport": true,
+        "detail": "django.contrib",
+        "documentation": {}
+    },
+    {
+        "label": "admin",
+        "importPath": "django.contrib",
+        "description": "django.contrib",
+        "isExtraImport": true,
+        "detail": "django.contrib",
+        "documentation": {}
+    },
+    {
+        "label": "admin",
+        "importPath": "django.contrib",
+        "description": "django.contrib",
+        "isExtraImport": true,
+        "detail": "django.contrib",
+        "documentation": {}
+    },
+    {
+        "label": "AppConfig",
+        "importPath": "django.apps",
+        "description": "django.apps",
+        "isExtraImport": true,
+        "detail": "django.apps",
+        "documentation": {}
+    },
+    {
+        "label": "AppConfig",
+        "importPath": "django.apps",
+        "description": "django.apps",
+        "isExtraImport": true,
+        "detail": "django.apps",
+        "documentation": {}
+    },
+    {
+        "label": "AppConfig",
+        "importPath": "django.apps",
+        "description": "django.apps",
+        "isExtraImport": true,
+        "detail": "django.apps",
+        "documentation": {}
+    },
+    {
+        "label": "decimal",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "decimal",
+        "description": "decimal",
+        "detail": "decimal",
+        "documentation": {}
+    },
+    {
+        "label": "Decimal",
+        "importPath": "decimal",
+        "description": "decimal",
+        "isExtraImport": true,
+        "detail": "decimal",
+        "documentation": {}
+    },
+    {
+        "label": "ROUND_HALF_UP",
+        "importPath": "decimal",
+        "description": "decimal",
+        "isExtraImport": true,
+        "detail": "decimal",
+        "documentation": {}
+    },
+    {
+        "label": "InvalidOperation",
+        "importPath": "decimal",
+        "description": "decimal",
+        "isExtraImport": true,
+        "detail": "decimal",
+        "documentation": {}
+    },
+    {
+        "label": "Decimal",
+        "importPath": "decimal",
+        "description": "decimal",
+        "isExtraImport": true,
+        "detail": "decimal",
+        "documentation": {}
+    },
+    {
+        "label": "ROUND_HALF_UP",
+        "importPath": "decimal",
+        "description": "decimal",
+        "isExtraImport": true,
+        "detail": "decimal",
+        "documentation": {}
+    },
+    {
+        "label": "InvalidOperation",
+        "importPath": "decimal",
+        "description": "decimal",
+        "isExtraImport": true,
+        "detail": "decimal",
+        "documentation": {}
+    },
+    {
+        "label": "getcontext",
+        "importPath": "decimal",
+        "description": "decimal",
+        "isExtraImport": true,
+        "detail": "decimal",
+        "documentation": {}
+    },
+    {
+        "label": "Decimal",
+        "importPath": "decimal",
+        "description": "decimal",
+        "isExtraImport": true,
+        "detail": "decimal",
+        "documentation": {}
+    },
+    {
+        "label": "ROUND_HALF_UP",
+        "importPath": "decimal",
+        "description": "decimal",
+        "isExtraImport": true,
+        "detail": "decimal",
+        "documentation": {}
+    },
+    {
+        "label": "InvalidOperation",
+        "importPath": "decimal",
+        "description": "decimal",
+        "isExtraImport": true,
+        "detail": "decimal",
+        "documentation": {}
+    },
+    {
+        "label": "Decimal",
+        "importPath": "decimal",
+        "description": "decimal",
+        "isExtraImport": true,
+        "detail": "decimal",
+        "documentation": {}
+    },
+    {
+        "label": "ROUND_HALF_UP",
+        "importPath": "decimal",
+        "description": "decimal",
+        "isExtraImport": true,
+        "detail": "decimal",
+        "documentation": {}
+    },
+    {
+        "label": "InvalidOperation",
+        "importPath": "decimal",
+        "description": "decimal",
+        "isExtraImport": true,
+        "detail": "decimal",
+        "documentation": {}
+    },
+    {
+        "label": "getcontext",
+        "importPath": "decimal",
+        "description": "decimal",
+        "isExtraImport": true,
+        "detail": "decimal",
+        "documentation": {}
+    },
+    {
+        "label": "Decimal",
+        "importPath": "decimal",
+        "description": "decimal",
+        "isExtraImport": true,
+        "detail": "decimal",
+        "documentation": {}
+    },
+    {
+        "label": "InvalidOperation",
+        "importPath": "decimal",
+        "description": "decimal",
+        "isExtraImport": true,
+        "detail": "decimal",
+        "documentation": {}
+    },
+    {
+        "label": "Decimal",
+        "importPath": "decimal",
+        "description": "decimal",
+        "isExtraImport": true,
+        "detail": "decimal",
+        "documentation": {}
+    },
+    {
+        "label": "Decimal",
+        "importPath": "decimal",
+        "description": "decimal",
+        "isExtraImport": true,
+        "detail": "decimal",
+        "documentation": {}
+    },
+    {
+        "label": "Decimal",
+        "importPath": "decimal",
+        "description": "decimal",
+        "isExtraImport": true,
+        "detail": "decimal",
+        "documentation": {}
+    },
+    {
+        "label": "InvalidOperation",
+        "importPath": "decimal",
+        "description": "decimal",
+        "isExtraImport": true,
+        "detail": "decimal",
+        "documentation": {}
+    },
+    {
+        "label": "ROUND_HALF_UP",
+        "importPath": "decimal",
+        "description": "decimal",
+        "isExtraImport": true,
+        "detail": "decimal",
+        "documentation": {}
+    },
+    {
+        "label": "getcontext",
+        "importPath": "decimal",
+        "description": "decimal",
+        "isExtraImport": true,
+        "detail": "decimal",
+        "documentation": {}
+    },
+    {
+        "label": "Decimal",
+        "importPath": "decimal",
+        "description": "decimal",
+        "isExtraImport": true,
+        "detail": "decimal",
+        "documentation": {}
+    },
+    {
+        "label": "InvalidOperation",
+        "importPath": "decimal",
+        "description": "decimal",
+        "isExtraImport": true,
+        "detail": "decimal",
+        "documentation": {}
+    },
+    {
+        "label": "ROUND_HALF_UP",
+        "importPath": "decimal",
+        "description": "decimal",
+        "isExtraImport": true,
+        "detail": "decimal",
+        "documentation": {}
+    },
+    {
+        "label": "getcontext",
+        "importPath": "decimal",
+        "description": "decimal",
+        "isExtraImport": true,
+        "detail": "decimal",
+        "documentation": {}
+    },
+    {
+        "label": "settings",
+        "importPath": "django.conf",
+        "description": "django.conf",
+        "isExtraImport": true,
+        "detail": "django.conf",
+        "documentation": {}
+    },
+    {
+        "label": "settings",
+        "importPath": "django.conf",
+        "description": "django.conf",
+        "isExtraImport": true,
+        "detail": "django.conf",
+        "documentation": {}
+    },
+    {
+        "label": "settings",
+        "importPath": "django.conf",
+        "description": "django.conf",
+        "isExtraImport": true,
+        "detail": "django.conf",
+        "documentation": {}
+    },
+    {
+        "label": "settings",
+        "importPath": "django.conf",
+        "description": "django.conf",
+        "isExtraImport": true,
+        "detail": "django.conf",
+        "documentation": {}
+    },
+    {
+        "label": "settings",
+        "importPath": "django.conf",
+        "description": "django.conf",
+        "isExtraImport": true,
+        "detail": "django.conf",
+        "documentation": {}
+    },
+    {
+        "label": "settings",
+        "importPath": "django.conf",
+        "description": "django.conf",
+        "isExtraImport": true,
+        "detail": "django.conf",
+        "documentation": {}
+    },
+    {
+        "label": "settings",
+        "importPath": "django.conf",
+        "description": "django.conf",
+        "isExtraImport": true,
+        "detail": "django.conf",
+        "documentation": {}
+    },
+    {
+        "label": "settings",
+        "importPath": "django.conf",
+        "description": "django.conf",
+        "isExtraImport": true,
+        "detail": "django.conf",
+        "documentation": {}
+    },
+    {
+        "label": "settings",
+        "importPath": "django.conf",
+        "description": "django.conf",
+        "isExtraImport": true,
+        "detail": "django.conf",
+        "documentation": {}
+    },
+    {
+        "label": "ValidationError",
+        "importPath": "django.core.exceptions",
+        "description": "django.core.exceptions",
+        "isExtraImport": true,
+        "detail": "django.core.exceptions",
+        "documentation": {}
+    },
+    {
+        "label": "Product",
+        "importPath": "inventory.models",
+        "description": "inventory.models",
+        "isExtraImport": true,
+        "detail": "inventory.models",
+        "documentation": {}
+    },
+    {
+        "label": "Product",
+        "importPath": "inventory.models",
+        "description": "inventory.models",
+        "isExtraImport": true,
+        "detail": "inventory.models",
+        "documentation": {}
+    },
+    {
+        "label": "Product",
+        "importPath": "inventory.models",
+        "description": "inventory.models",
+        "isExtraImport": true,
+        "detail": "inventory.models",
+        "documentation": {}
+    },
+    {
+        "label": "Product",
+        "importPath": "inventory.models",
+        "description": "inventory.models",
+        "isExtraImport": true,
+        "detail": "inventory.models",
+        "documentation": {}
+    },
+    {
+        "label": "PERCENTAGE_VALIDATOR",
+        "importPath": "inventory.models",
+        "description": "inventory.models",
+        "isExtraImport": true,
+        "detail": "inventory.models",
+        "documentation": {}
+    },
+    {
+        "label": "Optional",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Tuple",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Dict",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "TestCase",
+        "importPath": "django.test",
+        "description": "django.test",
+        "isExtraImport": true,
+        "detail": "django.test",
+        "documentation": {}
+    },
+    {
+        "label": "TestCase",
+        "importPath": "django.test",
+        "description": "django.test",
+        "isExtraImport": true,
+        "detail": "django.test",
+        "documentation": {}
+    },
+    {
+        "label": "TestCase",
+        "importPath": "django.test",
+        "description": "django.test",
+        "isExtraImport": true,
+        "detail": "django.test",
+        "documentation": {}
+    },
+    {
+        "label": "redirect",
+        "importPath": "django.shortcuts",
+        "description": "django.shortcuts",
+        "isExtraImport": true,
+        "detail": "django.shortcuts",
+        "documentation": {}
+    },
+    {
+        "label": "render",
+        "importPath": "django.shortcuts",
+        "description": "django.shortcuts",
+        "isExtraImport": true,
+        "detail": "django.shortcuts",
+        "documentation": {}
+    },
+    {
+        "label": "redirect",
+        "importPath": "django.shortcuts",
+        "description": "django.shortcuts",
+        "isExtraImport": true,
+        "detail": "django.shortcuts",
+        "documentation": {}
+    },
+    {
+        "label": "render",
+        "importPath": "django.shortcuts",
+        "description": "django.shortcuts",
+        "isExtraImport": true,
+        "detail": "django.shortcuts",
+        "documentation": {}
+    },
+    {
+        "label": "render",
+        "importPath": "django.shortcuts",
+        "description": "django.shortcuts",
+        "isExtraImport": true,
+        "detail": "django.shortcuts",
+        "documentation": {}
+    },
+    {
+        "label": "redirect",
+        "importPath": "django.shortcuts",
+        "description": "django.shortcuts",
+        "isExtraImport": true,
+        "detail": "django.shortcuts",
+        "documentation": {}
+    },
+    {
+        "label": "redirect",
+        "importPath": "django.shortcuts",
+        "description": "django.shortcuts",
+        "isExtraImport": true,
+        "detail": "django.shortcuts",
+        "documentation": {}
+    },
+    {
+        "label": "render",
+        "importPath": "django.shortcuts",
+        "description": "django.shortcuts",
+        "isExtraImport": true,
+        "detail": "django.shortcuts",
+        "documentation": {}
+    },
+    {
+        "label": "redirect",
+        "importPath": "django.shortcuts",
+        "description": "django.shortcuts",
+        "isExtraImport": true,
+        "detail": "django.shortcuts",
+        "documentation": {}
+    },
+    {
+        "label": "render",
+        "importPath": "django.shortcuts",
+        "description": "django.shortcuts",
+        "isExtraImport": true,
+        "detail": "django.shortcuts",
+        "documentation": {}
+    },
+    {
+        "label": "render",
+        "importPath": "django.shortcuts",
+        "description": "django.shortcuts",
+        "isExtraImport": true,
+        "detail": "django.shortcuts",
+        "documentation": {}
+    },
+    {
+        "label": "reverse",
+        "importPath": "django.urls",
+        "description": "django.urls",
+        "isExtraImport": true,
+        "detail": "django.urls",
+        "documentation": {}
+    },
+    {
+        "label": "reverse",
+        "importPath": "django.urls",
+        "description": "django.urls",
+        "isExtraImport": true,
+        "detail": "django.urls",
+        "documentation": {}
+    },
+    {
+        "label": "path",
+        "importPath": "django.urls",
+        "description": "django.urls",
+        "isExtraImport": true,
+        "detail": "django.urls",
+        "documentation": {}
+    },
+    {
+        "label": "re_path",
+        "importPath": "django.urls",
+        "description": "django.urls",
+        "isExtraImport": true,
+        "detail": "django.urls",
+        "documentation": {}
+    },
+    {
+        "label": "reverse",
+        "importPath": "django.urls",
+        "description": "django.urls",
+        "isExtraImport": true,
+        "detail": "django.urls",
+        "documentation": {}
+    },
+    {
+        "label": "login_required",
+        "importPath": "django.contrib.auth.decorators",
+        "description": "django.contrib.auth.decorators",
+        "isExtraImport": true,
+        "detail": "django.contrib.auth.decorators",
+        "documentation": {}
+    },
+    {
+        "label": "login_required",
+        "importPath": "django.contrib.auth.decorators",
+        "description": "django.contrib.auth.decorators",
+        "isExtraImport": true,
+        "detail": "django.contrib.auth.decorators",
+        "documentation": {}
+    },
+    {
+        "label": "login_required",
+        "importPath": "django.contrib.auth.decorators",
+        "description": "django.contrib.auth.decorators",
+        "isExtraImport": true,
+        "detail": "django.contrib.auth.decorators",
+        "documentation": {}
+    },
+    {
+        "label": "login_required",
+        "importPath": "django.contrib.auth.decorators",
+        "description": "django.contrib.auth.decorators",
+        "isExtraImport": true,
+        "detail": "django.contrib.auth.decorators",
+        "documentation": {}
+    },
+    {
+        "label": "login_required",
+        "importPath": "django.contrib.auth.decorators",
+        "description": "django.contrib.auth.decorators",
+        "isExtraImport": true,
+        "detail": "django.contrib.auth.decorators",
+        "documentation": {}
+    },
+    {
+        "label": "login_required",
+        "importPath": "django.contrib.auth.decorators",
+        "description": "django.contrib.auth.decorators",
+        "isExtraImport": true,
+        "detail": "django.contrib.auth.decorators",
+        "documentation": {}
+    },
+    {
+        "label": "JsonResponse",
+        "importPath": "django.http",
+        "description": "django.http",
+        "isExtraImport": true,
+        "detail": "django.http",
+        "documentation": {}
+    },
+    {
+        "label": "HttpResponseBadRequest",
+        "importPath": "django.http",
+        "description": "django.http",
+        "isExtraImport": true,
+        "detail": "django.http",
+        "documentation": {}
+    },
+    {
+        "label": "HttpResponse",
+        "importPath": "django.http",
+        "description": "django.http",
+        "isExtraImport": true,
+        "detail": "django.http",
+        "documentation": {}
+    },
+    {
+        "label": "HttpResponse",
+        "importPath": "django.http",
+        "description": "django.http",
+        "isExtraImport": true,
+        "detail": "django.http",
+        "documentation": {}
+    },
+    {
+        "label": "Http404",
+        "importPath": "django.http",
+        "description": "django.http",
+        "isExtraImport": true,
+        "detail": "django.http",
+        "documentation": {}
+    },
+    {
+        "label": "HttpResponse",
+        "importPath": "django.http",
+        "description": "django.http",
+        "isExtraImport": true,
+        "detail": "django.http",
+        "documentation": {}
+    },
+    {
+        "label": "HttpResponseBadRequest",
+        "importPath": "django.http",
+        "description": "django.http",
+        "isExtraImport": true,
+        "detail": "django.http",
+        "documentation": {}
+    },
+    {
+        "label": "require_GET",
+        "importPath": "django.views.decorators.http",
+        "description": "django.views.decorators.http",
+        "isExtraImport": true,
+        "detail": "django.views.decorators.http",
+        "documentation": {}
+    },
+    {
+        "label": "escape",
+        "importPath": "django.utils.html",
+        "description": "django.utils.html",
+        "isExtraImport": true,
+        "detail": "django.utils.html",
+        "documentation": {}
+    },
+    {
+        "label": "format_html",
+        "importPath": "django.utils.html",
+        "description": "django.utils.html",
+        "isExtraImport": true,
+        "detail": "django.utils.html",
+        "documentation": {}
+    },
+    {
+        "label": "format_html",
+        "importPath": "django.utils.html",
+        "description": "django.utils.html",
+        "isExtraImport": true,
+        "detail": "django.utils.html",
+        "documentation": {}
+    },
+    {
+        "label": "django.core.validators",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "django.core.validators",
+        "description": "django.core.validators",
+        "detail": "django.core.validators",
+        "documentation": {}
+    },
+    {
+        "label": "MinValueValidator",
+        "importPath": "django.core.validators",
+        "description": "django.core.validators",
+        "isExtraImport": true,
+        "detail": "django.core.validators",
+        "documentation": {}
+    },
+    {
+        "label": "MaxValueValidator",
+        "importPath": "django.core.validators",
+        "description": "django.core.validators",
+        "isExtraImport": true,
+        "detail": "django.core.validators",
+        "documentation": {}
+    },
+    {
+        "label": "django.db.models.deletion",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "django.db.models.deletion",
+        "description": "django.db.models.deletion",
+        "detail": "django.db.models.deletion",
+        "documentation": {}
+    },
+    {
+        "label": "urlencode",
+        "importPath": "django.utils.http",
+        "description": "django.utils.http",
+        "isExtraImport": true,
+        "detail": "django.utils.http",
+        "documentation": {}
+    },
+    {
+        "label": "urlencode",
+        "importPath": "django.utils.http",
+        "description": "django.utils.http",
+        "isExtraImport": true,
+        "detail": "django.utils.http",
+        "documentation": {}
+    },
+    {
+        "label": "ImportExportModelAdmin",
+        "importPath": "import_export.admin",
+        "description": "import_export.admin",
+        "isExtraImport": true,
+        "detail": "import_export.admin",
+        "documentation": {}
+    },
+    {
+        "label": "ImportExportModelAdmin",
+        "importPath": "import_export.admin",
+        "description": "import_export.admin",
+        "isExtraImport": true,
+        "detail": "import_export.admin",
+        "documentation": {}
+    },
+    {
+        "label": "resources",
+        "importPath": "import_export",
+        "description": "import_export",
+        "isExtraImport": true,
+        "detail": "import_export",
+        "documentation": {}
+    },
+    {
+        "label": "slugify",
+        "importPath": "django.template.defaultfilters",
+        "description": "django.template.defaultfilters",
+        "isExtraImport": true,
+        "detail": "django.template.defaultfilters",
+        "documentation": {}
+    },
+    {
+        "label": "forms",
+        "importPath": "django",
+        "description": "django",
+        "isExtraImport": true,
+        "detail": "django",
+        "documentation": {}
+    },
+    {
+        "label": "forms",
+        "importPath": "django",
+        "description": "django",
+        "isExtraImport": true,
+        "detail": "django",
+        "documentation": {}
+    },
+    {
+        "label": "forms",
+        "importPath": "django",
+        "description": "django",
+        "isExtraImport": true,
+        "detail": "django",
+        "documentation": {}
+    },
+    {
+        "label": "forms",
+        "importPath": "django",
+        "description": "django",
+        "isExtraImport": true,
+        "detail": "django",
+        "documentation": {}
+    },
+    {
+        "label": "TextInput",
+        "importPath": "django.forms",
+        "description": "django.forms",
+        "isExtraImport": true,
+        "detail": "django.forms",
+        "documentation": {}
+    },
+    {
+        "label": "Cart",
+        "importPath": "cart.models",
+        "description": "cart.models",
+        "isExtraImport": true,
+        "detail": "cart.models",
+        "documentation": {}
+    },
+    {
+        "label": "Cart",
+        "importPath": "cart.models",
+        "description": "cart.models",
+        "isExtraImport": true,
+        "detail": "cart.models",
+        "documentation": {}
+    },
+    {
+        "label": "displayed_items",
+        "importPath": "cart.models",
+        "description": "cart.models",
+        "isExtraImport": true,
+        "detail": "cart.models",
+        "documentation": {}
+    },
+    {
+        "label": "Cart",
+        "importPath": "cart.models",
+        "description": "cart.models",
+        "isExtraImport": true,
+        "detail": "cart.models",
+        "documentation": {}
+    },
+    {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
+        "documentation": {}
+    },
+    {
+        "label": "os",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "socket",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "socket",
+        "description": "socket",
+        "detail": "socket",
+        "documentation": {}
+    },
+    {
+        "label": "load_dotenv",
+        "importPath": "dotenv",
+        "description": "dotenv",
+        "isExtraImport": true,
+        "detail": "dotenv",
+        "documentation": {}
+    },
+    {
+        "label": "load_dotenv",
+        "importPath": "dotenv",
+        "description": "dotenv",
+        "isExtraImport": true,
+        "detail": "dotenv",
+        "documentation": {}
+    },
+    {
+        "label": "AdminConfig",
+        "importPath": "django.contrib.admin.apps",
+        "description": "django.contrib.admin.apps",
+        "isExtraImport": true,
+        "detail": "django.contrib.admin.apps",
+        "documentation": {}
+    },
+    {
+        "label": "get_asgi_application",
+        "importPath": "django.core.asgi",
+        "description": "django.core.asgi",
+        "isExtraImport": true,
+        "detail": "django.core.asgi",
+        "documentation": {}
+    },
+    {
+        "label": "serve",
+        "importPath": "django.views.static",
+        "description": "django.views.static",
+        "isExtraImport": true,
+        "detail": "django.views.static",
+        "documentation": {}
+    },
+    {
+        "label": "views",
+        "importPath": "transaction",
+        "description": "transaction",
+        "isExtraImport": true,
+        "detail": "transaction",
+        "documentation": {}
+    },
+    {
+        "label": "views",
+        "importPath": "cart",
+        "description": "cart",
+        "isExtraImport": true,
+        "detail": "cart",
+        "documentation": {}
+    },
+    {
+        "label": "views",
+        "importPath": "django.contrib.auth",
+        "description": "django.contrib.auth",
+        "isExtraImport": true,
+        "detail": "django.contrib.auth",
+        "documentation": {}
+    },
+    {
+        "label": "authenticate",
+        "importPath": "django.contrib.auth",
+        "description": "django.contrib.auth",
+        "isExtraImport": true,
+        "detail": "django.contrib.auth",
+        "documentation": {}
+    },
+    {
+        "label": "login",
+        "importPath": "django.contrib.auth",
+        "description": "django.contrib.auth",
+        "isExtraImport": true,
+        "detail": "django.contrib.auth",
+        "documentation": {}
+    },
+    {
+        "label": "logout",
+        "importPath": "django.contrib.auth",
+        "description": "django.contrib.auth",
+        "isExtraImport": true,
+        "detail": "django.contrib.auth",
+        "documentation": {}
+    },
+    {
+        "label": "views",
+        "importPath": "inventory",
+        "description": "inventory",
+        "isExtraImport": true,
+        "detail": "inventory",
+        "documentation": {}
+    },
+    {
+        "label": "staticfiles_storage",
+        "importPath": "django.contrib.staticfiles.storage",
+        "description": "django.contrib.staticfiles.storage",
+        "isExtraImport": true,
+        "detail": "django.contrib.staticfiles.storage",
+        "documentation": {}
+    },
+    {
+        "label": "RedirectView",
+        "importPath": "django.views.generic.base",
+        "description": "django.views.generic.base",
+        "isExtraImport": true,
+        "detail": "django.views.generic.base",
+        "documentation": {}
+    },
+    {
+        "label": "productTransaction",
+        "importPath": "transaction.models",
+        "description": "transaction.models",
+        "isExtraImport": true,
+        "detail": "transaction.models",
+        "documentation": {}
+    },
+    {
+        "label": "transaction",
+        "importPath": "transaction.models",
+        "description": "transaction.models",
+        "isExtraImport": true,
+        "detail": "transaction.models",
+        "documentation": {}
+    },
+    {
+        "label": "DateSelector",
+        "importPath": "transaction.views",
+        "description": "transaction.views",
+        "isExtraImport": true,
+        "detail": "transaction.views",
+        "documentation": {}
+    },
+    {
+        "label": "express",
+        "importPath": "plotly",
+        "description": "plotly",
+        "isExtraImport": true,
+        "detail": "plotly",
+        "documentation": {}
+    },
+    {
+        "label": "offline",
+        "importPath": "plotly",
+        "description": "plotly",
+        "isExtraImport": true,
+        "detail": "plotly",
+        "documentation": {}
+    },
+    {
+        "label": "plotly.figure_factory",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "plotly.figure_factory",
+        "description": "plotly.figure_factory",
+        "detail": "plotly.figure_factory",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "timedelta",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "timedelta",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "timezone",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "time",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "timezone",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "pandas",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "pandas",
+        "description": "pandas",
+        "detail": "pandas",
+        "documentation": {}
+    },
+    {
+        "label": "pytz,",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "pytz.",
+        "description": "pytz.",
+        "detail": "pytz.",
+        "documentation": {}
+    },
+    {
+        "label": "timezone",
+        "importPath": "django.utils",
+        "description": "django.utils",
+        "isExtraImport": true,
+        "detail": "django.utils",
+        "documentation": {}
+    },
+    {
+        "label": "timezone",
+        "importPath": "django.utils",
+        "description": "django.utils",
+        "isExtraImport": true,
+        "detail": "django.utils",
+        "documentation": {}
+    },
+    {
+        "label": "timezone",
+        "importPath": "django.utils",
+        "description": "django.utils",
+        "isExtraImport": true,
+        "detail": "django.utils",
+        "documentation": {}
+    },
+    {
+        "label": "timezone",
+        "importPath": "django.utils",
+        "description": "django.utils",
+        "isExtraImport": true,
+        "detail": "django.utils",
+        "documentation": {}
+    },
+    {
+        "label": "get_wsgi_application",
+        "importPath": "django.core.wsgi",
+        "description": "django.core.wsgi",
+        "isExtraImport": true,
+        "detail": "django.core.wsgi",
+        "documentation": {}
+    },
+    {
+        "label": "Library",
+        "importPath": "django.template",
+        "description": "django.template",
+        "isExtraImport": true,
+        "detail": "django.template",
+        "documentation": {}
+    },
+    {
+        "label": "DateTimeRangeFilter",
+        "importPath": "rangefilter.filters",
+        "description": "rangefilter.filters",
+        "isExtraImport": true,
+        "detail": "rangefilter.filters",
+        "documentation": {}
+    },
+    {
+        "label": "literal_eval",
+        "importPath": "ast",
+        "description": "ast",
+        "isExtraImport": true,
+        "detail": "ast",
+        "documentation": {}
+    },
+    {
+        "label": "pytz",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "pytz",
+        "description": "pytz",
+        "detail": "pytz",
+        "documentation": {}
+    },
+    {
+        "label": "F",
+        "importPath": "django.db.models",
+        "description": "django.db.models",
+        "isExtraImport": true,
+        "detail": "django.db.models",
+        "documentation": {}
+    },
+    {
+        "label": "Sum",
+        "importPath": "django.db.models",
+        "description": "django.db.models",
+        "isExtraImport": true,
+        "detail": "django.db.models",
+        "documentation": {}
+    },
+    {
+        "label": "F",
+        "importPath": "django.db.models",
+        "description": "django.db.models",
+        "isExtraImport": true,
+        "detail": "django.db.models",
+        "documentation": {}
+    },
+    {
+        "label": "ExpressionWrapper",
+        "importPath": "django.db.models",
+        "description": "django.db.models",
+        "isExtraImport": true,
+        "detail": "django.db.models",
+        "documentation": {}
+    },
+    {
+        "label": "DecimalField",
+        "importPath": "django.db.models",
+        "description": "django.db.models",
+        "isExtraImport": true,
+        "detail": "django.db.models",
+        "documentation": {}
+    },
+    {
+        "label": "traceback",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "traceback",
+        "description": "traceback",
+        "detail": "traceback",
+        "documentation": {}
+    },
+    {
+        "label": "parse_datetime",
+        "importPath": "django.utils.dateparse",
+        "description": "django.utils.dateparse",
+        "isExtraImport": true,
+        "detail": "django.utils.dateparse",
+        "documentation": {}
+    },
+    {
+        "label": "Usb",
+        "importPath": "escpos.printer",
+        "description": "escpos.printer",
+        "isExtraImport": true,
+        "detail": "escpos.printer",
+        "documentation": {}
+    },
+    {
+        "label": "print_function",
+        "importPath": "__future__",
+        "description": "__future__",
+        "isExtraImport": true,
+        "detail": "__future__",
+        "documentation": {}
+    },
+    {
+        "label": "sys",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "sys",
+        "description": "sys",
+        "detail": "sys",
+        "documentation": {}
+    },
+    {
+        "label": "Migration",
+        "kind": 6,
+        "importPath": "cart.migrations.0001_initial",
+        "description": "cart.migrations.0001_initial",
+        "peekOfCode": "class Migration(migrations.Migration):\n    initial = True\n    dependencies = [\n    ]\n    operations = [\n        migrations.CreateModel(\n            name='displayed_items',\n            fields=[\n                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),\n                ('barcode', models.CharField(max_length=16, unique=True)),",
+        "detail": "cart.migrations.0001_initial",
+        "documentation": {}
+    },
+    {
+        "label": "Migration",
+        "kind": 6,
+        "importPath": "cart.migrations.0002_alter_displayed_items_display_color",
+        "description": "cart.migrations.0002_alter_displayed_items_display_color",
+        "peekOfCode": "class Migration(migrations.Migration):\n    dependencies = [\n        ('cart', '0001_initial'),\n    ]\n    operations = [\n        migrations.AlterField(\n            model_name='displayed_items',\n            name='display_color',\n            field=colorfield.fields.ColorField(default='#575757', image_field=None, max_length=25, samples=None),\n        ),",
+        "detail": "cart.migrations.0002_alter_displayed_items_display_color",
+        "documentation": {}
+    },
+    {
+        "label": "Migration",
+        "kind": 6,
+        "importPath": "cart.migrations.0003_alter_displayed_items_options_and_more",
+        "description": "cart.migrations.0003_alter_displayed_items_options_and_more",
+        "peekOfCode": "class Migration(migrations.Migration):\n    dependencies = [\n        ('cart', '0002_alter_displayed_items_display_color'),\n    ]\n    operations = [\n        migrations.AlterModelOptions(\n            name='displayed_items',\n            options={'verbose_name_plural': 'Displayed Items'},\n        ),\n        migrations.AlterField(",
+        "detail": "cart.migrations.0003_alter_displayed_items_options_and_more",
+        "documentation": {}
+    },
+    {
+        "label": "Migration",
+        "kind": 6,
+        "importPath": "cart.migrations.0004_alter_displayed_items_barcode",
+        "description": "cart.migrations.0004_alter_displayed_items_barcode",
+        "peekOfCode": "class Migration(migrations.Migration):\n    dependencies = [\n        ('cart', '0003_alter_displayed_items_options_and_more'),\n    ]\n    operations = [\n        migrations.AlterField(\n            model_name='displayed_items',\n            name='barcode',\n            field=models.CharField(max_length=64, unique=True),\n        ),",
+        "detail": "cart.migrations.0004_alter_displayed_items_barcode",
+        "documentation": {}
+    },
+    {
+        "label": "DisplayedItems",
+        "kind": 6,
+        "importPath": "cart.admin",
+        "description": "cart.admin",
+        "peekOfCode": "class DisplayedItems(admin.ModelAdmin):\n    list_display = ('barcode','display_name','display_color','variable_price')\n# #### Admin Log Entry\n# from django.contrib.admin.models import LogEntry, DELETION\n# from django.utils.html import escape\n# from django.urls import reverse\n# from django.utils.safestring import mark_safe\n# @admin.register(LogEntry)\n# class LogEntryAdmin(admin.ModelAdmin):\n#     date_hierarchy = 'action_time'",
+        "detail": "cart.admin",
+        "documentation": {}
+    },
+    {
+        "label": "CartConfig",
+        "kind": 6,
+        "importPath": "cart.apps",
+        "description": "cart.apps",
+        "peekOfCode": "class CartConfig(AppConfig):\n    default_auto_field = 'django.db.models.BigAutoField'\n    name = 'cart'",
+        "detail": "cart.apps",
+        "documentation": {}
+    },
+    {
+        "label": "Cart",
+        "kind": 6,
+        "importPath": "cart.models",
+        "description": "cart.models",
+        "peekOfCode": "class Cart:\n    \"\"\"\n    Session-backed cart.\n    Usage:\n        cart = Cart(request)\n        result = cart.add(product, quantity=1, variable_price=None)\n        if result.get(\"status\") == \"error\": handle\n    \"\"\"\n    def __init__(self, request):\n        self.request = request",
+        "detail": "cart.models",
+        "documentation": {}
+    },
+    {
+        "label": "displayed_items",
+        "kind": 6,
+        "importPath": "cart.models",
+        "description": "cart.models",
+        "peekOfCode": "class displayed_items(models.Model):\n    \"\"\"\n    Simple model for buttons/display items on the POS screen.\n    Must reference an existing product barcode (prevents orphan button entries).\n    \"\"\"\n    barcode = models.CharField(unique=True, max_length=64, blank=False, null=False)\n    display_name = models.CharField(max_length=125, blank=False, null=False)\n    display_info = models.CharField(max_length=125, blank=True, null=False, default=\"\")\n    display_color = ColorField(default=\"#575757\")\n    variable_price = models.BooleanField(default=False)  # allow variable-price buttons",
+        "detail": "cart.models",
+        "documentation": {}
+    },
+    {
+        "label": "DEFAULT_CART_SESSION_KEY",
+        "kind": 5,
+        "importPath": "cart.models",
+        "description": "cart.models",
+        "peekOfCode": "DEFAULT_CART_SESSION_KEY = getattr(settings, \"CART_SESSION_ID\", \"cart\")\ndef _to_decimal(value):\n    \"\"\"Safely convert value to Decimal quantized to 2 decimal places.\"\"\"\n    try:\n        if isinstance(value, Decimal):\n            d = value\n        else:\n            d = Decimal(str(value))\n        return d.quantize(Decimal(\"0.01\"), rounding=ROUND_HALF_UP)\n    except (InvalidOperation, TypeError, ValueError):",
+        "detail": "cart.models",
+        "documentation": {}
+    },
+    {
+        "label": "getcontext().prec",
+        "kind": 5,
+        "importPath": "cart.models",
+        "description": "cart.models",
+        "peekOfCode": "getcontext().prec = 28\nDEFAULT_CART_SESSION_KEY = \"cart\"  # keep the same key you used before (change if needed)\ndef _to_decimal(value) -> Decimal:\n    \"\"\"Safe conversion to Decimal with fallback to 0.00\"\"\"\n    try:\n        if value is None:\n            return Decimal(\"0.00\")\n        if isinstance(value, Decimal):\n            return value\n        return Decimal(str(value))",
+        "detail": "cart.models",
+        "documentation": {}
+    },
+    {
+        "label": "DEFAULT_CART_SESSION_KEY",
+        "kind": 5,
+        "importPath": "cart.models",
+        "description": "cart.models",
+        "peekOfCode": "DEFAULT_CART_SESSION_KEY = \"cart\"  # keep the same key you used before (change if needed)\ndef _to_decimal(value) -> Decimal:\n    \"\"\"Safe conversion to Decimal with fallback to 0.00\"\"\"\n    try:\n        if value is None:\n            return Decimal(\"0.00\")\n        if isinstance(value, Decimal):\n            return value\n        return Decimal(str(value))\n    except (InvalidOperation, ValueError, TypeError):",
+        "detail": "cart.models",
+        "documentation": {}
+    },
+    {
+        "label": "safe_decimal",
+        "kind": 2,
+        "importPath": "cart.views",
+        "description": "cart.views",
+        "peekOfCode": "def safe_decimal(value, default=Decimal(\"0.00\")):\n    \"\"\"\n    Convert value to Decimal safely and quantize to 2 decimals.\n    Accepts Decimal, int, float, str. Returns default on failure.\n    \"\"\"\n    if value is None or value == \"\":\n        return default\n    if isinstance(value, Decimal):\n        try:\n            return value.quantize(Decimal(\"0.01\"), rounding=ROUND_HALF_UP)",
+        "detail": "cart.views",
+        "documentation": {}
+    },
+    {
+        "label": "get_unit_tax",
+        "kind": 2,
+        "importPath": "cart.views",
+        "description": "cart.views",
+        "peekOfCode": "def get_unit_tax(product_obj):\n    \"\"\"\n    Calculate per-unit tax for a Product object.\n    Returns Decimal(0.00) if product is not taxable or on error.\n    \"\"\"\n    try:\n        if getattr(product_obj, \"is_taxable\", True) and getattr(product_obj, \"tax_category\", None):\n            pct = safe_decimal(getattr(product_obj.tax_category, \"tax_percentage\", 0)) / Decimal(\"100\")\n            unit_tax = (safe_decimal(getattr(product_obj, \"sales_price\", 0)) * pct).quantize(\n                Decimal(\"0.01\"), rounding=ROUND_HALF_UP",
+        "detail": "cart.views",
+        "documentation": {}
+    },
+    {
+        "label": "cart_add",
+        "kind": 2,
+        "importPath": "cart.views",
+        "description": "cart.views",
+        "peekOfCode": "def cart_add(request, id, qty):\n    \"\"\"\n    Add a product to the session cart.\n    - id: barcode\n    - qty: integer quantity\n    Optional `price` GET param can override unit price (variable_price).\n    \"\"\"\n    cart = Cart(request)\n    try:\n        product = Product.objects.filter(barcode=id).first()",
+        "detail": "cart.views",
+        "documentation": {}
+    },
+    {
+        "label": "item_clear",
+        "kind": 2,
+        "importPath": "cart.views",
+        "description": "cart.views",
+        "peekOfCode": "def item_clear(request, id):\n    \"\"\"\n    Remove an item from the cart completely.\n    `id` is the product barcode.\n    \"\"\"\n    cart = Cart(request)\n    try:\n        product = Product.objects.get(barcode=id)\n    except Product.DoesNotExist:\n        # nothing to remove",
+        "detail": "cart.views",
+        "documentation": {}
+    },
+    {
+        "label": "item_increment",
+        "kind": 2,
+        "importPath": "cart.views",
+        "description": "cart.views",
+        "peekOfCode": "def item_increment(request, id):\n    \"\"\"\n    Increment product quantity by 1. Returns redirect to register page.\n    If stock insufficient, sets session stock_error to trigger UI alert.\n    \"\"\"\n    cart = Cart(request)\n    try:\n        product = Product.objects.get(barcode=id)\n    except Product.DoesNotExist:\n        request.session[\"stock_error\"] = \"Product not found\"",
+        "detail": "cart.views",
+        "documentation": {}
+    },
+    {
+        "label": "item_decrement",
+        "kind": 2,
+        "importPath": "cart.views",
+        "description": "cart.views",
+        "peekOfCode": "def item_decrement(request, id):\n    \"\"\"\n    Decrement product quantity by 1. If count reaches 0, remove from cart.\n    \"\"\"\n    cart = Cart(request)\n    try:\n        product = Product.objects.get(barcode=id)\n    except Product.DoesNotExist:\n        request.session[\"stock_error\"] = \"Product not found\"\n        return redirect(\"register\")",
+        "detail": "cart.views",
+        "documentation": {}
+    },
+    {
+        "label": "cart_clear",
+        "kind": 2,
+        "importPath": "cart.views",
+        "description": "cart.views",
+        "peekOfCode": "def cart_clear(request):\n    \"\"\"\n    Clear the entire session cart.\n    \"\"\"\n    cart = Cart(request)\n    cart.clear()\n    return redirect(\"register\")\n@login_required(login_url=\"/user/login\")\ndef cart_detail(request):\n    \"\"\"",
+        "detail": "cart.views",
+        "documentation": {}
+    },
+    {
+        "label": "cart_detail",
+        "kind": 2,
+        "importPath": "cart.views",
+        "description": "cart.views",
+        "peekOfCode": "def cart_detail(request):\n    \"\"\"\n    Render the cart detail page. Compute totals using cart items.\n    \"\"\"\n    cart = Cart(request)\n    items = []\n    for entry in cart:\n        # ensure keys exist and are typed\n        qty = int(entry.get(\"quantity\", entry.get(\"qty\", 0)) or 0)\n        price = safe_decimal(entry.get(\"price\", entry.get(\"sales_price\", 0)))",
+        "detail": "cart.views",
+        "documentation": {}
+    },
+    {
+        "label": "cart_update_quantity",
+        "kind": 2,
+        "importPath": "cart.views",
+        "description": "cart.views",
+        "peekOfCode": "def cart_update_quantity(request):\n    \"\"\"\n    AJAX / form endpoint to set a product quantity in cart.\n    Expects POST with 'barcode' and 'quantity' fields.\n    Returns JSON with new totals or 400 on bad input.\n    \"\"\"\n    if request.method != \"POST\":\n        return HttpResponseBadRequest(\"POST required\")\n    barcode = request.POST.get(\"barcode\")\n    quantity = request.POST.get(\"quantity\")",
+        "detail": "cart.views",
+        "documentation": {}
+    },
+    {
+        "label": "product_search",
+        "kind": 2,
+        "importPath": "cart.views",
+        "description": "cart.views",
+        "peekOfCode": "def product_search(request):\n    \"\"\"\n    AJAX endpoint: ?q=search_text\n    Returns JSON list of matching products limited to 20 items.\n    Each item: { barcode, name, sales_price, qty }\n    \"\"\"\n    q = request.GET.get(\"q\", \"\").strip()\n    data = []\n    if not q:\n        return JsonResponse({\"results\": data})",
+        "detail": "cart.views",
+        "documentation": {}
+    },
+    {
+        "label": "Migration",
+        "kind": 6,
+        "importPath": "inventory.migrations.0001_initial",
+        "description": "inventory.migrations.0001_initial",
+        "peekOfCode": "class Migration(migrations.Migration):\n    initial = True\n    dependencies = [\n    ]\n    operations = [\n        migrations.CreateModel(\n            name='department',\n            fields=[\n                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),\n                ('department_name', models.CharField(max_length=32, unique=True)),",
+        "detail": "inventory.migrations.0001_initial",
+        "documentation": {}
+    },
+    {
+        "label": "Migration",
+        "kind": 6,
+        "importPath": "inventory.migrations.0002_product_is_taxable_alter_deposit_deposit_value_and_more",
+        "description": "inventory.migrations.0002_product_is_taxable_alter_deposit_deposit_value_and_more",
+        "peekOfCode": "class Migration(migrations.Migration):\n    dependencies = [\n        ('inventory', '0001_initial'),\n    ]\n    operations = [\n        migrations.AddField(\n            model_name='product',\n            name='is_taxable',\n            field=models.BooleanField(default=True),\n        ),",
+        "detail": "inventory.migrations.0002_product_is_taxable_alter_deposit_deposit_value_and_more",
+        "documentation": {}
+    },
+    {
+        "label": "Migration",
+        "kind": 6,
+        "importPath": "inventory.migrations.0003_auto_20260114_1732",
+        "description": "inventory.migrations.0003_auto_20260114_1732",
+        "peekOfCode": "class Migration(migrations.Migration):\n    dependencies = [\n        ('inventory', '0002_product_is_taxable_alter_deposit_deposit_value_and_more'),\n    ]\n    operations = [\n    ]",
+        "detail": "inventory.migrations.0003_auto_20260114_1732",
+        "documentation": {}
+    },
+    {
+        "label": "Migration",
+        "kind": 6,
+        "importPath": "inventory.migrations.0004_supplier_remove_product_deposit_category_and_more",
+        "description": "inventory.migrations.0004_supplier_remove_product_deposit_category_and_more",
+        "peekOfCode": "class Migration(migrations.Migration):\n    dependencies = [\n        ('inventory', '0003_auto_20260114_1732'),\n    ]\n    operations = [\n        migrations.CreateModel(\n            name='supplier',\n            fields=[\n                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),\n                ('name', models.CharField(max_length=100, unique=True)),",
+        "detail": "inventory.migrations.0004_supplier_remove_product_deposit_category_and_more",
+        "documentation": {}
+    },
+    {
+        "label": "Migration",
+        "kind": 6,
+        "importPath": "inventory.migrations.0005_product_low_stock_threshold",
+        "description": "inventory.migrations.0005_product_low_stock_threshold",
+        "peekOfCode": "class Migration(migrations.Migration):\n    dependencies = [\n        ('inventory', '0004_supplier_remove_product_deposit_category_and_more'),\n    ]\n    operations = [\n        migrations.AddField(\n            model_name='product',\n            name='low_stock_threshold',\n            field=models.PositiveIntegerField(default=5),\n        ),",
+        "detail": "inventory.migrations.0005_product_low_stock_threshold",
+        "documentation": {}
+    },
+    {
+        "label": "Migration",
+        "kind": 6,
+        "importPath": "inventory.migrations.0006_alter_department_options_alter_product_options_and_more",
+        "description": "inventory.migrations.0006_alter_department_options_alter_product_options_and_more",
+        "peekOfCode": "class Migration(migrations.Migration):\n    dependencies = [\n        ('inventory', '0005_product_low_stock_threshold'),\n    ]\n    operations = [\n        migrations.AlterModelOptions(\n            name='department',\n            options={'verbose_name': 'Department', 'verbose_name_plural': 'Departments'},\n        ),\n        migrations.AlterModelOptions(",
+        "detail": "inventory.migrations.0006_alter_department_options_alter_product_options_and_more",
+        "documentation": {}
+    },
+    {
+        "label": "Migration",
+        "kind": 6,
+        "importPath": "inventory.migrations.0007_remove_product_is_taxable_alter_product_tax_category",
+        "description": "inventory.migrations.0007_remove_product_is_taxable_alter_product_tax_category",
+        "peekOfCode": "class Migration(migrations.Migration):\n    dependencies = [\n        ('inventory', '0006_alter_department_options_alter_product_options_and_more'),\n    ]\n    operations = [\n        migrations.RemoveField(\n            model_name='product',\n            name='is_taxable',\n        ),\n        migrations.AlterField(",
+        "detail": "inventory.migrations.0007_remove_product_is_taxable_alter_product_tax_category",
+        "documentation": {}
+    },
+    {
+        "label": "ProductResource",
+        "kind": 6,
+        "importPath": "inventory.admin",
+        "description": "inventory.admin",
+        "peekOfCode": "class ProductResource(resources.ModelResource):\n    class Meta:\n        model = Product\n        fields = (\n            \"id\",\n            \"barcode\",\n            \"name\",\n            \"sales_price\",\n            \"qty\",\n            \"cost_price\",",
+        "detail": "inventory.admin",
+        "documentation": {}
+    },
+    {
+        "label": "ProductAdmin",
+        "kind": 6,
+        "importPath": "inventory.admin",
+        "description": "inventory.admin",
+        "peekOfCode": "class ProductAdmin(ImportExportModelAdmin):\n    resource_class = ProductResource\n    list_display = (\n        \"barcode\",\n        \"name\",\n        \"supplier\",\n        \"sales_price\",\n        \"qty\",\n        \"low_stock_threshold\",\n        \"low_stock_indicator\",",
+        "detail": "inventory.admin",
+        "documentation": {}
+    },
+    {
+        "label": "DepartmentAdmin",
+        "kind": 6,
+        "importPath": "inventory.admin",
+        "description": "inventory.admin",
+        "peekOfCode": "class DepartmentAdmin(ImportExportModelAdmin):\n    list_display = (\"department_name\", \"department_desc\", \"products_in_department\")\n    def products_in_department(self, obj):\n        count = Product.objects.filter(department=obj).count()\n        url = (\n            reverse(\"admin:inventory_product_changelist\")\n            + \"?\"\n            + urlencode({\"department__id\": f\"{obj.id}\"})\n        )\n        return format_html(",
+        "detail": "inventory.admin",
+        "documentation": {}
+    },
+    {
+        "label": "TaxAdmin",
+        "kind": 6,
+        "importPath": "inventory.admin",
+        "description": "inventory.admin",
+        "peekOfCode": "class TaxAdmin(ImportExportModelAdmin):\n    list_display = (\"tax_category\", \"tax_percentage\", \"tax_desc\")\n    search_fields = (\"tax_category\",)\n# ------------------------------\n# Supplier Admin\n# ------------------------------\n@admin.register(Supplier)\nclass SupplierAdmin(admin.ModelAdmin):\n    list_display = (\"name\", \"phone\", \"email\", \"address\")\n    search_fields = (\"name\", \"email\", \"phone\")",
+        "detail": "inventory.admin",
+        "documentation": {}
+    },
+    {
+        "label": "SupplierAdmin",
+        "kind": 6,
+        "importPath": "inventory.admin",
+        "description": "inventory.admin",
+        "peekOfCode": "class SupplierAdmin(admin.ModelAdmin):\n    list_display = (\"name\", \"phone\", \"email\", \"address\")\n    search_fields = (\"name\", \"email\", \"phone\")",
+        "detail": "inventory.admin",
+        "documentation": {}
+    },
+    {
+        "label": "InventoryConfig",
+        "kind": 6,
+        "importPath": "inventory.apps",
+        "description": "inventory.apps",
+        "peekOfCode": "class InventoryConfig(AppConfig):\n    default_auto_field = 'django.db.models.BigAutoField'\n    name = 'inventory'",
+        "detail": "inventory.apps",
+        "documentation": {}
+    },
+    {
+        "label": "Supplier",
+        "kind": 6,
+        "importPath": "inventory.models",
+        "description": "inventory.models",
+        "peekOfCode": "class Supplier(models.Model):\n    \"\"\"Supplier / vendor for products.\"\"\"\n    name = models.CharField(max_length=100, unique=True)\n    phone = models.CharField(max_length=20, blank=True)\n    email = models.EmailField(blank=True)\n    address = models.TextField(blank=True)\n    def __str__(self) -> str:\n        return self.name\n    class Meta:\n        verbose_name = \"Supplier\"",
+        "detail": "inventory.models",
+        "documentation": {}
+    },
+    {
+        "label": "Department",
+        "kind": 6,
+        "importPath": "inventory.models",
+        "description": "inventory.models",
+        "peekOfCode": "class Department(models.Model):\n    department_name = models.CharField(max_length=32, unique=True, null=False, blank=False)\n    department_desc = models.TextField(blank=True)\n    department_slug = models.SlugField(max_length=32, unique=True, blank=True)\n    def __str__(self) -> str:\n        return self.department_name\n    def save(self, *args, **kwargs):\n        self.department_slug = slugify(self.department_name)\n        return super().save(*args, **kwargs)\n    class Meta:",
+        "detail": "inventory.models",
+        "documentation": {}
+    },
+    {
+        "label": "Tax",
+        "kind": 6,
+        "importPath": "inventory.models",
+        "description": "inventory.models",
+        "peekOfCode": "class Tax(models.Model):\n    \"\"\"\n    Tax category model.\n    Example: tax_category='VAT', tax_percentage=18.000\n    \"\"\"\n    tax_category = models.CharField(max_length=32, unique=True, null=False, blank=False)\n    tax_desc = models.TextField(blank=True)\n    tax_percentage = models.DecimalField(\n        max_digits=6,\n        decimal_places=3,",
+        "detail": "inventory.models",
+        "documentation": {}
+    },
+    {
+        "label": "Product",
+        "kind": 6,
+        "importPath": "inventory.models",
+        "description": "inventory.models",
+        "peekOfCode": "class Product(models.Model):\n    \"\"\"\n    Product model — linked to a supplier and department.\n    Notes:\n    - `is_vat_applicable` is the single boolean toggle that controls whether VAT is applied.\n      (We removed `is_taxable` to avoid confusion — use only `is_vat_applicable`.)\n    - `tax_category` is optional. If missing and `is_vat_applicable` is True, default VAT is 18%.\n    - VAT calculations use VAT-INCLUSIVE extraction (i.e., VAT portion inside the sales price).\n    \"\"\"\n    department = models.ForeignKey(\"Department\", on_delete=models.RESTRICT, null=False, blank=False)",
+        "detail": "inventory.models",
+        "documentation": {}
+    },
+    {
+        "label": "getcontext().prec",
+        "kind": 5,
+        "importPath": "inventory.models",
+        "description": "inventory.models",
+        "peekOfCode": "getcontext().prec = 28\nPERCENTAGE_VALIDATOR = [MinValueValidator(0), MaxValueValidator(100)]\nclass Supplier(models.Model):\n    \"\"\"Supplier / vendor for products.\"\"\"\n    name = models.CharField(max_length=100, unique=True)\n    phone = models.CharField(max_length=20, blank=True)\n    email = models.EmailField(blank=True)\n    address = models.TextField(blank=True)\n    def __str__(self) -> str:\n        return self.name",
+        "detail": "inventory.models",
+        "documentation": {}
+    },
+    {
+        "label": "PERCENTAGE_VALIDATOR",
+        "kind": 5,
+        "importPath": "inventory.models",
+        "description": "inventory.models",
+        "peekOfCode": "PERCENTAGE_VALIDATOR = [MinValueValidator(0), MaxValueValidator(100)]\nclass Supplier(models.Model):\n    \"\"\"Supplier / vendor for products.\"\"\"\n    name = models.CharField(max_length=100, unique=True)\n    phone = models.CharField(max_length=20, blank=True)\n    email = models.EmailField(blank=True)\n    address = models.TextField(blank=True)\n    def __str__(self) -> str:\n        return self.name\n    class Meta:",
+        "detail": "inventory.models",
+        "documentation": {}
+    },
+    {
+        "label": "ProductLookup",
+        "kind": 6,
+        "importPath": "inventory.views",
+        "description": "inventory.views",
+        "peekOfCode": "class ProductLookup(forms.Form):\n    barcode = forms.CharField(widget=TextInput(attrs={' autocomplete':\"off\",'placeholder': \"Please Enter Barcode...\",'style':\"width:100%;padding: 10px;\"}),max_length = 32)\nclass AddProduct(forms.Form):\n    qty = forms.IntegerField(label=\"Quantity To Be Added\",widget=TextInput(attrs={'style':\"width:100%\"}))\n    barcode = forms.CharField(label=\"Product Barcode\", widget=TextInput(attrs={'autofocus':\"autofocus\",' autocomplete':\"off\",'style':\"width:100%\"}),max_length = 32)\n# Create your views here.\n@login_required(login_url=\"/user/login\")\ndef product_lookup(request):\n    obj = None\n    notFound = False",
+        "detail": "inventory.views",
+        "documentation": {}
+    },
+    {
+        "label": "AddProduct",
+        "kind": 6,
+        "importPath": "inventory.views",
+        "description": "inventory.views",
+        "peekOfCode": "class AddProduct(forms.Form):\n    qty = forms.IntegerField(label=\"Quantity To Be Added\",widget=TextInput(attrs={'style':\"width:100%\"}))\n    barcode = forms.CharField(label=\"Product Barcode\", widget=TextInput(attrs={'autofocus':\"autofocus\",' autocomplete':\"off\",'style':\"width:100%\"}),max_length = 32)\n# Create your views here.\n@login_required(login_url=\"/user/login\")\ndef product_lookup(request):\n    obj = None\n    notFound = False\n    if request.method == \"POST\":\n        form = ProductLookup(request.POST)",
+        "detail": "inventory.views",
+        "documentation": {}
+    },
+    {
+        "label": "product_lookup",
+        "kind": 2,
+        "importPath": "inventory.views",
+        "description": "inventory.views",
+        "peekOfCode": "def product_lookup(request):\n    obj = None\n    notFound = False\n    if request.method == \"POST\":\n        form = ProductLookup(request.POST)\n        if form.is_valid():\n            try:\n                obj = Product.objects.get(barcode=form.cleaned_data['barcode'])\n            except Product.DoesNotExist:\n                obj = None",
+        "detail": "inventory.views",
+        "documentation": {}
+    },
+    {
+        "label": "manualAmount",
+        "kind": 2,
+        "importPath": "inventory.views",
+        "description": "inventory.views",
+        "peekOfCode": "def manualAmount(request,manual_department,amount):\n    \"\"\"Needs to add Variable Barcode in Inventory and make Prices Zero and Quantity One\n    Args:\n        request (_type_): _description_\n        manual_department (_type_): _description_\n        amount (_type_): _description_\n    Returns:\n        _type_: _description_\n    \"\"\"\n    cart = Cart(request)",
+        "detail": "inventory.views",
+        "documentation": {}
+    },
+    {
+        "label": "inventoryAdd",
+        "kind": 2,
+        "importPath": "inventory.views",
+        "description": "inventory.views",
+        "peekOfCode": "def inventoryAdd(request):\n    context = { }\n    if request.method == \"POST\":\n        form = AddProduct(request.POST)\n        if form.is_valid():\n            try:\n                obj = Product.objects.get(barcode=form.cleaned_data['barcode'])\n                # 'product_added':  True if \"ProductNotFound\" in request.path else False, \n                context['p_qty'] = obj.qty\n                context['n_qty'] = int(form.cleaned_data['qty'])",
+        "detail": "inventory.views",
+        "documentation": {}
+    },
+    {
+        "label": "str_to_bool",
+        "kind": 2,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "def str_to_bool(s: str) -> bool:\n    return str(s).lower() in (\"1\", \"true\", \"yes\", \"on\")\ndef csv_to_list(s: str):\n    return [item.strip() for item in s.split(\",\") if item.strip()]\n# ---------- Debug / Secret ----------\nDEBUG = str_to_bool(os.getenv(\"DEBUG\", \"True\"))\nSECRET_KEY = os.getenv(\"SECRET_KEY\", \"django_dev_secret_key_online-retail-pos-1234\")\n# ---------- Hosts & CSRF ----------\n# Default hosts to include local and your domain (so VPS won't error)\n_default_hosts = [\"127.0.0.1\", \"localhost\", \"adamsmini.shop\", \"www.adamsmini.shop\"]",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "csv_to_list",
+        "kind": 2,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "def csv_to_list(s: str):\n    return [item.strip() for item in s.split(\",\") if item.strip()]\n# ---------- Debug / Secret ----------\nDEBUG = str_to_bool(os.getenv(\"DEBUG\", \"True\"))\nSECRET_KEY = os.getenv(\"SECRET_KEY\", \"django_dev_secret_key_online-retail-pos-1234\")\n# ---------- Hosts & CSRF ----------\n# Default hosts to include local and your domain (so VPS won't error)\n_default_hosts = [\"127.0.0.1\", \"localhost\", \"adamsmini.shop\", \"www.adamsmini.shop\"]\nenv_allowed = os.getenv(\"ALLOWED_HOSTS\", \"\")\nif env_allowed:",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "BASE_DIR",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "BASE_DIR = Path(__file__).resolve().parents[2]\nPROJECT_DIR = BASE_DIR / \"onlineretailpos\"\n# ---------- small helpers ----------\ndef str_to_bool(s: str) -> bool:\n    return str(s).lower() in (\"1\", \"true\", \"yes\", \"on\")\ndef csv_to_list(s: str):\n    return [item.strip() for item in s.split(\",\") if item.strip()]\n# ---------- Debug / Secret ----------\nDEBUG = str_to_bool(os.getenv(\"DEBUG\", \"True\"))\nSECRET_KEY = os.getenv(\"SECRET_KEY\", \"django_dev_secret_key_online-retail-pos-1234\")",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "PROJECT_DIR",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "PROJECT_DIR = BASE_DIR / \"onlineretailpos\"\n# ---------- small helpers ----------\ndef str_to_bool(s: str) -> bool:\n    return str(s).lower() in (\"1\", \"true\", \"yes\", \"on\")\ndef csv_to_list(s: str):\n    return [item.strip() for item in s.split(\",\") if item.strip()]\n# ---------- Debug / Secret ----------\nDEBUG = str_to_bool(os.getenv(\"DEBUG\", \"True\"))\nSECRET_KEY = os.getenv(\"SECRET_KEY\", \"django_dev_secret_key_online-retail-pos-1234\")\n# ---------- Hosts & CSRF ----------",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "DEBUG",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "DEBUG = str_to_bool(os.getenv(\"DEBUG\", \"True\"))\nSECRET_KEY = os.getenv(\"SECRET_KEY\", \"django_dev_secret_key_online-retail-pos-1234\")\n# ---------- Hosts & CSRF ----------\n# Default hosts to include local and your domain (so VPS won't error)\n_default_hosts = [\"127.0.0.1\", \"localhost\", \"adamsmini.shop\", \"www.adamsmini.shop\"]\nenv_allowed = os.getenv(\"ALLOWED_HOSTS\", \"\")\nif env_allowed:\n    ALLOWED_HOSTS = csv_to_list(env_allowed)\n    # ensure the essential hosts are present\n    for h in _default_hosts:",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "SECRET_KEY",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "SECRET_KEY = os.getenv(\"SECRET_KEY\", \"django_dev_secret_key_online-retail-pos-1234\")\n# ---------- Hosts & CSRF ----------\n# Default hosts to include local and your domain (so VPS won't error)\n_default_hosts = [\"127.0.0.1\", \"localhost\", \"adamsmini.shop\", \"www.adamsmini.shop\"]\nenv_allowed = os.getenv(\"ALLOWED_HOSTS\", \"\")\nif env_allowed:\n    ALLOWED_HOSTS = csv_to_list(env_allowed)\n    # ensure the essential hosts are present\n    for h in _default_hosts:\n        if h not in ALLOWED_HOSTS:",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "_default_hosts",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "_default_hosts = [\"127.0.0.1\", \"localhost\", \"adamsmini.shop\", \"www.adamsmini.shop\"]\nenv_allowed = os.getenv(\"ALLOWED_HOSTS\", \"\")\nif env_allowed:\n    ALLOWED_HOSTS = csv_to_list(env_allowed)\n    # ensure the essential hosts are present\n    for h in _default_hosts:\n        if h not in ALLOWED_HOSTS:\n            ALLOWED_HOSTS.append(h)\nelse:\n    ALLOWED_HOSTS = _default_hosts.copy()",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "env_allowed",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "env_allowed = os.getenv(\"ALLOWED_HOSTS\", \"\")\nif env_allowed:\n    ALLOWED_HOSTS = csv_to_list(env_allowed)\n    # ensure the essential hosts are present\n    for h in _default_hosts:\n        if h not in ALLOWED_HOSTS:\n            ALLOWED_HOSTS.append(h)\nelse:\n    ALLOWED_HOSTS = _default_hosts.copy()\n# CSRF trusted origins: prefer explicit https origins for production.",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "env_csrf",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "env_csrf = os.getenv(\"CSRF_TRUSTED_ORIGINS\", \"\")\ndefault_csrf = [\"https://adamsmini.shop\", \"https://www.adamsmini.shop\"]\nif env_csrf:\n    CSRF_TRUSTED_ORIGINS = csv_to_list(env_csrf)\n    for origin in default_csrf:\n        if origin not in CSRF_TRUSTED_ORIGINS:\n            CSRF_TRUSTED_ORIGINS.append(origin)\nelse:\n    CSRF_TRUSTED_ORIGINS = default_csrf.copy()\n# Add local http origins for local testing (optional)",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "default_csrf",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "default_csrf = [\"https://adamsmini.shop\", \"https://www.adamsmini.shop\"]\nif env_csrf:\n    CSRF_TRUSTED_ORIGINS = csv_to_list(env_csrf)\n    for origin in default_csrf:\n        if origin not in CSRF_TRUSTED_ORIGINS:\n            CSRF_TRUSTED_ORIGINS.append(origin)\nelse:\n    CSRF_TRUSTED_ORIGINS = default_csrf.copy()\n# Add local http origins for local testing (optional)\nif \"http://127.0.0.1\" not in CSRF_TRUSTED_ORIGINS:",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "INSTALLED_APPS",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "INSTALLED_APPS = [\n    \"colorfield\",\n    'onlineretailpos.admin.MyAdminConfig',  # custom admin config\n    'django.contrib.auth',\n    'django.contrib.contenttypes',\n    'django.contrib.sessions',\n    'django.contrib.messages',\n    'django.contrib.staticfiles',\n    'django.contrib.humanize',\n    'jquery',",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "MIDDLEWARE",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "MIDDLEWARE = [\n    'django.middleware.security.SecurityMiddleware',\n    'django.contrib.sessions.middleware.SessionMiddleware',\n    'django.middleware.common.CommonMiddleware',\n    'django.middleware.csrf.CsrfViewMiddleware',\n    'django.contrib.auth.middleware.AuthenticationMiddleware',\n    'django.contrib.messages.middleware.MessageMiddleware',\n    'django.middleware.clickjacking.XFrameOptionsMiddleware',\n]\nX_FRAME_OPTIONS = \"SAMEORIGIN\"",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "X_FRAME_OPTIONS",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "X_FRAME_OPTIONS = \"SAMEORIGIN\"\nSILENCED_SYSTEM_CHECKS = [\"security.W019\"]\nROOT_URLCONF = 'onlineretailpos.urls'\nTEMPLATES = [\n    {\n        'BACKEND': 'django.template.backends.django.DjangoTemplates',\n        'DIRS': [str(PROJECT_DIR / \"templates\")],\n        'APP_DIRS': True,\n        'OPTIONS': {\n            'context_processors': [",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "SILENCED_SYSTEM_CHECKS",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "SILENCED_SYSTEM_CHECKS = [\"security.W019\"]\nROOT_URLCONF = 'onlineretailpos.urls'\nTEMPLATES = [\n    {\n        'BACKEND': 'django.template.backends.django.DjangoTemplates',\n        'DIRS': [str(PROJECT_DIR / \"templates\")],\n        'APP_DIRS': True,\n        'OPTIONS': {\n            'context_processors': [\n                'django.template.context_processors.debug',",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "ROOT_URLCONF",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "ROOT_URLCONF = 'onlineretailpos.urls'\nTEMPLATES = [\n    {\n        'BACKEND': 'django.template.backends.django.DjangoTemplates',\n        'DIRS': [str(PROJECT_DIR / \"templates\")],\n        'APP_DIRS': True,\n        'OPTIONS': {\n            'context_processors': [\n                'django.template.context_processors.debug',\n                'django.template.context_processors.request',",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "TEMPLATES",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "TEMPLATES = [\n    {\n        'BACKEND': 'django.template.backends.django.DjangoTemplates',\n        'DIRS': [str(PROJECT_DIR / \"templates\")],\n        'APP_DIRS': True,\n        'OPTIONS': {\n            'context_processors': [\n                'django.template.context_processors.debug',\n                'django.template.context_processors.request',\n                'django.contrib.auth.context_processors.auth',",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "WSGI_APPLICATION",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "WSGI_APPLICATION = 'onlineretailpos.wsgi.application'\n# Channels (default in-memory for now)\nCHANNEL_LAYERS = {\n    \"default\": {\n        \"BACKEND\": \"channels.layers.InMemoryChannelLayer\"\n    }\n}\n# ---------- Password validators ----------\nAUTH_PASSWORD_VALIDATORS = [\n    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',},",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "CHANNEL_LAYERS",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "CHANNEL_LAYERS = {\n    \"default\": {\n        \"BACKEND\": \"channels.layers.InMemoryChannelLayer\"\n    }\n}\n# ---------- Password validators ----------\nAUTH_PASSWORD_VALIDATORS = [\n    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',},\n    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',},\n    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',},",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "AUTH_PASSWORD_VALIDATORS",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "AUTH_PASSWORD_VALIDATORS = [\n    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',},\n    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',},\n    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',},\n    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',},\n]\n# ---------- Internationalization ----------\nLANGUAGE_CODE = 'en-us'\nTIME_ZONE = 'Africa/Dar_es_Salaam'\nUSE_I18N = True",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "LANGUAGE_CODE",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "LANGUAGE_CODE = 'en-us'\nTIME_ZONE = 'Africa/Dar_es_Salaam'\nUSE_I18N = True\nUSE_TZ = True\nCURRENCY_SYMBOL = \"TZS\"\n# ---------- Static & Media ----------\nSTATIC_URL = '/static/'\nSTATICFILES_DIRS = [ BASE_DIR / 'onlineretailpos' / 'static' ]\nSTATIC_ROOT = BASE_DIR / 'staticfiles'   # for collectstatic in production\nMEDIA_URL = \"/media/\"",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "TIME_ZONE",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "TIME_ZONE = 'Africa/Dar_es_Salaam'\nUSE_I18N = True\nUSE_TZ = True\nCURRENCY_SYMBOL = \"TZS\"\n# ---------- Static & Media ----------\nSTATIC_URL = '/static/'\nSTATICFILES_DIRS = [ BASE_DIR / 'onlineretailpos' / 'static' ]\nSTATIC_ROOT = BASE_DIR / 'staticfiles'   # for collectstatic in production\nMEDIA_URL = \"/media/\"\nMEDIA_ROOT = PROJECT_DIR / \"media\"",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "USE_I18N",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "USE_I18N = True\nUSE_TZ = True\nCURRENCY_SYMBOL = \"TZS\"\n# ---------- Static & Media ----------\nSTATIC_URL = '/static/'\nSTATICFILES_DIRS = [ BASE_DIR / 'onlineretailpos' / 'static' ]\nSTATIC_ROOT = BASE_DIR / 'staticfiles'   # for collectstatic in production\nMEDIA_URL = \"/media/\"\nMEDIA_ROOT = PROJECT_DIR / \"media\"\n# ---------- Cart session ----------",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "USE_TZ",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "USE_TZ = True\nCURRENCY_SYMBOL = \"TZS\"\n# ---------- Static & Media ----------\nSTATIC_URL = '/static/'\nSTATICFILES_DIRS = [ BASE_DIR / 'onlineretailpos' / 'static' ]\nSTATIC_ROOT = BASE_DIR / 'staticfiles'   # for collectstatic in production\nMEDIA_URL = \"/media/\"\nMEDIA_ROOT = PROJECT_DIR / \"media\"\n# ---------- Cart session ----------\nCART_SESSION_ID = 'cart'",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "CURRENCY_SYMBOL",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "CURRENCY_SYMBOL = \"TZS\"\n# ---------- Static & Media ----------\nSTATIC_URL = '/static/'\nSTATICFILES_DIRS = [ BASE_DIR / 'onlineretailpos' / 'static' ]\nSTATIC_ROOT = BASE_DIR / 'staticfiles'   # for collectstatic in production\nMEDIA_URL = \"/media/\"\nMEDIA_ROOT = PROJECT_DIR / \"media\"\n# ---------- Cart session ----------\nCART_SESSION_ID = 'cart'\n# ---------- Databases ----------",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "STATIC_URL",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "STATIC_URL = '/static/'\nSTATICFILES_DIRS = [ BASE_DIR / 'onlineretailpos' / 'static' ]\nSTATIC_ROOT = BASE_DIR / 'staticfiles'   # for collectstatic in production\nMEDIA_URL = \"/media/\"\nMEDIA_ROOT = PROJECT_DIR / \"media\"\n# ---------- Cart session ----------\nCART_SESSION_ID = 'cart'\n# ---------- Databases ----------\n# You can set NAME_OF_DATABASE to \"sqlite\", \"postgres\", or \"mysql\".\ndatabase_dict = {",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "STATICFILES_DIRS",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "STATICFILES_DIRS = [ BASE_DIR / 'onlineretailpos' / 'static' ]\nSTATIC_ROOT = BASE_DIR / 'staticfiles'   # for collectstatic in production\nMEDIA_URL = \"/media/\"\nMEDIA_ROOT = PROJECT_DIR / \"media\"\n# ---------- Cart session ----------\nCART_SESSION_ID = 'cart'\n# ---------- Databases ----------\n# You can set NAME_OF_DATABASE to \"sqlite\", \"postgres\", or \"mysql\".\ndatabase_dict = {\n    'sqlite' :  {",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "STATIC_ROOT",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "STATIC_ROOT = BASE_DIR / 'staticfiles'   # for collectstatic in production\nMEDIA_URL = \"/media/\"\nMEDIA_ROOT = PROJECT_DIR / \"media\"\n# ---------- Cart session ----------\nCART_SESSION_ID = 'cart'\n# ---------- Databases ----------\n# You can set NAME_OF_DATABASE to \"sqlite\", \"postgres\", or \"mysql\".\ndatabase_dict = {\n    'sqlite' :  {\n        'ENGINE': 'django.db.backends.sqlite3',",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "MEDIA_URL",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "MEDIA_URL = \"/media/\"\nMEDIA_ROOT = PROJECT_DIR / \"media\"\n# ---------- Cart session ----------\nCART_SESSION_ID = 'cart'\n# ---------- Databases ----------\n# You can set NAME_OF_DATABASE to \"sqlite\", \"postgres\", or \"mysql\".\ndatabase_dict = {\n    'sqlite' :  {\n        'ENGINE': 'django.db.backends.sqlite3',\n        'NAME': BASE_DIR / 'db.sqlite3',",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "MEDIA_ROOT",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "MEDIA_ROOT = PROJECT_DIR / \"media\"\n# ---------- Cart session ----------\nCART_SESSION_ID = 'cart'\n# ---------- Databases ----------\n# You can set NAME_OF_DATABASE to \"sqlite\", \"postgres\", or \"mysql\".\ndatabase_dict = {\n    'sqlite' :  {\n        'ENGINE': 'django.db.backends.sqlite3',\n        'NAME': BASE_DIR / 'db.sqlite3',\n    },",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "CART_SESSION_ID",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "CART_SESSION_ID = 'cart'\n# ---------- Databases ----------\n# You can set NAME_OF_DATABASE to \"sqlite\", \"postgres\", or \"mysql\".\ndatabase_dict = {\n    'sqlite' :  {\n        'ENGINE': 'django.db.backends.sqlite3',\n        'NAME': BASE_DIR / 'db.sqlite3',\n    },\n    'postgres' : {\n        'ENGINE': 'django.db.backends.postgresql',",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "database_dict",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "database_dict = {\n    'sqlite' :  {\n        'ENGINE': 'django.db.backends.sqlite3',\n        'NAME': BASE_DIR / 'db.sqlite3',\n    },\n    'postgres' : {\n        'ENGINE': 'django.db.backends.postgresql',\n        'NAME': os.getenv('DB_NAME', \"OnlineRetailPOS\"),\n        'USER': os.getenv('DB_USERNAME', \"\"),\n        'PASSWORD': os.getenv('DB_PASSWORD', \"\"),",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "chosen_db",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "chosen_db = os.getenv('NAME_OF_DATABASE', 'sqlite').lower()\nif chosen_db not in database_dict:\n    chosen_db = 'sqlite'\nDATABASES = {'default': database_dict[chosen_db]}\n# Informational print (helpful while testing locally)\nprint(f\"[settings] DEBUG={DEBUG} | DB={DATABASES['default']['ENGINE']} | ALLOWED_HOSTS={ALLOWED_HOSTS}\")\nif CSRF_TRUSTED_ORIGINS:\n    print(f\"[settings] CSRF_TRUSTED_ORIGINS={CSRF_TRUSTED_ORIGINS}\")\n# ---------- Default primary key ----------\nDEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "DATABASES",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "DATABASES = {'default': database_dict[chosen_db]}\n# Informational print (helpful while testing locally)\nprint(f\"[settings] DEBUG={DEBUG} | DB={DATABASES['default']['ENGINE']} | ALLOWED_HOSTS={ALLOWED_HOSTS}\")\nif CSRF_TRUSTED_ORIGINS:\n    print(f\"[settings] CSRF_TRUSTED_ORIGINS={CSRF_TRUSTED_ORIGINS}\")\n# ---------- Default primary key ----------\nDEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'\n# ---------- Receipt / Store Settings ----------\n# Controls receipt appearance and printer options.\n# You can override any of these via environment variables.",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "DEFAULT_AUTO_FIELD",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'\n# ---------- Receipt / Store Settings ----------\n# Controls receipt appearance and printer options.\n# You can override any of these via environment variables.\n# Number of characters per line on your thermal printer (commonly 32 for 58mm, 48+ for 80mm)\nRECEIPT_CHAR_COUNT = int(os.getenv(\"RECEIPT_CHAR_COUNT\", \"32\"))\n# Store identity (defaults chosen to match your photo)\nSTORE_NAME = os.getenv(\"STORE_NAME\", \"ADAMS MINI SUPERMARKET\")\nSTORE_ADDRESS = os.getenv(\"STORE_ADDRESS\", \"PO BOX 942 MOSHI\\nJ.K. Nyerere Street\")\nSTORE_PHONE = os.getenv(\"STORE_PHONE\", \"+255744844699\")",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "RECEIPT_CHAR_COUNT",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "RECEIPT_CHAR_COUNT = int(os.getenv(\"RECEIPT_CHAR_COUNT\", \"32\"))\n# Store identity (defaults chosen to match your photo)\nSTORE_NAME = os.getenv(\"STORE_NAME\", \"ADAMS MINI SUPERMARKET\")\nSTORE_ADDRESS = os.getenv(\"STORE_ADDRESS\", \"PO BOX 942 MOSHI\\nJ.K. Nyerere Street\")\nSTORE_PHONE = os.getenv(\"STORE_PHONE\", \"+255744844699\")\nSTORE_EMAIL = os.getenv(\"STORE_EMAIL\", \"adamssupermarket@gmail.com\")\n# Tax / registration numbers (optional)\nSTORE_TIN = os.getenv(\"STORE_TIN\", \"102-188-357\")\nSTORE_VRN = os.getenv(\"STORE_VRN\", \"\")\n# Additional heading lines you may want to include (e.g. branch name, tagline)",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "STORE_NAME",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "STORE_NAME = os.getenv(\"STORE_NAME\", \"ADAMS MINI SUPERMARKET\")\nSTORE_ADDRESS = os.getenv(\"STORE_ADDRESS\", \"PO BOX 942 MOSHI\\nJ.K. Nyerere Street\")\nSTORE_PHONE = os.getenv(\"STORE_PHONE\", \"+255744844699\")\nSTORE_EMAIL = os.getenv(\"STORE_EMAIL\", \"adamssupermarket@gmail.com\")\n# Tax / registration numbers (optional)\nSTORE_TIN = os.getenv(\"STORE_TIN\", \"102-188-357\")\nSTORE_VRN = os.getenv(\"STORE_VRN\", \"\")\n# Additional heading lines you may want to include (e.g. branch name, tagline)\nRECEIPT_ADDITIONAL_HEADING = os.getenv(\"RECEIPT_ADDITIONAL_HEADING\", \"\")\n# Whether to include phone or email line in header (env true/false)",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "STORE_ADDRESS",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "STORE_ADDRESS = os.getenv(\"STORE_ADDRESS\", \"PO BOX 942 MOSHI\\nJ.K. Nyerere Street\")\nSTORE_PHONE = os.getenv(\"STORE_PHONE\", \"+255744844699\")\nSTORE_EMAIL = os.getenv(\"STORE_EMAIL\", \"adamssupermarket@gmail.com\")\n# Tax / registration numbers (optional)\nSTORE_TIN = os.getenv(\"STORE_TIN\", \"102-188-357\")\nSTORE_VRN = os.getenv(\"STORE_VRN\", \"\")\n# Additional heading lines you may want to include (e.g. branch name, tagline)\nRECEIPT_ADDITIONAL_HEADING = os.getenv(\"RECEIPT_ADDITIONAL_HEADING\", \"\")\n# Whether to include phone or email line in header (env true/false)\nINCLUDE_PHONE_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_PHONE_IN_HEADING\", \"True\"))",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "STORE_PHONE",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "STORE_PHONE = os.getenv(\"STORE_PHONE\", \"+255744844699\")\nSTORE_EMAIL = os.getenv(\"STORE_EMAIL\", \"adamssupermarket@gmail.com\")\n# Tax / registration numbers (optional)\nSTORE_TIN = os.getenv(\"STORE_TIN\", \"102-188-357\")\nSTORE_VRN = os.getenv(\"STORE_VRN\", \"\")\n# Additional heading lines you may want to include (e.g. branch name, tagline)\nRECEIPT_ADDITIONAL_HEADING = os.getenv(\"RECEIPT_ADDITIONAL_HEADING\", \"\")\n# Whether to include phone or email line in header (env true/false)\nINCLUDE_PHONE_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_PHONE_IN_HEADING\", \"True\"))\nINCLUDE_EMAIL_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_EMAIL_IN_HEADING\", \"True\"))",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "STORE_EMAIL",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "STORE_EMAIL = os.getenv(\"STORE_EMAIL\", \"adamssupermarket@gmail.com\")\n# Tax / registration numbers (optional)\nSTORE_TIN = os.getenv(\"STORE_TIN\", \"102-188-357\")\nSTORE_VRN = os.getenv(\"STORE_VRN\", \"\")\n# Additional heading lines you may want to include (e.g. branch name, tagline)\nRECEIPT_ADDITIONAL_HEADING = os.getenv(\"RECEIPT_ADDITIONAL_HEADING\", \"\")\n# Whether to include phone or email line in header (env true/false)\nINCLUDE_PHONE_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_PHONE_IN_HEADING\", \"True\"))\nINCLUDE_EMAIL_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_EMAIL_IN_HEADING\", \"True\"))\n# Footer line(s)",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "STORE_TIN",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "STORE_TIN = os.getenv(\"STORE_TIN\", \"102-188-357\")\nSTORE_VRN = os.getenv(\"STORE_VRN\", \"\")\n# Additional heading lines you may want to include (e.g. branch name, tagline)\nRECEIPT_ADDITIONAL_HEADING = os.getenv(\"RECEIPT_ADDITIONAL_HEADING\", \"\")\n# Whether to include phone or email line in header (env true/false)\nINCLUDE_PHONE_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_PHONE_IN_HEADING\", \"True\"))\nINCLUDE_EMAIL_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_EMAIL_IN_HEADING\", \"True\"))\n# Footer line(s)\nRECEIPT_FOOTER = os.getenv(\"RECEIPT_FOOTER\", \"You are Welcomed !\")\n# Receipt markers (e.g., fiscal/non-fiscal text)",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "STORE_VRN",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "STORE_VRN = os.getenv(\"STORE_VRN\", \"\")\n# Additional heading lines you may want to include (e.g. branch name, tagline)\nRECEIPT_ADDITIONAL_HEADING = os.getenv(\"RECEIPT_ADDITIONAL_HEADING\", \"\")\n# Whether to include phone or email line in header (env true/false)\nINCLUDE_PHONE_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_PHONE_IN_HEADING\", \"True\"))\nINCLUDE_EMAIL_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_EMAIL_IN_HEADING\", \"True\"))\n# Footer line(s)\nRECEIPT_FOOTER = os.getenv(\"RECEIPT_FOOTER\", \"You are Welcomed !\")\n# Receipt markers (e.g., fiscal/non-fiscal text)\nRECEIPT_SALES_TITLE = os.getenv(\"RECEIPT_SALES_TITLE\", \"*** Sales Receipt ***\")",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "RECEIPT_ADDITIONAL_HEADING",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "RECEIPT_ADDITIONAL_HEADING = os.getenv(\"RECEIPT_ADDITIONAL_HEADING\", \"\")\n# Whether to include phone or email line in header (env true/false)\nINCLUDE_PHONE_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_PHONE_IN_HEADING\", \"True\"))\nINCLUDE_EMAIL_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_EMAIL_IN_HEADING\", \"True\"))\n# Footer line(s)\nRECEIPT_FOOTER = os.getenv(\"RECEIPT_FOOTER\", \"You are Welcomed !\")\n# Receipt markers (e.g., fiscal/non-fiscal text)\nRECEIPT_SALES_TITLE = os.getenv(\"RECEIPT_SALES_TITLE\", \"*** Sales Receipt ***\")\nRECEIPT_NONFISCAL_TEXT = os.getenv(\"RECEIPT_NONFISCAL_TEXT\", \"*** NON-FISCAL RECEIPT ***\")\n# Printer hardware settings (optional)",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "INCLUDE_PHONE_IN_HEADING",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "INCLUDE_PHONE_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_PHONE_IN_HEADING\", \"True\"))\nINCLUDE_EMAIL_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_EMAIL_IN_HEADING\", \"True\"))\n# Footer line(s)\nRECEIPT_FOOTER = os.getenv(\"RECEIPT_FOOTER\", \"You are Welcomed !\")\n# Receipt markers (e.g., fiscal/non-fiscal text)\nRECEIPT_SALES_TITLE = os.getenv(\"RECEIPT_SALES_TITLE\", \"*** Sales Receipt ***\")\nRECEIPT_NONFISCAL_TEXT = os.getenv(\"RECEIPT_NONFISCAL_TEXT\", \"*** NON-FISCAL RECEIPT ***\")\n# Printer hardware settings (optional)\nPRINTER_VENDOR_ID = os.getenv(\"PRINTER_VENDOR_ID\", \"\")\nPRINTER_PRODUCT_ID = os.getenv(\"PRINTER_PRODUCT_ID\", \"\")",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "INCLUDE_EMAIL_IN_HEADING",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "INCLUDE_EMAIL_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_EMAIL_IN_HEADING\", \"True\"))\n# Footer line(s)\nRECEIPT_FOOTER = os.getenv(\"RECEIPT_FOOTER\", \"You are Welcomed !\")\n# Receipt markers (e.g., fiscal/non-fiscal text)\nRECEIPT_SALES_TITLE = os.getenv(\"RECEIPT_SALES_TITLE\", \"*** Sales Receipt ***\")\nRECEIPT_NONFISCAL_TEXT = os.getenv(\"RECEIPT_NONFISCAL_TEXT\", \"*** NON-FISCAL RECEIPT ***\")\n# Printer hardware settings (optional)\nPRINTER_VENDOR_ID = os.getenv(\"PRINTER_VENDOR_ID\", \"\")\nPRINTER_PRODUCT_ID = os.getenv(\"PRINTER_PRODUCT_ID\", \"\")\nPRINT_RECEIPT = str_to_bool(os.getenv(\"PRINT_RECEIPT\", \"True\"))",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "RECEIPT_FOOTER",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "RECEIPT_FOOTER = os.getenv(\"RECEIPT_FOOTER\", \"You are Welcomed !\")\n# Receipt markers (e.g., fiscal/non-fiscal text)\nRECEIPT_SALES_TITLE = os.getenv(\"RECEIPT_SALES_TITLE\", \"*** Sales Receipt ***\")\nRECEIPT_NONFISCAL_TEXT = os.getenv(\"RECEIPT_NONFISCAL_TEXT\", \"*** NON-FISCAL RECEIPT ***\")\n# Printer hardware settings (optional)\nPRINTER_VENDOR_ID = os.getenv(\"PRINTER_VENDOR_ID\", \"\")\nPRINTER_PRODUCT_ID = os.getenv(\"PRINTER_PRODUCT_ID\", \"\")\nPRINT_RECEIPT = str_to_bool(os.getenv(\"PRINT_RECEIPT\", \"True\"))\nCASH_DRAWER = str_to_bool(os.getenv(\"CASH_DRAWER\", \"False\"))\n# Helper: build a standard receipt header string (multi-line)",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "RECEIPT_SALES_TITLE",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "RECEIPT_SALES_TITLE = os.getenv(\"RECEIPT_SALES_TITLE\", \"*** Sales Receipt ***\")\nRECEIPT_NONFISCAL_TEXT = os.getenv(\"RECEIPT_NONFISCAL_TEXT\", \"*** NON-FISCAL RECEIPT ***\")\n# Printer hardware settings (optional)\nPRINTER_VENDOR_ID = os.getenv(\"PRINTER_VENDOR_ID\", \"\")\nPRINTER_PRODUCT_ID = os.getenv(\"PRINTER_PRODUCT_ID\", \"\")\nPRINT_RECEIPT = str_to_bool(os.getenv(\"PRINT_RECEIPT\", \"True\"))\nCASH_DRAWER = str_to_bool(os.getenv(\"CASH_DRAWER\", \"False\"))\n# Helper: build a standard receipt header string (multi-line)\n_receipt_header_lines = []\n_receipt_header_lines.append(STORE_NAME)",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "RECEIPT_NONFISCAL_TEXT",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "RECEIPT_NONFISCAL_TEXT = os.getenv(\"RECEIPT_NONFISCAL_TEXT\", \"*** NON-FISCAL RECEIPT ***\")\n# Printer hardware settings (optional)\nPRINTER_VENDOR_ID = os.getenv(\"PRINTER_VENDOR_ID\", \"\")\nPRINTER_PRODUCT_ID = os.getenv(\"PRINTER_PRODUCT_ID\", \"\")\nPRINT_RECEIPT = str_to_bool(os.getenv(\"PRINT_RECEIPT\", \"True\"))\nCASH_DRAWER = str_to_bool(os.getenv(\"CASH_DRAWER\", \"False\"))\n# Helper: build a standard receipt header string (multi-line)\n_receipt_header_lines = []\n_receipt_header_lines.append(STORE_NAME)\n# If address contains newlines keep them; otherwise add one line",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "PRINTER_VENDOR_ID",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "PRINTER_VENDOR_ID = os.getenv(\"PRINTER_VENDOR_ID\", \"\")\nPRINTER_PRODUCT_ID = os.getenv(\"PRINTER_PRODUCT_ID\", \"\")\nPRINT_RECEIPT = str_to_bool(os.getenv(\"PRINT_RECEIPT\", \"True\"))\nCASH_DRAWER = str_to_bool(os.getenv(\"CASH_DRAWER\", \"False\"))\n# Helper: build a standard receipt header string (multi-line)\n_receipt_header_lines = []\n_receipt_header_lines.append(STORE_NAME)\n# If address contains newlines keep them; otherwise add one line\nif STORE_ADDRESS:\n    _receipt_header_lines.extend([line for line in STORE_ADDRESS.splitlines() if line.strip()])",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "PRINTER_PRODUCT_ID",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "PRINTER_PRODUCT_ID = os.getenv(\"PRINTER_PRODUCT_ID\", \"\")\nPRINT_RECEIPT = str_to_bool(os.getenv(\"PRINT_RECEIPT\", \"True\"))\nCASH_DRAWER = str_to_bool(os.getenv(\"CASH_DRAWER\", \"False\"))\n# Helper: build a standard receipt header string (multi-line)\n_receipt_header_lines = []\n_receipt_header_lines.append(STORE_NAME)\n# If address contains newlines keep them; otherwise add one line\nif STORE_ADDRESS:\n    _receipt_header_lines.extend([line for line in STORE_ADDRESS.splitlines() if line.strip()])\nif INCLUDE_PHONE_IN_HEADING and STORE_PHONE:",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "PRINT_RECEIPT",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "PRINT_RECEIPT = str_to_bool(os.getenv(\"PRINT_RECEIPT\", \"True\"))\nCASH_DRAWER = str_to_bool(os.getenv(\"CASH_DRAWER\", \"False\"))\n# Helper: build a standard receipt header string (multi-line)\n_receipt_header_lines = []\n_receipt_header_lines.append(STORE_NAME)\n# If address contains newlines keep them; otherwise add one line\nif STORE_ADDRESS:\n    _receipt_header_lines.extend([line for line in STORE_ADDRESS.splitlines() if line.strip()])\nif INCLUDE_PHONE_IN_HEADING and STORE_PHONE:\n    _receipt_header_lines.append(STORE_PHONE)",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "CASH_DRAWER",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "CASH_DRAWER = str_to_bool(os.getenv(\"CASH_DRAWER\", \"False\"))\n# Helper: build a standard receipt header string (multi-line)\n_receipt_header_lines = []\n_receipt_header_lines.append(STORE_NAME)\n# If address contains newlines keep them; otherwise add one line\nif STORE_ADDRESS:\n    _receipt_header_lines.extend([line for line in STORE_ADDRESS.splitlines() if line.strip()])\nif INCLUDE_PHONE_IN_HEADING and STORE_PHONE:\n    _receipt_header_lines.append(STORE_PHONE)\nif INCLUDE_EMAIL_IN_HEADING and STORE_EMAIL:",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "_receipt_header_lines",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "_receipt_header_lines = []\n_receipt_header_lines.append(STORE_NAME)\n# If address contains newlines keep them; otherwise add one line\nif STORE_ADDRESS:\n    _receipt_header_lines.extend([line for line in STORE_ADDRESS.splitlines() if line.strip()])\nif INCLUDE_PHONE_IN_HEADING and STORE_PHONE:\n    _receipt_header_lines.append(STORE_PHONE)\nif INCLUDE_EMAIL_IN_HEADING and STORE_EMAIL:\n    _receipt_header_lines.append(STORE_EMAIL)\n# Add optional additional heading",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "RECEIPT_HEADER",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "RECEIPT_HEADER = \"\\n\".join(_receipt_header_lines)\n# Default layout strings you can reuse in code (for clarity)\nRECEIPT_SEPARATOR = \"-\" * RECEIPT_CHAR_COUNT\nRECEIPT_COLUMN_HEADER = \"DESCRIPTION\\nQTY   PRICE     AMOUNT\"\n# Print debug info at startup (helpful during local dev)\nprint(f\"[settings] RECEIPT: char_count={RECEIPT_CHAR_COUNT} | store='{STORE_NAME}' | print={PRINT_RECEIPT}\")\n# ---------- Security for production ----------\nif not DEBUG:\n    # Basic production security settings\n    SESSION_COOKIE_SECURE = True",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "RECEIPT_SEPARATOR",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "RECEIPT_SEPARATOR = \"-\" * RECEIPT_CHAR_COUNT\nRECEIPT_COLUMN_HEADER = \"DESCRIPTION\\nQTY   PRICE     AMOUNT\"\n# Print debug info at startup (helpful during local dev)\nprint(f\"[settings] RECEIPT: char_count={RECEIPT_CHAR_COUNT} | store='{STORE_NAME}' | print={PRINT_RECEIPT}\")\n# ---------- Security for production ----------\nif not DEBUG:\n    # Basic production security settings\n    SESSION_COOKIE_SECURE = True\n    CSRF_COOKIE_SECURE = True\n    SECURE_SSL_REDIRECT = True",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "RECEIPT_COLUMN_HEADER",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "RECEIPT_COLUMN_HEADER = \"DESCRIPTION\\nQTY   PRICE     AMOUNT\"\n# Print debug info at startup (helpful during local dev)\nprint(f\"[settings] RECEIPT: char_count={RECEIPT_CHAR_COUNT} | store='{STORE_NAME}' | print={PRINT_RECEIPT}\")\n# ---------- Security for production ----------\nif not DEBUG:\n    # Basic production security settings\n    SESSION_COOKIE_SECURE = True\n    CSRF_COOKIE_SECURE = True\n    SECURE_SSL_REDIRECT = True\n    SECURE_HSTS_SECONDS = int(os.getenv('SECURE_HSTS_SECONDS', 120))",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "MyAdminSite",
+        "kind": 6,
+        "importPath": "onlineretailpos.admin",
+        "description": "onlineretailpos.admin",
+        "peekOfCode": "class MyAdminSite(admin.AdminSite):\n    site_header = f\"{settings.STORE_NAME} - Data Portal\"\n    site_title = \"Online Retail POS\"\n    index_title = \"Data Administration\"\nclass MyAdminConfig(AdminConfig):\n    default_site = 'onlineretailpos.admin.MyAdminSite'",
+        "detail": "onlineretailpos.admin",
+        "documentation": {}
+    },
+    {
+        "label": "MyAdminConfig",
+        "kind": 6,
+        "importPath": "onlineretailpos.admin",
+        "description": "onlineretailpos.admin",
+        "peekOfCode": "class MyAdminConfig(AdminConfig):\n    default_site = 'onlineretailpos.admin.MyAdminSite'",
+        "detail": "onlineretailpos.admin",
+        "documentation": {}
+    },
+    {
+        "label": "application",
+        "kind": 5,
+        "importPath": "onlineretailpos.asgi",
+        "description": "onlineretailpos.asgi",
+        "peekOfCode": "application = get_asgi_application()",
+        "detail": "onlineretailpos.asgi",
+        "documentation": {}
+    },
+    {
+        "label": "urlpatterns",
+        "kind": 5,
+        "importPath": "onlineretailpos.urls",
+        "description": "onlineretailpos.urls",
+        "peekOfCode": "urlpatterns = [\n    # Admin URL\n    path('staff_portal/', admin.site.urls ),\n    # User URLs\n    path(\"user/login/\", views.user_login, name=\"user_login\"),\n    path(\"user/logout/\", views.user_logout, name=\"user_logout\"),\n    path('user/change-password/', auth_views.PasswordChangeView.as_view(\n        template_name='registration/change_password.html',\n        success_url='/' ), name='change_password'),\n    # Dashboard URLs",
+        "detail": "onlineretailpos.urls",
+        "documentation": {}
+    },
+    {
+        "label": "EnterBarcode",
+        "kind": 6,
+        "importPath": "onlineretailpos.views",
+        "description": "onlineretailpos.views",
+        "peekOfCode": "class EnterBarcode(forms.Form):\n    barcode = forms.CharField(\n        widget=forms.TextInput(attrs={'autofocus': \"autofocus\", ' autocomplete': \"off\", 'style': \"width:100%\"}),\n        max_length=32)\n    qty = forms.IntegerField(label=\"Quantity\", widget=forms.TextInput(attrs={'style': \"width:100%\"}))\n# -----------------------------\n# Views\n# -----------------------------\n@login_required(login_url=\"/user/login/\")\ndef register(request):",
+        "detail": "onlineretailpos.views",
+        "documentation": {}
+    },
+    {
+        "label": "currency_symbol",
+        "kind": 2,
+        "importPath": "onlineretailpos.views",
+        "description": "onlineretailpos.views",
+        "peekOfCode": "def currency_symbol():\n    return getattr(settings, \"CURRENCY_SYMBOL\", \"TZS\")\ndef fmt(amount, decimals=2):\n    \"\"\"\n    Format a numeric amount with commas and currency symbol.\n    Example: fmt(123456.5) -> \"TZS 123,456.50\"\n    \"\"\"\n    try:\n        a = float(amount)\n    except Exception:",
+        "detail": "onlineretailpos.views",
+        "documentation": {}
+    },
+    {
+        "label": "fmt",
+        "kind": 2,
+        "importPath": "onlineretailpos.views",
+        "description": "onlineretailpos.views",
+        "peekOfCode": "def fmt(amount, decimals=2):\n    \"\"\"\n    Format a numeric amount with commas and currency symbol.\n    Example: fmt(123456.5) -> \"TZS 123,456.50\"\n    \"\"\"\n    try:\n        a = float(amount)\n    except Exception:\n        a = 0.0\n    formatted = format(round(a, decimals), f\",.{decimals}f\")",
+        "detail": "onlineretailpos.views",
+        "documentation": {}
+    },
+    {
+        "label": "fmt_no_sym",
+        "kind": 2,
+        "importPath": "onlineretailpos.views",
+        "description": "onlineretailpos.views",
+        "peekOfCode": "def fmt_no_sym(amount, decimals=2):\n    \"\"\"Return just the number with commas (no currency symbol).\"\"\"\n    try:\n        a = float(amount)\n    except Exception:\n        a = 0.0\n    return format(round(a, decimals), f\",.{decimals}f\")\ndef format_if_number(x, decimals=2):\n    \"\"\"Try to format x as number with commas; else return original.\"\"\"\n    try:",
+        "detail": "onlineretailpos.views",
+        "documentation": {}
+    },
+    {
+        "label": "format_if_number",
+        "kind": 2,
+        "importPath": "onlineretailpos.views",
+        "description": "onlineretailpos.views",
+        "peekOfCode": "def format_if_number(x, decimals=2):\n    \"\"\"Try to format x as number with commas; else return original.\"\"\"\n    try:\n        return fmt_no_sym(float(x), decimals=decimals)\n    except Exception:\n        return x\n# -----------------------------\n# Forms\n# -----------------------------\nclass EnterBarcode(forms.Form):",
+        "detail": "onlineretailpos.views",
+        "documentation": {}
+    },
+    {
+        "label": "register",
+        "kind": 2,
+        "importPath": "onlineretailpos.views",
+        "description": "onlineretailpos.views",
+        "peekOfCode": "def register(request):\n    # Barcode form (same as before)\n    form = EnterBarcode(initial={'qty': 1})\n    if request.method == \"POST\":\n        form = EnterBarcode(request.POST)\n        if form.is_valid():\n            return redirect(f\"/cart/add/{form.cleaned_data['barcode']}/{form.cleaned_data['qty']}\")\n    # Build / load cart (use Cart wrapper which handles session)\n    cart = Cart(request)\n    # helper to safely convert various types to Decimal",
+        "detail": "onlineretailpos.views",
+        "documentation": {}
+    },
+    {
+        "label": "retail_display",
+        "kind": 2,
+        "importPath": "onlineretailpos.views",
+        "description": "onlineretailpos.views",
+        "peekOfCode": "def retail_display(request, values=None):\n    if values:\n        try:\n            cart = request.session[settings.CART_SESSION_ID]\n            if len(cart) == 0:\n                return HttpResponse(\"IMAGE\")\n            total = round(pd.DataFrame(cart).T[\"line_total\"].astype(float).sum(), 2)\n            # Build HTML response with formatted numbers\n            response = f\"\"\"<div class=\"card shadow-sm p-0 m-0\" style=\"width:100%;height:95%\">\n                    <div class=\"card-header p-0\" >",
+        "detail": "onlineretailpos.views",
+        "documentation": {}
+    },
+    {
+        "label": "report_regular",
+        "kind": 2,
+        "importPath": "onlineretailpos.views",
+        "description": "onlineretailpos.views",
+        "peekOfCode": "def report_regular(request, start_date, end_date):\n    start_date = datetime.strptime(start_date, \"%Y-%m-%d\").date()\n    end_date = datetime.strptime(end_date, \"%Y-%m-%d\").date()\n    df = pd.DataFrame(productTransaction.objects.filter(transaction_date_time__date__range=(start_date, end_date)).order_by('-transaction_date_time').values())\n    if not df.shape[0]:\n        return redirect(\"/\")\n    df['transaction_date_time'] = df['transaction_date_time'].apply(lambda x: x.astimezone(timezone))\n    df['date'] = df['transaction_date_time'].dt.date\n    df['total_sales'] = (df['qty'] * df['sales_price']) + df['tax_amount'] + df['deposit_amount']\n    df['total_pre_sales'] = df['qty'] * df['sales_price']",
+        "detail": "onlineretailpos.views",
+        "documentation": {}
+    },
+    {
+        "label": "dashboard_products",
+        "kind": 2,
+        "importPath": "onlineretailpos.views",
+        "description": "onlineretailpos.views",
+        "peekOfCode": "def dashboard_products(request):\n    try:\n        number = 10\n        context = {}\n        today_date = datetime.now().date()\n        last_30_date = datetime.now().date() - timedelta(30)\n        df = pd.DataFrame(productTransaction.objects.filter(transaction_date_time__date__range=(last_30_date, today_date)).order_by('-transaction_date_time').values())\n        context['products_group'] = {}\n        for i, df_group in df.groupby('department'):\n            context['products_group'][i] = df_group.groupby([\"barcode\", \"name\"])[[\"qty\"]].sum().reset_index().sort_values(by=[\"qty\"], ascending=False).iloc[:number].to_dict('records')",
+        "detail": "onlineretailpos.views",
+        "documentation": {}
+    },
+    {
+        "label": "dashboard_department",
+        "kind": 2,
+        "importPath": "onlineretailpos.views",
+        "description": "onlineretailpos.views",
+        "peekOfCode": "def dashboard_department(request):\n    context = {}\n    end_date = datetime.now().date()\n    start_date = datetime.now().date()\n    form = DateSelector(initial={'end_date': end_date, 'start_date': start_date})\n    if request.method == \"POST\":\n        form = DateSelector(request.POST)\n        if form.is_valid():\n            end_date = form.cleaned_data['end_date']\n            start_date = form.cleaned_data['start_date']",
+        "detail": "onlineretailpos.views",
+        "documentation": {}
+    },
+    {
+        "label": "dashboard_sales",
+        "kind": 2,
+        "importPath": "onlineretailpos.views",
+        "description": "onlineretailpos.views",
+        "peekOfCode": "def dashboard_sales(request):\n    context = {}\n    today_date = datetime.combine(datetime.now().date(), datetime.min.time())\n    try:\n        df = pd.DataFrame(transaction.objects.filter(transaction_dt__date__gte=datetime(today_date.year, 1, 1)).values())\n        df['transaction_dt'] = df['transaction_dt'].apply(lambda x: x.astimezone(timezone))\n        df['date'] = df['transaction_dt'].dt.date\n        df_date = df.groupby('date')['total_sale'].sum()\n        df_date.index = pd.to_datetime(df_date.index)\n        if not df_date.get(datetime(today_date.year, 1, 1)): df_date[datetime(today_date.year, 1, 1)] = 0",
+        "detail": "onlineretailpos.views",
+        "documentation": {}
+    },
+    {
+        "label": "user_login",
+        "kind": 2,
+        "importPath": "onlineretailpos.views",
+        "description": "onlineretailpos.views",
+        "peekOfCode": "def user_login(request):\n    if request.method == 'POST':\n        username = request.POST.get('username')\n        password = request.POST.get('password')\n        user = authenticate(username=username, password=password)\n        if user is not None:\n            login(request, user)\n            request.session[\"Total\"] = 0.00\n            request.session[\"Tax_Total\"] = 0.00\n            return redirect('home')",
+        "detail": "onlineretailpos.views",
+        "documentation": {}
+    },
+    {
+        "label": "user_logout",
+        "kind": 2,
+        "importPath": "onlineretailpos.views",
+        "description": "onlineretailpos.views",
+        "peekOfCode": "def user_logout(request):\n    logout(request)\n    return render(request, 'registration/login.html', context={'logout': True})",
+        "detail": "onlineretailpos.views",
+        "documentation": {}
+    },
+    {
+        "label": "today_date",
+        "kind": 5,
+        "importPath": "onlineretailpos.views",
+        "description": "onlineretailpos.views",
+        "peekOfCode": "today_date = dj_timezone.localtime(dj_timezone.now()).date()\ntimezone = pytz.timezone(\"Africa/Dar_es_Salaam\")\n# -----------------------------\n# Currency formatting helpers\n# -----------------------------\ndef currency_symbol():\n    return getattr(settings, \"CURRENCY_SYMBOL\", \"TZS\")\ndef fmt(amount, decimals=2):\n    \"\"\"\n    Format a numeric amount with commas and currency symbol.",
+        "detail": "onlineretailpos.views",
+        "documentation": {}
+    },
+    {
+        "label": "timezone",
+        "kind": 5,
+        "importPath": "onlineretailpos.views",
+        "description": "onlineretailpos.views",
+        "peekOfCode": "timezone = pytz.timezone(\"Africa/Dar_es_Salaam\")\n# -----------------------------\n# Currency formatting helpers\n# -----------------------------\ndef currency_symbol():\n    return getattr(settings, \"CURRENCY_SYMBOL\", \"TZS\")\ndef fmt(amount, decimals=2):\n    \"\"\"\n    Format a numeric amount with commas and currency symbol.\n    Example: fmt(123456.5) -> \"TZS 123,456.50\"",
+        "detail": "onlineretailpos.views",
+        "documentation": {}
+    },
+    {
+        "label": "os.environ[\"DJANGO_ALLOW_ASYNC_UNSAFE\"]",
+        "kind": 5,
+        "importPath": "onlineretailpos.wsgi",
+        "description": "onlineretailpos.wsgi",
+        "peekOfCode": "os.environ[\"DJANGO_ALLOW_ASYNC_UNSAFE\"] = \"true\"\napplication = get_wsgi_application()",
+        "detail": "onlineretailpos.wsgi",
+        "documentation": {}
+    },
+    {
+        "label": "application",
+        "kind": 5,
+        "importPath": "onlineretailpos.wsgi",
+        "description": "onlineretailpos.wsgi",
+        "peekOfCode": "application = get_wsgi_application()",
+        "detail": "onlineretailpos.wsgi",
+        "documentation": {}
+    },
+    {
+        "label": "Migration",
+        "kind": 6,
+        "importPath": "transaction.migrations.0001_initial",
+        "description": "transaction.migrations.0001_initial",
+        "peekOfCode": "class Migration(migrations.Migration):\n    initial = True\n    dependencies = [\n        migrations.swappable_dependency(settings.AUTH_USER_MODEL),\n    ]\n    operations = [\n        migrations.CreateModel(\n            name='transaction',\n            fields=[\n                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),",
+        "detail": "transaction.migrations.0001_initial",
+        "documentation": {}
+    },
+    {
+        "label": "Migration",
+        "kind": 6,
+        "importPath": "transaction.migrations.0002_alter_producttransaction_cost_price_and_more",
+        "description": "transaction.migrations.0002_alter_producttransaction_cost_price_and_more",
+        "peekOfCode": "class Migration(migrations.Migration):\n    dependencies = [\n        ('transaction', '0001_initial'),\n    ]\n    operations = [\n        migrations.AlterField(\n            model_name='producttransaction',\n            name='cost_price',\n            field=models.DecimalField(decimal_places=2, default=Decimal('0.00'), editable=False, max_digits=15, null=True),\n        ),",
+        "detail": "transaction.migrations.0002_alter_producttransaction_cost_price_and_more",
+        "documentation": {}
+    },
+    {
+        "label": "Migration",
+        "kind": 6,
+        "importPath": "transaction.migrations.0003_expense",
+        "description": "transaction.migrations.0003_expense",
+        "peekOfCode": "class Migration(migrations.Migration):\n    dependencies = [\n        ('transaction', '0002_alter_producttransaction_cost_price_and_more'),\n        migrations.swappable_dependency(settings.AUTH_USER_MODEL),\n    ]\n    operations = [\n        migrations.CreateModel(\n            name='Expense',\n            fields=[\n                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),",
+        "detail": "transaction.migrations.0003_expense",
+        "documentation": {}
+    },
+    {
+        "label": "Migration",
+        "kind": 6,
+        "importPath": "transaction.migrations.0004_alter_producttransaction_tax_percentage",
+        "description": "transaction.migrations.0004_alter_producttransaction_tax_percentage",
+        "peekOfCode": "class Migration(migrations.Migration):\n    dependencies = [\n        ('transaction', '0003_expense'),\n    ]\n    operations = [\n        migrations.AlterField(\n            model_name='producttransaction',\n            name='tax_percentage',\n            field=models.DecimalField(decimal_places=3, default=Decimal('0.00'), max_digits=6, validators=[django.core.validators.MinValueValidator(0), django.core.validators.MaxValueValidator(100)]),\n        ),",
+        "detail": "transaction.migrations.0004_alter_producttransaction_tax_percentage",
+        "documentation": {}
+    },
+    {
+        "label": "transactionID_2_date",
+        "kind": 2,
+        "importPath": "transaction.templatetags.transaction_tags",
+        "description": "transaction.templatetags.transaction_tags",
+        "peekOfCode": "def transactionID_2_date(value):\n    return datetime.strptime(value, \"%Y%m%d%H%M%S%f\")\n@register.filter()\ndef sort(value):\n    return sorted(value,reverse=True)",
+        "detail": "transaction.templatetags.transaction_tags",
+        "documentation": {}
+    },
+    {
+        "label": "sort",
+        "kind": 2,
+        "importPath": "transaction.templatetags.transaction_tags",
+        "description": "transaction.templatetags.transaction_tags",
+        "peekOfCode": "def sort(value):\n    return sorted(value,reverse=True)",
+        "detail": "transaction.templatetags.transaction_tags",
+        "documentation": {}
+    },
+    {
+        "label": "register",
+        "kind": 5,
+        "importPath": "transaction.templatetags.transaction_tags",
+        "description": "transaction.templatetags.transaction_tags",
+        "peekOfCode": "register = Library()\n@register.filter()\ndef transactionID_2_date(value):\n    return datetime.strptime(value, \"%Y%m%d%H%M%S%f\")\n@register.filter()\ndef sort(value):\n    return sorted(value,reverse=True)",
+        "detail": "transaction.templatetags.transaction_tags",
+        "documentation": {}
+    },
+    {
+        "label": "TransactionAdmin",
+        "kind": 6,
+        "importPath": "transaction.admin",
+        "description": "transaction.admin",
+        "peekOfCode": "class TransactionAdmin(ImportExportModelAdmin):\n    list_display = (\"transaction_dt\", \"transaction_id\", \"total_sale\", \"tax_total\", \"payment_type\", \"products_link\", \"receipt_link\",)\n    fields = [\"user\", \"transaction_dt\", \"transaction_id\", \"total_sale\", \"sub_total\", \"tax_total\", \"deposit_total\", \"payment_type\", \"receipt\", \"receipt_link\", \"products_link\"]\n    list_filter = ((\"transaction_dt\", DateTimeRangeFilter), \"transaction_dt\", \"user\", \"payment_type\",)\n    search_fields = [\"transaction_id\"]\n    def receipt_link(self, obj=None):\n        if obj is not None:\n            # link to the front-end receipt route (keeps your original behaviour)\n            return format_html(f'<a href=\"/transaction_receipt/{obj.transaction_id}/\" style=\"color:green;\" target=\"_blank\">View Receipt</a>')\n        return \"-\"",
+        "detail": "transaction.admin",
+        "documentation": {}
+    },
+    {
+        "label": "ProductTransactionAdmin",
+        "kind": 6,
+        "importPath": "transaction.admin",
+        "description": "transaction.admin",
+        "peekOfCode": "class ProductTransactionAdmin(ImportExportModelAdmin):\n    list_display = (\"transaction_date_time\", \"barcode\", \"name\", \"qty\", \"sales_price\", \"sales_amount\", \"tax_amount\", \"deposit_amount\", \"total_amount\", \"link_transaction\",)\n    fields = [\"transaction_date_time\", \"barcode\", \"name\", \"department\", \"qty\", \"sales_price\", \"cost_price\", \"profit_per_item\", \"Profit_amount\", \"tax_category\", \"tax_percentage\", \"deposit_category\", \"deposit\", \"sales_amount\", \"tax_amount\",\n        \"deposit_amount\", \"total_amount\", \"payment_type\", \"link_transaction\",]\n    list_filter = [(\"transaction_date_time\", DateTimeRangeFilter), \"department\", \"tax_category\", \"deposit_category\", \"payment_type\"]\n    search_fields = [\"transaction_id_num\", \"barcode\", \"name\",]\n    def link_transaction(self, obj=None):\n        if obj is not None and getattr(obj, \"transaction\", None):\n            return format_html(\n                '<a href=\"/staff_portal/transaction/transaction/{}/change/\" style=\"color:#4e73df;\">{}</a>',",
+        "detail": "transaction.admin",
+        "documentation": {}
+    },
+    {
+        "label": "ExpenseAdmin",
+        "kind": 6,
+        "importPath": "transaction.admin",
+        "description": "transaction.admin",
+        "peekOfCode": "class ExpenseAdmin(ImportExportModelAdmin):\n    list_display = (\"created_at\", \"created_by\", \"category\", \"amount\", \"note_short\", \"view_link\")\n    fields = (\"created_by\", \"created_at\", \"category\", \"amount\", \"note\")\n    readonly_fields = (\"created_by\", \"created_at\")\n    list_filter = ((\"created_at\", DateTimeRangeFilter), \"category\")\n    search_fields = (\"note\", \"created_by__username\")\n    ordering = (\"-created_at\",)\n    def note_short(self, obj):\n        if not obj.note:\n            return \"-\"",
+        "detail": "transaction.admin",
+        "documentation": {}
+    },
+    {
+        "label": "TransactionConfig",
+        "kind": 6,
+        "importPath": "transaction.apps",
+        "description": "transaction.apps",
+        "peekOfCode": "class TransactionConfig(AppConfig):\n    default_auto_field = 'django.db.models.BigAutoField'\n    name = 'transaction'",
+        "detail": "transaction.apps",
+        "documentation": {}
+    },
+    {
+        "label": "ExpenseForm",
+        "kind": 6,
+        "importPath": "transaction.forms",
+        "description": "transaction.forms",
+        "peekOfCode": "class ExpenseForm(forms.ModelForm):\n    class Meta:\n        model = Expense\n        fields = [\"amount\", \"category\", \"note\"]\n        widgets = {\n            \"amount\": forms.NumberInput(\n                attrs={\n                    \"step\": \"0.01\",\n                    \"class\": \"form-control\",\n                    \"placeholder\": \"Amount\",",
+        "detail": "transaction.forms",
+        "documentation": {}
+    },
+    {
+        "label": "DateSelector",
+        "kind": 6,
+        "importPath": "transaction.forms",
+        "description": "transaction.forms",
+        "peekOfCode": "class DateSelector(forms.Form):\n    start_date = forms.DateField(\n        required=False,   # 🔥 IMPORTANT (allows reset & partial filtering)\n        label=\"From\",\n        widget=forms.DateInput(\n            attrs={\n                \"type\": \"date\",\n                \"class\": \"form-control\",\n                \"placeholder\": \"Start date\",\n            }",
+        "detail": "transaction.forms",
+        "documentation": {}
+    },
+    {
+        "label": "transaction",
+        "kind": 6,
+        "importPath": "transaction.models",
+        "description": "transaction.models",
+        "peekOfCode": "class transaction(models.Model):\n    \"\"\"\n    Transaction header (one row per sale).\n    Expects `products` to be a stringifiable/list-like structure with items:\n      {'barcode': '123', 'name': 'Milk', 'price': 500, 'quantity': 2, 'tax_value': 76.27, ...}\n    The save() method will:\n      - parse products\n      - compute sub_total (sum of price * qty), tax_total (sum of extracted taxes),\n        deposit_total (sum of deposit amounts)\n      - set total_sale = sub_total + deposit_total (customer payable; for VAT-inclusive pricing sub_total already includes VAT)",
+        "detail": "transaction.models",
+        "documentation": {}
+    },
+    {
+        "label": "productTransaction",
+        "kind": 6,
+        "importPath": "transaction.models",
+        "description": "transaction.models",
+        "peekOfCode": "class productTransaction(models.Model):\n    \"\"\"\n    One row per sold item (child of transaction).\n    \"\"\"\n    transaction = models.ForeignKey(\"transaction\", on_delete=models.RESTRICT, null=False, blank=False, editable=False)\n    transaction_id_num = models.CharField(max_length=50, editable=False, null=False)\n    transaction_date_time = models.DateTimeField(editable=False, null=False, blank=False)\n    barcode = models.CharField(max_length=32, editable=False, blank=False, null=False)\n    name = models.CharField(max_length=125, editable=False, blank=False, null=False)\n    department = models.CharField(max_length=125, editable=False, blank=False, null=True)",
+        "detail": "transaction.models",
+        "documentation": {}
+    },
+    {
+        "label": "Expense",
+        "kind": 6,
+        "importPath": "transaction.models",
+        "description": "transaction.models",
+        "peekOfCode": "class Expense(models.Model):\n    \"\"\"\n    Business expenses (e.g. electricity, rent, supplies).\n    \"\"\"\n    CATEGORY_CHOICES = [\n        (\"RENT\", \"Rent\"),\n        (\"SALARY\", \"Salary\"),\n        (\"UTILITY\", \"Utility\"),\n        (\"SUPPLIES\", \"Supplies\"),\n        (\"OTHER\", \"Other\"),",
+        "detail": "transaction.models",
+        "documentation": {}
+    },
+    {
+        "label": "safe_decimal",
+        "kind": 2,
+        "importPath": "transaction.models",
+        "description": "transaction.models",
+        "peekOfCode": "def safe_decimal(value, default=Decimal(\"0.00\")):\n    \"\"\"\n    Convert value to Decimal safely. Accepts Decimal, int, float, str.\n    Returns a quantized Decimal with 2 decimal places or default on error.\n    \"\"\"\n    if value is None or value == \"\":\n        return default\n    if isinstance(value, Decimal):\n        try:\n            return value.quantize(Decimal(\"0.01\"), rounding=ROUND_HALF_UP)",
+        "detail": "transaction.models",
+        "documentation": {}
+    },
+    {
+        "label": "getcontext().prec",
+        "kind": 5,
+        "importPath": "transaction.models",
+        "description": "transaction.models",
+        "peekOfCode": "getcontext().prec = 28\n# Timezone target (from settings)\nTZ = pytz.timezone(settings.TIME_ZONE)\ndef safe_decimal(value, default=Decimal(\"0.00\")):\n    \"\"\"\n    Convert value to Decimal safely. Accepts Decimal, int, float, str.\n    Returns a quantized Decimal with 2 decimal places or default on error.\n    \"\"\"\n    if value is None or value == \"\":\n        return default",
+        "detail": "transaction.models",
+        "documentation": {}
+    },
+    {
+        "label": "TZ",
+        "kind": 5,
+        "importPath": "transaction.models",
+        "description": "transaction.models",
+        "peekOfCode": "TZ = pytz.timezone(settings.TIME_ZONE)\ndef safe_decimal(value, default=Decimal(\"0.00\")):\n    \"\"\"\n    Convert value to Decimal safely. Accepts Decimal, int, float, str.\n    Returns a quantized Decimal with 2 decimal places or default on error.\n    \"\"\"\n    if value is None or value == \"\":\n        return default\n    if isinstance(value, Decimal):\n        try:",
+        "detail": "transaction.models",
+        "documentation": {}
+    },
+    {
+        "label": "fmt",
+        "kind": 2,
+        "importPath": "transaction.utils",
+        "description": "transaction.utils",
+        "peekOfCode": "def fmt(value):\n    try:\n        return f\"TZS {value:,.2f}\"\n    except Exception:\n        return \"TZS 0.00\"",
+        "detail": "transaction.utils",
+        "documentation": {}
+    },
+    {
+        "label": "DateSelector",
+        "kind": 6,
+        "importPath": "transaction.views",
+        "description": "transaction.views",
+        "peekOfCode": "class DateSelector(forms.Form):\n    start_date = forms.DateField(widget=forms.SelectDateWidget())\n    end_date = forms.DateField(widget=forms.SelectDateWidget())\nclass printer:\n    \"\"\"\n    Simple wrapper for escpos. Use settings.PRINTER_VENDOR_ID and PRINTER_PRODUCT_ID.\n    Note: environment values may be strings like '0x1234' or integers; original code used eval().\n    \"\"\"\n    printer = None\n    @staticmethod",
+        "detail": "transaction.views",
+        "documentation": {}
+    },
+    {
+        "label": "printer",
+        "kind": 6,
+        "importPath": "transaction.views",
+        "description": "transaction.views",
+        "peekOfCode": "class printer:\n    \"\"\"\n    Simple wrapper for escpos. Use settings.PRINTER_VENDOR_ID and PRINTER_PRODUCT_ID.\n    Note: environment values may be strings like '0x1234' or integers; original code used eval().\n    \"\"\"\n    printer = None\n    @staticmethod\n    def printReceipt(printText, times=0, *args, **kwargs):\n        try:\n            if printer.printer:",
+        "detail": "transaction.views",
+        "documentation": {}
+    },
+    {
+        "label": "currency_symbol",
+        "kind": 2,
+        "importPath": "transaction.views",
+        "description": "transaction.views",
+        "peekOfCode": "def currency_symbol():\n    return getattr(settings, \"CURRENCY_SYMBOL\", \"TZS\")\ndef safe_decimal(value, default=Decimal(\"0.00\")):\n    \"\"\"\n    Convert value to Decimal safely. Accepts Decimal, int, float, str.\n    Returns a Decimal quantized to 2 places, or default on error.\n    \"\"\"\n    if value is None or value == \"\":\n        return default\n    if isinstance(value, Decimal):",
+        "detail": "transaction.views",
+        "documentation": {}
+    },
+    {
+        "label": "safe_decimal",
+        "kind": 2,
+        "importPath": "transaction.views",
+        "description": "transaction.views",
+        "peekOfCode": "def safe_decimal(value, default=Decimal(\"0.00\")):\n    \"\"\"\n    Convert value to Decimal safely. Accepts Decimal, int, float, str.\n    Returns a Decimal quantized to 2 places, or default on error.\n    \"\"\"\n    if value is None or value == \"\":\n        return default\n    if isinstance(value, Decimal):\n        try:\n            return value.quantize(Decimal(\"0.01\"), rounding=ROUND_HALF_UP)",
+        "detail": "transaction.views",
+        "documentation": {}
+    },
+    {
+        "label": "fmt",
+        "kind": 2,
+        "importPath": "transaction.views",
+        "description": "transaction.views",
+        "peekOfCode": "def fmt(amount, decimals=2):\n    \"\"\"\n    Format a numeric amount with commas and currency symbol.\n    Example: fmt(123456.5) -> \"TZS 123,456.50\"\n    Always returns a string.\n    \"\"\"\n    try:\n        dec = safe_decimal(amount)\n        formatted = f\"{dec:,.{decimals}f}\"\n    except Exception:",
+        "detail": "transaction.views",
+        "documentation": {}
+    },
+    {
+        "label": "fmt_no_sym",
+        "kind": 2,
+        "importPath": "transaction.views",
+        "description": "transaction.views",
+        "peekOfCode": "def fmt_no_sym(amount, decimals=2):\n    \"\"\"Return just the number with commas (no currency symbol).\"\"\"\n    try:\n        dec = safe_decimal(amount)\n        return f\"{dec:,.{decimals}f}\"\n    except Exception:\n        return f\"{Decimal('0.00'):,.{decimals}f}\"\ndef sum_cart_field(cart, field_name):\n    \"\"\"\n    Sum a numeric field from the session cart safely using Decimal arithmetic.",
+        "detail": "transaction.views",
+        "documentation": {}
+    },
+    {
+        "label": "sum_cart_field",
+        "kind": 2,
+        "importPath": "transaction.views",
+        "description": "transaction.views",
+        "peekOfCode": "def sum_cart_field(cart, field_name):\n    \"\"\"\n    Sum a numeric field from the session cart safely using Decimal arithmetic.\n    cart is expected to be a dict mapping key -> {field_name: value, ...}\n    \"\"\"\n    total = Decimal(\"0.00\")\n    if not cart or not isinstance(cart, dict):\n        return total\n    for val in cart.values():\n        try:",
+        "detail": "transaction.views",
+        "documentation": {}
+    },
+    {
+        "label": "transactionReceipt",
+        "kind": 2,
+        "importPath": "transaction.views",
+        "description": "transaction.views",
+        "peekOfCode": "def transactionReceipt(request, transNo):\n    \"\"\"\n    Show receipt for a transaction. Defensive against DB decimal issues.\n    \"\"\"\n    try:\n        obj = transaction.objects.get(transaction_id=transNo)\n        receipt = getattr(obj, \"receipt\", \"\")\n        return render(request, 'receiptView.html', context={'receipt': receipt, 'transNo': transNo})\n    except transaction.DoesNotExist:\n        raise Http404(\"No Transactions Found!!!\")",
+        "detail": "transaction.views",
+        "documentation": {}
+    },
+    {
+        "label": "transactionPrintReceipt",
+        "kind": 2,
+        "importPath": "transaction.views",
+        "description": "transaction.views",
+        "peekOfCode": "def transactionPrintReceipt(request, transNo):\n    \"\"\"\n    Send stored receipt text to the physical printer (if available).\n    \"\"\"\n    try:\n        try:\n            receipt = transaction.objects.get(transaction_id=transNo).receipt\n        except InvalidOperation as inv:\n            print(\"transactionPrintReceipt: InvalidOperation, raw fallback\", inv)\n            traceback.print_exc()",
+        "detail": "transaction.views",
+        "documentation": {}
+    },
+    {
+        "label": "transactionView",
+        "kind": 2,
+        "importPath": "transaction.views",
+        "description": "transaction.views",
+        "peekOfCode": "def transactionView(request):\n    \"\"\"\n    Transaction list with date filter (GET).\n    - User selects local dates -> convert to aware local datetimes -> convert to UTC for DB query.\n    - Results' datetimes are converted back to local for display.\n    \"\"\"\n    # local timezone (server/user)\n    local_tz = dj_timezone.get_current_timezone()\n    now_local = dj_timezone.localtime(dj_timezone.now(), local_tz)\n    # Default local start/end for \"today\"",
+        "detail": "transaction.views",
+        "documentation": {}
+    },
+    {
+        "label": "returnsTransaction",
+        "kind": 2,
+        "importPath": "transaction.views",
+        "description": "transaction.views",
+        "peekOfCode": "def returnsTransaction(request):\n    Cart(request).returns()\n    return redirect('register')\n@login_required(login_url=\"/user/login/\")\ndef suspendTransaction(request):\n    \"\"\"\n    Save current session cart under a timestamp key for later recall.\n    \"\"\"\n    if Cart(request).isNotEmpty():\n        key = datetime.now().strftime('%Y%m%d%H%M%S%f')",
+        "detail": "transaction.views",
+        "documentation": {}
+    },
+    {
+        "label": "suspendTransaction",
+        "kind": 2,
+        "importPath": "transaction.views",
+        "description": "transaction.views",
+        "peekOfCode": "def suspendTransaction(request):\n    \"\"\"\n    Save current session cart under a timestamp key for later recall.\n    \"\"\"\n    if Cart(request).isNotEmpty():\n        key = datetime.now().strftime('%Y%m%d%H%M%S%f')\n        if \"Cart_Sessions\" in request.session.keys():\n            request.session[\"Cart_Sessions\"][key] = request.session[settings.CART_SESSION_ID]\n            request.session.modified = True\n        else:",
+        "detail": "transaction.views",
+        "documentation": {}
+    },
+    {
+        "label": "recallTransaction",
+        "kind": 2,
+        "importPath": "transaction.views",
+        "description": "transaction.views",
+        "peekOfCode": "def recallTransaction(request, recallTransNo=None):\n    \"\"\"\n    Restore a suspended cart back to the session.\n    \"\"\"\n    if Cart(request).isNotEmpty():\n        return redirect(\"suspend_transaction\")\n    if recallTransNo:\n        request.session[settings.CART_SESSION_ID] = request.session[\"Cart_Sessions\"][recallTransNo]\n        del request.session[\"Cart_Sessions\"][recallTransNo]\n        request.session.modified = True",
+        "detail": "transaction.views",
+        "documentation": {}
+    },
+    {
+        "label": "endTransactionReceipt",
+        "kind": 2,
+        "importPath": "transaction.views",
+        "description": "transaction.views",
+        "peekOfCode": "def endTransactionReceipt(request, transNo):\n    \"\"\"\n    Show final receipt page after completing transaction (with cash/card details in a small table).\n    \"\"\"\n    try:\n        change = \"\"\n        if request.GET.get(\"type\") == \"cash\":\n            # compute change properly and format TZS\n            total = float(request.GET.get(\"total\", 0))\n            value = float(request.GET.get(\"value\", 0))",
+        "detail": "transaction.views",
+        "documentation": {}
+    },
+    {
+        "label": "endTransaction",
+        "kind": 2,
+        "importPath": "transaction.views",
+        "description": "transaction.views",
+        "peekOfCode": "def endTransaction(request, type, value):\n    \"\"\"\n    Called when completing a sale. Reads session cart, validates payment, calls addTransaction(),\n    clears cart and redirects to the endTransaction receipt page.\n    \"\"\"\n    try:\n        return_transaction = None\n        cart = request.session.get(settings.CART_SESSION_ID, {})\n        # compute total safely from session cart\n        total_dec = sum_cart_field(cart, \"line_total\")",
+        "detail": "transaction.views",
+        "documentation": {}
+    },
+    {
+        "label": "addTransaction",
+        "kind": 2,
+        "importPath": "transaction.views",
+        "description": "transaction.views",
+        "peekOfCode": "def addTransaction(user, payment_type, total, cart, value):\n    \"\"\"\n    Creates receipt text with TZS formatting and saves the transaction.\n    Behavior:\n      - VAT is EXTRACTED per-line (not added).\n      - Per-line VAT formula (VAT included in price):\n            line_vat = line_total * tax_pct / (100 + tax_pct)\n        Example for 18%: line_vat = line_total * 18 / 118\n      - Each line_vat is quantized to 2 decimals then summed to avoid rounding mismatches.\n      - Receipt (customer-facing) shows:",
+        "detail": "transaction.views",
+        "documentation": {}
+    },
+    {
+        "label": "expenses_add",
+        "kind": 2,
+        "importPath": "transaction.views",
+        "description": "transaction.views",
+        "peekOfCode": "def expenses_add(request):\n    if request.method == \"POST\":\n        form = ExpenseForm(request.POST)\n        if form.is_valid():\n            expense = form.save(commit=False)\n            expense.created_by = request.user\n            expense.save()\n            return redirect(\"expenses_list\")\n    else:\n        form = ExpenseForm()",
+        "detail": "transaction.views",
+        "documentation": {}
+    },
+    {
+        "label": "expenses_list",
+        "kind": 2,
+        "importPath": "transaction.views",
+        "description": "transaction.views",
+        "peekOfCode": "def expenses_list(request):\n    qs = Expense.objects.all()\n    return render(request, \"transaction/expenses_list.html\", {\"expenses\": qs})\n@login_required(login_url=\"/user/login/\")\ndef profit_loss(request):\n    \"\"\"\n    Profit & loss between two dates (inclusive).\n    \"\"\"\n    # date range handling\n    now = timezone.now()",
+        "detail": "transaction.views",
+        "documentation": {}
+    },
+    {
+        "label": "profit_loss",
+        "kind": 2,
+        "importPath": "transaction.views",
+        "description": "transaction.views",
+        "peekOfCode": "def profit_loss(request):\n    \"\"\"\n    Profit & loss between two dates (inclusive).\n    \"\"\"\n    # date range handling\n    now = timezone.now()\n    start_str = request.GET.get(\"start_date\", \"\")\n    end_str = request.GET.get(\"end_date\", \"\")\n    try:\n        if start_str:",
+        "detail": "transaction.views",
+        "documentation": {}
+    },
+    {
+        "label": "getcontext().prec",
+        "kind": 5,
+        "importPath": "transaction.views",
+        "description": "transaction.views",
+        "peekOfCode": "getcontext().prec = 28\n# -----------------------------\n# Helpers\n# -----------------------------\ndef currency_symbol():\n    return getattr(settings, \"CURRENCY_SYMBOL\", \"TZS\")\ndef safe_decimal(value, default=Decimal(\"0.00\")):\n    \"\"\"\n    Convert value to Decimal safely. Accepts Decimal, int, float, str.\n    Returns a Decimal quantized to 2 places, or default on error.",
+        "detail": "transaction.views",
+        "documentation": {}
+    },
+    {
+        "label": "cmd_doc",
+        "kind": 5,
+        "importPath": "venv.Scripts.runxlrd",
+        "description": "venv.Scripts.runxlrd",
+        "peekOfCode": "cmd_doc = \"\"\"\nCommands:\n2rows           Print the contents of first and last row in each sheet\n3rows           Print the contents of first, second and last row in each sheet\nbench           Same as \"show\", but doesn't print -- for profiling\nbiff_count[1]   Print a count of each type of BIFF record in the file\nbiff_dump[1]    Print a dump (char and hex) of the BIFF records in the file\nfonts           hdr + print a dump of all font objects\nhdr             Mini-overview of file (no per-sheet information)\nhotshot         Do a hotshot profile run e.g. ... -f1 hotshot bench bigfile*.xls",
+        "detail": "venv.Scripts.runxlrd",
+        "documentation": {}
+    },
+    {
+        "label": "options",
+        "kind": 5,
+        "importPath": "venv.Scripts.runxlrd",
+        "description": "venv.Scripts.runxlrd",
+        "peekOfCode": "options = None\nif __name__ == \"__main__\":\n    import xlrd\n    import sys\n    import time\n    import glob\n    import traceback\n    import gc\n    from xlrd.timemachine import xrange, REPR\n    class LogHandler(object):",
+        "detail": "venv.Scripts.runxlrd",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "manage",
+        "description": "manage",
+        "peekOfCode": "def main():\n    \"\"\"Run administrative tasks.\"\"\"\n    os.environ.setdefault('DJANGO_SETTINGS_MODULE', os.getenv('SETTINGS',\"onlineretailpos.settings.settings\"))\n    try:\n        from django.core.management import execute_from_command_line\n    except ImportError as exc:\n        raise ImportError(\n            \"Couldn't import Django. Are you sure it's installed and \"\n            \"available on your PYTHONPATH environment variable? Did you \"\n            \"forget to activate a virtual environment?\"",
+        "detail": "manage",
+        "documentation": {}
+    }
+]

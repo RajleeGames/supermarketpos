@@ -10,37 +10,38 @@ Product Information | Online Retail POS
 
 {% block content %}
 <div class="row" style="width: 100%;padding-right: 0px;">
-        <form class="form" action="{{ request.get_full_path }}" method = "POST" style="width:100%;padding-bottom: 10px;text-align: center;padding:10px;padding-top: 15px;">
+        <form class="form" action="{{ request.get_full_path }}" method="POST" style="width:100%;padding-bottom: 10px;text-align: center;padding:10px;padding-top: 15px;">
             {% csrf_token %}
             <div class="row" style="justify-content: center;">
             {% for field in form %}
             <ul style="padding-left:0;width:54%"> {{ field }} </ul>
             {% endfor %}
             </div>
-            <input class="btn btn-lg btn-primary"  style="width:60%;margin-top: 10px;" id="submit-barcode" type="submit" value="Submit">
+            <input class="btn btn-lg btn-primary" style="width:60%;margin-top: 10px;" id="submit-barcode" type="submit" value="Submit">
         </form>
 </div>
+
 <div class="row col-lg-12" style="justify-content: center;">
     {% if notFound %}
         <script>
             window.alert("NO PRODUCT FOUND")
         </script>
-    {% endif%}
+    {% endif %}
     {% if obj %}
     <div class="card shadow" style="width:80%;margin-top:50px">
         <div class="card-header py-3">
             <h6 class="m-2 font-weight-bold text-primary h3">Product Information - {{ obj.get_fields.0.1 }}</h6>
         </div>
-        <div class="card-body " style="width:100%;">
-            <div class="row h1 text-danger  " style="justify-content:end;padding-right: 10%;">
-                Price: {{ obj.get_fields.2.1 }}
+        <div class="card-body" style="width:100%;">
+            <div class="row h1 text-danger" style="justify-content:end;padding-right: 10%;">
+                <!-- Only Price area formatted -->
+                Price: <span id="product-price" data-raw="{{ obj.get_fields.2.1 }}">{{ obj.get_fields.2.1 }}</span>
             </div>
             <div class="table-responsive mt-4" style="width:100%;">
                 <table class="table table-bordered table-hover h5 text-gray-900 " style="width:100%;">
-                    <!-- <table class="table table-hover table-bordered h1 font-weight-bold text-gray-800" style="width:100%;"> -->
                     <tbody>
                         {% for name, value in obj.get_fields %}
-                        <tr height="50px" >
+                        <tr height="50px">
                             <td width="35%">{{ name }}</td>
                             <td>{{ value }}</td>
                         </tr>
@@ -52,4 +53,23 @@ Product Information | Online Retail POS
     </div>
     {% endif %}
 </div>
+
+<!-- Script formats only the Price area -->
+<script>
+(function(){
+    const currency = "TZS"; // change if needed
+    const priceEl = document.getElementById('product-price');
+    if (priceEl){
+        let raw = priceEl.getAttribute('data-raw') || priceEl.innerText;
+        // parse numeric value
+        let num = Number(String(raw).replace(/[^0-9.\-]/g, ''));
+        if (!isNaN(num)){
+            // add commas
+            let parts = num.toFixed(2).split('.');
+            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            priceEl.innerText = currency + ' ' + parts.join('.');
+        }
+    }
+})();
+</script>
 {% endblock %}
