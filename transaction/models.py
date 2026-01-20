@@ -50,6 +50,7 @@ class transaction(models.Model):
         deposit_total (sum of deposit amounts)
       - set total_sale = sub_total + deposit_total (customer payable; for VAT-inclusive pricing sub_total already includes VAT)
       - save header, then create productTransaction rows if none exist
+      - if payment_type == 'DEBT' create Debt and DebtPayment as needed (safe/atomic)
     """
     date_time = models.DateTimeField(auto_now_add=True)
     transaction_dt = models.DateTimeField(editable=False, null=False, blank=False)
@@ -62,10 +63,25 @@ class transaction(models.Model):
     tax_total = models.DecimalField(max_digits=15, decimal_places=2, null=True, editable=False, default=Decimal("0.00"))
     deposit_total = models.DecimalField(max_digits=15, decimal_places=2, null=True, editable=False, default=Decimal("0.00"))
 
+    # new: amount paid at time of transaction (for partial payments)
+    paid_amount = models.DecimalField(max_digits=15, decimal_places=2, null=False, editable=False, default=Decimal("0.00"))
+
+    # payment types: include DEBT option
+    PAYMENT_CHOICES = [
+        ('CASH', 'CASH'),
+        ('DEBIT/CREDIT', 'DEBIT/CREDIT'),
+        ('EBT', 'EBT'),
+        ('DEBT', 'DEBT'),  # added debt option
+    ]
     payment_type = models.CharField(
-        choices=[('CASH', 'CASH'), ('DEBIT/CREDIT', 'DEBIT/CREDIT'), ('EBT', 'EBT')],
+        choices=PAYMENT_CHOICES,
         max_length=32, null=False, editable=False
     )
+
+    # optional debtor metadata (string fields to avoid coupling if you don't have a Customer model here)
+    debtor_name = models.CharField(max_length=200, blank=True, default="", editable=False)
+    debt_due_date = models.DateField(null=True, blank=True, editable=False)
+    debt_created = models.BooleanField(default=False, editable=False)
 
     receipt = models.TextField(blank=False, null=False, editable=False)
     # products: expected string repr of list of dicts
@@ -108,16 +124,18 @@ class transaction(models.Model):
             return vat
         except Exception:
             return Decimal("0.00")
-        
+
     from django.utils import timezone
     def save(self, *args, **kwargs):
         """
         Save transaction header, compute totals from `products` payload, and create productTransaction rows.
+        Also create Debt and DebtPayment records if payment_type is DEBT.
+        This method is defensive and avoids duplicate child rows by checking the DB first.
         """
         # Ensure transaction_dt has proper TZ
         self._ensure_transaction_dt_timezone()
 
-        # Attempt to parse products payload early so we can compute header totals before saving header.
+        # Parse products payload early so we can compute header totals before saving header.
         try:
             products_list = literal_eval(self.products) if self.products else []
             if not isinstance(products_list, list):
@@ -203,6 +221,7 @@ class transaction(models.Model):
         self.sub_total = safe_decimal(self.sub_total)
         self.tax_total = safe_decimal(self.tax_total)
         self.deposit_total = safe_decimal(self.deposit_total)
+        self.paid_amount = safe_decimal(self.paid_amount)
 
         # Save header first so we have a PK for child rows
         super().save(*args, **kwargs)
@@ -279,6 +298,51 @@ class transaction(models.Model):
         except Exception as e_create:
             # don't prevent the header from being saved if product rows fail
             print("transaction.save: productTransaction creation failed:", e_create)
+
+        # ------------------------
+        # DEBT handling (SAFE — no duplicate creation)
+        # ------------------------
+        try:
+            if str(self.payment_type).upper() == "DEBT" and not self.debt_created:
+                with db_transaction.atomic():
+                    # lock this transaction row to avoid races
+                    tx_locked = transaction.objects.select_for_update().get(pk=self.pk)
+
+                    # double-check after acquiring lock: if a Debt already exists, skip
+                    if not Debt.objects.filter(transaction=tx_locked).exists():
+                        paid_amt = safe_decimal(tx_locked.paid_amount)
+                        due = tx_locked.debt_due_date if tx_locked.debt_due_date else None
+                        debtor = tx_locked.debtor_name or ""
+
+                        debt = Debt.objects.create(
+                            transaction=tx_locked,
+                            total_amount=tx_locked.total_sale,
+                            paid_amount=paid_amt,
+                            due_date=due,
+                            debtor_name=debtor,
+                            created_by=tx_locked.user,
+                            phone_number=getattr(tx_locked, "phone_number", None) if hasattr(tx_locked, "phone_number") else None
+                        )
+
+                        if paid_amt > Decimal("0.00"):
+                            DebtPayment.objects.create(
+                                debt=debt,
+                                amount=paid_amt,
+                                method='CASH',
+                                note="Initial payment recorded on transaction save",
+                                paid_by=tx_locked.user
+                            )
+
+                        # update debt status and mark transaction as having created a debt
+                        try:
+                            debt.update_status()
+                        except Exception:
+                            pass
+
+                        # mark the transaction as debt_created using update() to avoid re-entering save()
+                        transaction.objects.filter(pk=tx_locked.pk).update(debt_created=True)
+        except Exception as e_debt:
+            print("transaction.save: debt creation failed:", e_debt)
 
         return self
 
@@ -361,6 +425,128 @@ class productTransaction(models.Model):
 
     class Meta:
         verbose_name_plural = "Product Transactions"
+
+# --------- Debt / Payments models (fixed) ----------
+class Debt(models.Model):
+    """
+    Debt/Credit record tied to a transaction (sale or purchase).
+    Stores totals, paid amount, due date, and status.
+    One-to-one to transaction to prevent duplicate debts for a single sale.
+    """
+    STATUS_CHOICES = [
+        ('PENDING', 'Pending'),
+        ('PARTIAL', 'Partially Paid'),
+        ('PAID', 'Paid'),
+        ('OVERDUE', 'Overdue'),
+    ]
+
+    # OneToOne ensures only one Debt per Transaction (db-level protection)
+    transaction = models.OneToOneField(
+        "transaction",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="debt"
+    )
+
+    total_amount = models.DecimalField(max_digits=15, decimal_places=2, default=Decimal("0.00"))
+    paid_amount = models.DecimalField(max_digits=15, decimal_places=2, default=Decimal("0.00"))
+    status = models.CharField(max_length=16, choices=STATUS_CHOICES, default='PENDING')
+    due_date = models.DateField(null=True, blank=True)
+    debtor_name = models.CharField(max_length=200, blank=True, default="")
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    phone_number = models.CharField(max_length=20, null=True, blank=True)
+
+    def __str__(self):
+        return f"Debt #{self.pk or 'new'} | {self.debtor_name or 'Unknown'} | {self.balance}"
+
+    @property
+    def balance(self):
+        try:
+            return (safe_decimal(self.total_amount) - safe_decimal(self.paid_amount)).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+        except Exception:
+            return safe_decimal(0)
+
+    def update_status(self):
+        """
+        Update status based on paid_amount, due_date and today's date.
+        Uses an efficient DB update for status + updated_at to avoid extra save loops.
+        """
+        try:
+            paid = safe_decimal(self.paid_amount)
+            total = safe_decimal(self.total_amount)
+            today = dj_timezone.localdate()
+
+            if total > Decimal("0.00") and paid >= total:
+                new_status = 'PAID'
+            elif paid > Decimal("0.00") and paid < total:
+                new_status = 'PARTIAL'
+            else:
+                if self.due_date and self.due_date < today:
+                    new_status = 'OVERDUE'
+                else:
+                    new_status = 'PENDING'
+
+            # Only update DB when status actually changed (reduces writes)
+            if new_status != (self.status or ''):
+                self.status = new_status
+                # update status and updated_at in one DB call
+                Debt.objects.filter(pk=self.pk).update(status=new_status, updated_at=dj_timezone.now())
+            else:
+                # keep updated_at fresh even if status unchanged
+                Debt.objects.filter(pk=self.pk).update(updated_at=dj_timezone.now())
+
+        except Exception:
+            # best-effort fallback: attempt a safe save/update of updated_at
+            try:
+                Debt.objects.filter(pk=self.pk).update(updated_at=dj_timezone.now())
+            except Exception:
+                pass
+
+    class Meta:
+        verbose_name_plural = "Debts"
+        ordering = ["-created_at"]
+
+
+
+class DebtPayment(models.Model):
+    """
+    Payment entries against a Debt. Keeps full history (date/time, method, note, who).
+    """
+    PAYMENT_METHODS = [
+        ('CASH', 'CASH'),
+        ('DEBIT/CREDIT', 'DEBIT/CREDIT'),
+        ('EBT', 'EBT'),
+    ]
+
+    debt = models.ForeignKey(Debt, related_name='payments', on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=15, decimal_places=2, default=Decimal("0.00"))
+    method = models.CharField(max_length=32, choices=PAYMENT_METHODS, default='CASH')
+    note = models.CharField(max_length=255, blank=True, default="")
+    paid_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Payment {self.amount} on Debt #{self.debt_id or self.debt.pk}"
+
+    def save(self, *args, **kwargs):
+        """
+        When a DebtPayment is saved, update the parent Debt's paid_amount and status.
+        Note: If you create DebtPayment via code, this will auto-update the debt.
+        """
+        is_new = self.pk is None
+        super().save(*args, **kwargs)
+        if is_new:
+            try:
+                # increment parent debt paid_amount atomically to avoid race conditions
+                Debt.objects.filter(pk=self.debt.pk).update(paid_amount=F('paid_amount') + safe_decimal(self.amount))
+                # refresh and update status
+                debt = Debt.objects.get(pk=self.debt.pk)
+                debt.update_status()
+            except Exception as e:
+                print("DebtPayment.save: failed updating parent debt:", e)
 
 
 # --------- Expenses model (add below productTransaction) ----------

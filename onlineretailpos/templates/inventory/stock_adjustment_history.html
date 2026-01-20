@@ -1,0 +1,245 @@
+{% extends "base.html" %}
+{% load humanize %}
+{% block title %}Stock Adjustment History{% endblock %}
+
+{% block nav-item %}
+<div class="mb-0 font-weight-bold h5 text-gray-500 text-uppercase p-3">
+    Stock Adjustment History
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+
+  <style>
+    /* --- Fancy badge styles --- */
+    .badge-type {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .35rem .7rem;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: .85rem;
+      box-shadow: 0 6px 18px rgba(29,31,41,0.05), inset 0 -4px 0 rgba(255,255,255,0.03);
+      border: 1px solid rgba(0,0,0,0.04);
+    }
+
+    .badge-type .dot {
+      width: .6rem;
+      height: .6rem;
+      border-radius: 50%;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+
+    .badge-damaged {
+      background: linear-gradient(135deg,#ff9b9b 0%, #ff5b5b 100%);
+      color: #fff;
+      border-color: rgba(255,91,91,0.25);
+    }
+    .badge-damaged .dot { background: #ff2b2b; }
+
+    .badge-expired {
+      background: linear-gradient(135deg,#ffd88a 0%, #ffb14d 100%);
+      color: rgba(20,20,20,0.95);
+      border-color: rgba(255,177,77,0.12);
+    }
+    .badge-expired .dot { background: #ff8a00; }
+
+    .badge-other {
+      background: linear-gradient(135deg,#dfe6f3 0%, #b7c3da 100%);
+      color: #2b3440;
+      border-color: rgba(43,52,64,0.06);
+    }
+    .badge-other .dot { background: #6f7b8a; }
+
+    /* Qty styling */
+    .qty-removed {
+      color: #d9534f;
+      font-weight: 700;
+    }
+
+    /* Row hover and zebra */
+    .table-hover tbody tr:hover {
+      background: linear-gradient(90deg, rgba(250,250,252,0.7), rgba(245,247,250,0.7));
+    }
+
+    /* small responsive tweaks */
+    @media (max-width: 768px) {
+      .badge-type { font-size: .8rem; padding: .3rem .55rem; }
+    }
+
+    /* nicer pagination */
+    .pagination .page-item .page-link {
+      border-radius: .5rem;
+      margin: 0 .12rem;
+      padding: .45rem .65rem;
+    }
+  </style>
+
+  <!-- Summary cards -->
+  <div class="row mb-3">
+    <div class="col-md-8">
+      <div class="card shadow-sm border-0">
+        <div class="card-body d-flex align-items-center gap-3">
+          <div class="flex-shrink-0 rounded-3 p-3" style="background: linear-gradient(135deg,#6f42c1,#4a90e2); color: #fff;">
+            <h4 class="mb-0">{{ count_all }}</h4>
+            <small class="d-block opacity-75">Adjustments</small>
+          </div>
+
+          <div class="flex-grow-1">
+            <h5 class="mb-0">
+              {% if product %}
+                {{ product.name }} — Adjustment History
+              {% else %}
+                All Products — Adjustment History
+              {% endif %}
+            </h5>
+            <small class="text-muted">
+              Total removed: <strong class="text-danger">-{{ total_removed }}</strong>
+            </small>
+          </div>
+
+          <div class="ms-auto">
+            <a href="{% url 'stock_adjustment' %}" class="btn btn-light btn-sm border">
+              + New Adjustment
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0">
+        <div class="card-body">
+          <h6 class="mb-2">Quick filter</h6>
+          <div class="d-flex gap-2">
+            <a href="{% url 'stock_adjustment_history' %}" class="btn btn-outline-secondary btn-sm">All</a>
+            {% if product %}
+              <a href="?p={{ product.pk }}" class="btn btn-outline-primary btn-sm">For this product</a>
+            {% endif %}
+            <a href="?page=1" class="btn btn-outline-info btn-sm">First page</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="card shadow">
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th style="width:56px">#</th>
+              <th>Product</th>
+              <th>Type</th>
+              <th class="text-end">Qty</th>
+              <th>Note</th>
+              <th>By</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for a in adjustments %}
+            <tr>
+              {# compute global index: start_index + zero-based counter #}
+              <td>{{ adjustments.start_index|add:forloop.counter0 }}</td>
+
+              <td>
+                <div class="fw-semibold">{{ a.product.name }}</div>
+                <small class="text-muted">{{ a.product.barcode }}</small>
+              </td>
+
+              <td>
+                {% if a.adjustment_type == "DAMAGED" %}
+                  <span class="badge-type badge-damaged">
+                    <span class="dot" aria-hidden="true"></span>
+                    Damaged
+                  </span>
+                {% elif a.adjustment_type == "EXPIRED" %}
+                  <span class="badge-type badge-expired">
+                    <span class="dot" aria-hidden="true"></span>
+                    Expired
+                  </span>
+                {% else %}
+                  <span class="badge-type badge-other">
+                    <span class="dot" aria-hidden="true"></span>
+                    Other
+                  </span>
+                {% endif %}
+              </td>
+
+              <td class="text-end fw-bold qty-removed">-{{ a.quantity }}</td>
+
+              <td>{{ a.note|default:"—" }}</td>
+
+              <td>
+                {% if a.created_by %}
+                  {{ a.created_by.get_full_name|default:a.created_by.username }}
+                {% else %}
+                  <span class="text-muted">—</span>
+                {% endif %}
+              </td>
+
+              <td>{{ a.created_at|date:"Y-m-d H:i" }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="7" class="text-center text-muted py-4">
+                No stock adjustments recorded.
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      <div class="p-3 d-flex justify-content-between align-items-center">
+        <div>
+          <small class="text-muted">Showing {{ adjustments.start_index }} to {{ adjustments.end_index }} of {{ adjustments.paginator.count }}</small>
+        </div>
+
+        <nav>
+          <ul class="pagination mb-0">
+            {% if adjustments.has_previous %}
+              <li class="page-item">
+                <a class="page-link" href="?page={{ adjustments.previous_page_number }}{% if product %}&p={{ product.pk }}{% endif %}">Previous</a>
+              </li>
+            {% else %}
+              <li class="page-item disabled"><span class="page-link">Previous</span></li>
+            {% endif %}
+
+            {# show nearby page numbers #}
+            {% for i in adjustments.paginator.page_range %}
+              {% if adjustments.paginator.num_pages > 9 %}
+                {% if i >= adjustments.number|add:-2 and i <= adjustments.number|add:2 %}
+                  <li class="page-item {% if i == adjustments.number %}active{% endif %}">
+                    <a class="page-link" href="?page={{ i }}{% if product %}&p={{ product.pk }}{% endif %}">{{ i }}</a>
+                  </li>
+                {% endif %}
+              {% else %}
+                <li class="page-item {% if i == adjustments.number %}active{% endif %}">
+                  <a class="page-link" href="?page={{ i }}{% if product %}&p={{ product.pk }}{% endif %}">{{ i }}</a>
+                </li>
+              {% endif %}
+            {% endfor %}
+
+            {% if adjustments.has_next %}
+              <li class="page-item">
+                <a class="page-link" href="?page={{ adjustments.next_page_number }}{% if product %}&p={{ product.pk }}{% endif %}">Next</a>
+              </li>
+            {% else %}
+              <li class="page-item disabled"><span class="page-link">Next</span></li>
+            {% endif %}
+          </ul>
+        </nav>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+{% endblock %}

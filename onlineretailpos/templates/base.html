@@ -91,6 +91,17 @@
             text-overflow: ellipsis;
             max-width: 180px;
         }
+
+        /* highlight debt badge (optional) */
+        .debt-badge {
+            background:#ffc107;
+            color:#000;
+            font-weight:700;
+            padding:2px 6px;
+            border-radius:8px;
+            margin-left:6px;
+            font-size:0.75rem;
+        }
     </style>
 
 </head>
@@ -145,6 +156,12 @@
                     <span class="menu-text">Transactions</span>
                 </a>
 
+ <!-- Quick link to Expired / Damaged Stock -->
+<a class="nav-link" href="{% url 'stock_adjustment' %}">
+    <i class="fas fa-box-open"></i>
+    <span class="menu-text">Expired / Damaged</span>
+</a>
+
                 <!-- Financials (unique collapse id) -->
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFinancials" aria-expanded="true" aria-controls="collapseFinancials">
                     <i class="fas fa-fw fa-file-invoice-dollar"></i>
@@ -155,7 +172,15 @@
                         
                         <a class="collapse-item" href="{% url 'expenses_add' %}"><i class="fas fa-fw fa-plus-circle"></i> <span class="menu-text">Add Expense</span></a>
                         
-                        <a class="collapse-item" href="{% url 'profit_loss' %}"><i class="fas fa-fw fa-balance-scale"></i> <span class="menu-text">Profit &amp; Loss</span></a>   
+                        <a class="collapse-item" href="{% url 'profit_loss' %}"><i class="fas fa-fw fa-balance-scale"></i> <span class="menu-text">Profit &amp; Loss</span></a>
+
+                        <!-- Debts overview inside Financials -->
+                        <a class="collapse-item" href="{% url 'debts_list' %}">
+                            <i class="fas fa-fw fa-file-invoice"></i> <span class="menu-text">Debts</span>
+                        </a>
+
+                       
+                
                     </div>
                 </div>
                 
@@ -254,6 +279,9 @@
     <script src="{% static 'vendor/datatables/dataTables.bootstrap4.min.js' %}"></script>
     <!-- Page level custom scripts -->
     <script src="{% static 'js/demo/datatables-demo.js' %}"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/qz-tray@2.2.4/qz-tray.js"></script>
+
     
     {% block script %}
     {% endblock %}

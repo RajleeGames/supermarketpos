@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}Create Debt{% endblock %}
+
+{% block extra_styles %}
+<style>
+.form-card {
+  max-width: 720px;
+  margin: 0 auto;
+  box-shadow: 0 6px 20px rgba(0,0,0,.06);
+  border-radius: 10px;
+}
+.form-label { font-weight: 600; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h4>Create New Debt</h4>
+    <a href="{% url 'debts_list' %}" class="btn btn-outline-secondary btn-sm">← Back</a>
+  </div>
+
+  <!-- Messages -->
+  {% if messages %}
+    {% for msg in messages %}
+      <div class="alert alert-{{ msg.tags }}">{{ msg }}</div>
+    {% endfor %}
+  {% endif %}
+
+  <!-- Form Card -->
+  <div class="card form-card">
+    <div class="card-body">
+
+      {# If you pass a Django form in context as `form`, prefer rendering it #}
+      {% if form %}
+        <form method="post" autocomplete="off" novalidate>
+          {% csrf_token %}
+          {{ form.non_field_errors }}
+          {% for field in form %}
+            <div class="mb-3">
+              <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+              {{ field }}
+              {% if field.help_text %}<div class="small-muted">{{ field.help_text }}</div>{% endif %}
+              {% for err in field.errors %}<div class="text-danger small">{{ err }}</div>{% endfor %}
+            </div>
+          {% endfor %}
+
+          <div class="d-flex justify-content-end gap-2">
+            <a href="{% url 'debts_list' %}" class="btn btn-outline-secondary">Cancel</a>
+            <button type="submit" class="btn btn-primary">💾 Save Debt</button>
+          </div>
+        </form>
+
+      {# Otherwise render a simple manual form and preserve POSTed values #}
+      {% else %}
+        <form method="post" autocomplete="off" novalidate>
+          {% csrf_token %}
+
+          <div class="mb-3">
+            <label class="form-label">Debtor Name</label>
+            <input
+              type="text"
+              name="debtor_name"
+              class="form-control"
+              placeholder="Customer / Company name"
+              required
+              value="{{ request.POST.debtor_name|default_if_none:'' }}"
+            >
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Debtor Type</label>
+            <select name="debtor_type" class="form-select">
+              <option value="Customer" {% if request.POST.debtor_type == "Customer" %}selected{% endif %}>Customer</option>
+              <option value="Company" {% if request.POST.debtor_type == "Company" %}selected{% endif %}>Company</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Debt Amount</label>
+            <input
+              type="number"
+              step="0.01"
+              name="amount"
+              class="form-control"
+              placeholder="0.00"
+              required
+              value="{{ request.POST.amount|default_if_none:'' }}"
+            >
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Payment Method</label>
+            <select name="payment_method" class="form-select">
+              <option value="Debt" {% if request.POST.payment_method == "Debt" %}selected{% endif %}>Full Debt</option>
+              <option value="Cash" {% if request.POST.payment_method == "Cash" %}selected{% endif %}>Cash</option>
+              <option value="Bank" {% if request.POST.payment_method == "Bank" %}selected{% endif %}>Bank</option>
+              <option value="EFT" {% if request.POST.payment_method == "EFT" %}selected{% endif %}>EFT</option>
+            </select>
+            <div class="small-muted mt-1">Select <strong>Full Debt</strong> if no payment was received.</div>
+          </div>
+
+          <div class="d-flex justify-content-end gap-2">
+            <a href="{% url 'debts_list' %}" class="btn btn-outline-secondary">Cancel</a>
+            <button type="submit" class="btn btn-primary">💾 Save Debt</button>
+          </div>
+        </form>
+      {% endif %}
+
+    </div>
+  </div>
+
+</div>
+{% endblock %}

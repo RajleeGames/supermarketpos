@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}Payment History{% endblock %}
+
+{% block extra_styles %}
+<style>
+.payment-card {
+  box-shadow: 0 6px 20px rgba(0,0,0,.06);
+  border-radius: 10px;
+}
+.amount-positive {
+  color: #198754;
+  font-weight: 600;
+}
+.small-muted {
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+.action-btn {
+  min-width: 80px;
+}
+.table .text-nowrap {
+  white-space: nowrap;
+}
+
+/* Method badges (NO GREY) */
+.badge-method {
+  font-weight: 600;
+  padding: 6px 10px;
+  border-radius: 6px;
+}
+.badge-cash { background:#d1e7dd; color:#0f5132; }
+.badge-bank { background:#cff4fc; color:#055160; }
+.badge-card { background:#e2d9f3; color:#432874; }
+.badge-ebt  { background:#e9ecef; color:#212529; }
+.badge-other{ background:#f8f9fa; color:#495057; border:1px solid #dee2e6; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-3">
+
+  <!-- Header -->
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+    <div>
+      <h4 class="mb-0">Payment History</h4>
+      <div class="small-muted">
+        Debtor: <strong>{{ debt.debtor_name }}</strong>
+      </div>
+    </div>
+
+    <div class="mt-2 mt-md-0">
+      <a href="{% url 'debt_detail' debt.id %}" class="btn btn-outline-secondary btn-sm">
+        ← Back to Debt
+      </a>
+    </div>
+  </div>
+
+  <!-- Summary -->
+  <div class="row mb-3">
+    <div class="col-sm-4 mb-2">
+      <div class="card payment-card p-3">
+        <div class="small-muted">Total Debt</div>
+        <div class="fw-bold fs-5">
+          {{ debt.total_amount|floatformat:2|intcomma }}
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-4 mb-2">
+      <div class="card payment-card p-3">
+        <div class="small-muted">Total Paid</div>
+        <div class="fw-bold fs-5 text-success">
+          {{ debt.paid_amount|floatformat:2|intcomma }}
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-4 mb-2">
+      <div class="card payment-card p-3">
+        <div class="small-muted">Balance</div>
+        <div class="fw-bold fs-5 text-danger">
+          {{ debt.balance|floatformat:2|intcomma }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Payments Table -->
+  <div class="card payment-card">
+    <div class="card-body p-3">
+      <div class="table-responsive">
+        <table class="table table-hover table-sm align-middle mb-0">
+          <thead class="table-dark">
+            <tr>
+              <th style="width:48px">#</th>
+              <th class="text-end" style="width:140px">Amount</th>
+              <th style="width:140px">Method</th>
+              <th style="width:160px">Paid By</th>
+              <th style="width:170px">Date</th>
+              <th>Note</th>
+              <th style="width:120px">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+
+          {% for p in payments %}
+          <tr>
+            <td>{{ forloop.counter }}</td>
+
+            <td class="text-end amount-positive">
+              {{ p.amount|floatformat:2|intcomma }}
+            </td>
+
+            <td>
+              {% if p.method == "CASH" %}
+                <span class="badge-method badge-cash">Cash</span>
+              {% elif p.method == "BANK" %}
+                <span class="badge-method badge-bank">Bank</span>
+              {% elif p.method == "DEBIT/CREDIT" %}
+                <span class="badge-method badge-card">Card</span>
+              {% elif p.method == "EBT" %}
+                <span class="badge-method badge-ebt">EBT</span>
+              {% else %}
+                <span class="badge-method badge-other">{{ p.method }}</span>
+              {% endif %}
+            </td>
+
+            <td>
+              {{ p.paid_by.get_full_name|default:p.paid_by.username|default:"—" }}
+            </td>
+
+            <td class="text-nowrap">
+              {{ p.created_at|date:"Y-m-d H:i" }}
+            </td>
+
+            <td>{{ p.note|default:"—" }}</td>
+
+            <td>
+              <div class="d-flex gap-1">
+                <button class="btn btn-sm btn-outline-primary action-btn" disabled>Edit</button>
+                <button class="btn btn-sm btn-outline-danger action-btn" disabled>Delete</button>
+              </div>
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="7" class="text-center py-4 text-muted">
+              No payments recorded yet.
+            </td>
+          </tr>
+          {% endfor %}
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

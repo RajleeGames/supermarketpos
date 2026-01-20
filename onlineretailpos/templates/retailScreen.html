@@ -16,8 +16,7 @@ Register | Online Retail POS
     <div class="col-lg-6">
         <div class="row mb-0" style="padding-bottom:5px;">
 
-            <!-- ===== product search + existing barcode form (paste in place of your existing form block) ===== -->
-            <!-- Search input (autocomplete) -->
+            <!-- ===== product search + existing barcode form (unchanged) ===== -->
             <div class="mb-2" style="width:100%; padding:10px 10px 0 10px;">
               <label class="small text-dark">Search product (type name or barcode)</label>
               <div style="position:relative;">
@@ -26,7 +25,6 @@ Register | Online Retail POS
               </div>
             </div>
 
-            <!-- Your original form kept intact (scan / manual barcode entry) -->
             <form class="form col-lg-6" action="{{ request.get_full_path }}" method="POST" style="width:100%;padding-bottom: 10px;padding:10px;padding-top: 15px;">
                 {% csrf_token %}
                 <div class="row" style="width:100%;justify-content: center;">
@@ -48,17 +46,20 @@ Register | Online Retail POS
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
+                            <!-- Updated: elements with IDs so JS can update totals live -->
                             <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">
-                                <strong>Sub Total : </strong>{{ total|sub:tax_total|floatformat:2|intcomma }}
+                                <strong>Sub Total : </strong>
+                                <span id="transaction-subtotal">{{ total|sub:tax_total|floatformat:2|intcomma }}</span>
                             </div>
                             <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">
-                                <strong>Tax Total : </strong>{{ tax_total|floatformat:2|intcomma }}
+                                <strong>Tax Total : </strong>
+                                <span id="transaction-tax">{{ tax_total|floatformat:2|intcomma }}</span>
                             </div>
                             <div class="text-xl font-weight-bold text-success text-uppercase mb-1">
                                 <strong>Total : </strong>
                             </div>
                             <div class="h3 mb-0 font-weight-bold text-gray-800" style="text-align:right;">
-                                {{ currency }} {{ total|floatformat:2|intcomma }}
+                                {{ currency }} <span id="transaction-total">{{ total|floatformat:2|intcomma }}</span>
                             </div>
                         </div>
                         <div class="col-auto">
@@ -81,13 +82,11 @@ Register | Online Retail POS
             </div>
             {% endif %}
 
-            {# STOCK ERROR ALERT FROM VIEWS (plays sound) #}
             {% if stock_error %}
-            <div class="alert alert-danger text-center fw-bold" role="alert" id="stock-error-alert">
+            <div class="alert alert-danger text-center FW-bold" role="alert" id="stock-error-alert">
                 {{ stock_error }}
             </div>
             <script>
-                // play sound when server reported a stock error
                 setTimeout(function(){ try{ playStockAlert(); }catch(e){} }, 50);
             </script>
             {% endif %}
@@ -110,14 +109,12 @@ Register | Online Retail POS
                         <tr data-barcode="{{ key }}">
                             <th style="text-align:left; vertical-align: middle;">
                                 {{ key }} <br> {{ value.name }}
-
-                                {# low-stock indicator (uses cart item flags provided by Cart) #}
                                 {% if value.low_stock %}
                                     <div style="margin-top:6px;">
                                         {% if value.stock_left|default:0 <= 0 %}
-                                            <span style="display:inline-block;padding:4px 8px;background:#b02a37;color:#fff;border-radius:6px;font-weight:700;margin-top:4px;">OUT OF STOCK</span>
+                                            <span class="badge badge-danger" style="display:inline-block;padding:4px 8px;">OUT OF STOCK</span>
                                         {% else %}
-                                            <span style="display:inline-block;padding:4px 8px;background:#ffc107;color:#000;border-radius:6px;font-weight:700;margin-top:4px;">
+                                            <span class="badge badge-warning" style="display:inline-block;padding:4px 8px;">
                                                 ⚠ LOW STOCK — {{ value.stock_left }} left
                                             </span>
                                         {% endif %}
@@ -125,15 +122,22 @@ Register | Online Retail POS
                                 {% endif %}
                             </th>
 
-                            <!-- Qty column: simplified static display to save space (no +/- or update controls) -->
+                            <!-- Quantity cell with class & data attribute -->
                             <td style="vertical-align: middle;text-align:center;">
-                                <div style="font-weight:600;">{{ value.quantity }}</div>
+                                <div class="cart-qty" data-barcode="{{ key }}" style="font-weight:600;">{{ value.quantity }}</div>
                             </td>
 
-                            <td>{{ currency }} {{ value.price|floatformat:2|intcomma }}</td>
-                            <td>{{ currency }} {{ value.tax_value|floatformat:2|intcomma }}</td>
-                            <td>{{ currency }} {{ value.deposit_value|floatformat:2|intcomma }}</td>
-                            <td>{{ currency }} {{ value.line_total|floatformat:2|intcomma }}</td>
+                            <!-- Price -->
+                            <td class="cart-price" data-barcode="{{ key }}">{{ currency }} {{ value.price|floatformat:2|intcomma }}</td>
+
+                            <!-- Tax -->
+                            <td class="cart-tax" data-barcode="{{ key }}">{{ currency }} {{ value.tax_value|floatformat:2|intcomma }}</td>
+
+                            <!-- Deposit -->
+                            <td class="cart-deposit" data-barcode="{{ key }}">{{ currency }} {{ value.deposit_value|floatformat:2|intcomma }}</td>
+
+                            <!-- Line total -->
+                            <td class="cart-line-total" data-barcode="{{ key }}">{{ currency }} {{ value.line_total|floatformat:2|intcomma }}</td>
                         </tr>
                         {% endfor %}
                     </table>
@@ -153,13 +157,18 @@ Register | Online Retail POS
         </div>
         <hr >
 
-        <!-- Payment buttons: only Debit/Credit, EBT and CASH (no quick dollar shortcuts) -->
+        <!-- Payment buttons (Debit/Credit, EBT, CASH, DEBT) -->
         <div class="btn-block" style="padding-top: 10px;text-align:center" >
-            <button id="disable_P_1" onclick="return window.open('/endTransaction/card/DEBIT_CREDIT/',target='_self')" class="btn btn-success" style="width:32%;height:60px; margin:2px;margin-bottom:5px;background-color:darkgreen" > Debit/<br>Credit </button>
+            <button id="disable_P_1" onclick="return window.open('/endTransaction/card/DEBIT_CREDIT/',target='_self')" class="btn btn-success" style="width:24%;height:60px; margin:2px;margin-bottom:5px;background-color:darkgreen" > Debit/<br>Credit </button>
 
-            <button id="disable_P_5" onclick="return window.open('/endTransaction/card/EBT/',target='_self')" class="btn btn-success" style="width:32%;margin: 2px;height:60px;margin-bottom:5px;background-color:darkgreen"> EBT </button>
+            <button id="disable_P_5" onclick="return window.open('/endTransaction/card/EBT/',target='_self')" class="btn btn-success" style="width:24%;margin: 2px;height:60px;margin-bottom:5px;background-color:darkgreen"> EBT </button>
 
-            <button id="disable_P_8" onclick="endTransactionCash('CASH','{{ total }}')" class="btn btn-success" style="width:32%;margin:2px;height:60px;margin-bottom:5px;background-color:rgb(27, 66, 27)"> CASH </button>
+            <button id="disable_P_8" onclick="endTransactionCash('CASH','{{ total }}')" class="btn btn-success" style="width:24%;margin:2px;height:60px;margin-bottom:5px;background-color:rgb(27, 66, 27)"> CASH </button>
+
+            <!-- DEBT button opens in-page modal to capture debtor info / initial payment -->
+            <button id="disable_P_debt" onclick="openDebtModal()" class="btn btn-warning" style="width:24%;margin:2px;height:60px;margin-bottom:5px;background-color:#ff8c00;color:#000;font-weight:700">
+                DEBT / Credit
+            </button>
         </div>
 
         <div class="loginPopup" id='cash_popup'> </div>
@@ -183,13 +192,13 @@ Register | Online Retail POS
 <script>
     var elements = document.querySelectorAll('[id^="disable_"]');
     for (var i = 0; i < elements.length; i++){ elements[i].disabled = true; }
-    // also disable payment buttons if total is zero
-    var payEls = document.querySelectorAll('#disable_P_1,#disable_P_5,#disable_P_8');
+    // also disable payment buttons if total is zero (includes DEBT)
+    var payEls = document.querySelectorAll('#disable_P_1,#disable_P_5,#disable_P_8,#disable_P_debt');
     payEls.forEach(function(el){ el.disabled = true; });
 </script>
 {% endif %}
 
-{# Alert sound element (short beep) #}
+{# Alert sound element #}
 <audio id="stockAlertSound" preload="auto">
   <source src="{% static 'sounds/alert.mp3' %}" type="audio/mpeg">
 </audio>
@@ -200,20 +209,15 @@ Register | Online Retail POS
             var sound = document.getElementById("stockAlertSound");
             if (sound) {
                 sound.currentTime = 0;
-                // browsers may block autoplay; catch errors silently
-                sound.play().catch(function(e){ /* ignore */ });
+                sound.play().catch(function(e){});
             }
-        } catch (e) {
-            // ignore
-        }
+        } catch (e) {}
     }
 
     /* ========= Cash & Variable functions (unchanged) ========= */
 
-    // Open a popup to collect cash amount from cashier, then submit to endTransaction
     function endTransactionCash(mode, total){
         var totalNum = Number(total) || 0;
-        // Only 'CASH' mode is supported here (quick amounts removed)
         if (mode === 'CASH'){
             document.getElementById("cash_popup").innerHTML =
                 '<div class="formPopup" id="popupForm" style="display:block">' +
@@ -223,10 +227,8 @@ Register | Online Retail POS
                 '<button type="submit" class="btn btn-success btn-lg btn-block">Enter</button>' +
                 '<button type="button" class="btn btn-danger btn-lg btn-block" onclick="closeForm()">Close</button>' +
                 '</form></div>';
-            // focus after adding to DOM
             setTimeout(function(){ var f = document.getElementById("cashAmount"); if(f) f.focus(); }, 50);
         } else {
-            // fallback: if a numeric value somehow passed, treat as amount
             var amount = Number(mode);
             if (!isNaN(amount) && amount > 0){
                 window.open("/endTransaction/cash/"+amount+"/", target="_self");
@@ -280,11 +282,308 @@ Register | Online Retail POS
     }
 </script>
 
-<!-- ===== Autocomplete JS (place just once near bottom of template, after other scripts) ===== -->
+<!-- ===== Improved Debt modal: centered, max-height, overlay + draggable header (mouse + touch) ===== -->
+<style>
+  /* overlay */
+  #debt_modal_overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 1190;
+    display: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  /* container holds the centered modal - we will move it during drag by adjusting style.left/top and removing transform */
+  #debt_modal_box {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1200;
+    width: min(420px, 92%);
+    max-height: 80vh;
+    display: none;
+    border-radius: 10px;
+    box-shadow: 0 12px 40px rgba(0,0,0,.3);
+    background: #fff;
+    overflow: hidden;
+    touch-action: none; /* allow touch dragging */
+  }
+  /* header */
+  #debt_modal_header {
+    background: #f7f7f7;
+    padding: 12px 14px;
+    cursor: grab;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    border-bottom: 1px solid rgba(0,0,0,.06);
+    user-select: none;
+  }
+  #debt_modal_header:active { cursor: grabbing; }
+  #debt_modal_title { font-weight:700; font-size:1.05rem; color:#111; }
+  #debt_modal_close { border:0; background:transparent; font-size:18px; line-height:1; cursor:pointer; color:#333; }
+  /* body scroll area */
+  #debt_modal_body {
+    padding: 16px;
+    overflow-y: auto;
+    max-height: calc(80vh - 120px);
+  }
+  /* footer / actions */
+  #debt_modal_footer {
+    padding: 12px;
+    border-top: 1px solid rgba(0,0,0,.06);
+    display:flex;
+    gap:8px;
+  }
+  /* make form controls full width in modal */
+  #debt_modal_body .form-control { width:100%; box-sizing:border-box; }
+  @media (max-height: 480px) {
+    #debt_modal_box { max-height: 94vh; }
+    #debt_modal_body { max-height: calc(94vh - 120px); }
+  }
+</style>
+
+<!-- Modal DOM -->
+<div id="debt_modal_overlay" aria-hidden="true"></div>
+
+<div id="debt_modal_box" role="dialog" aria-modal="true" aria-labelledby="debt_modal_title">
+  <div id="debt_modal_header">
+    <div id="debt_modal_title">Create Credit / Debt</div>
+    <button id="debt_modal_close" type="button" aria-label="Close">&times;</button>
+  </div>
+
+  <div id="debt_modal_body">
+    <form id="debtForm" method="post" action="{% url 'end_debt_transaction' %}" style="padding-bottom:6px;">
+      {% csrf_token %}
+      <div class="mb-2">
+        <label class="form-label">Debtor Name <small class="text-muted">(customer or company)</small></label>
+        <input name="debtor_name" id="debt_debtor_name" class="form-control" type="text" placeholder="Customer or Company name" required />
+      </div>
+
+      <!-- Phone field -->
+      <div class="mb-2">
+        <label class="form-label">Phone Number <small class="text-muted">(optional)</small></label>
+        <input name="phone_number" id="debt_phone_number" class="form-control" type="tel" placeholder="+255712345678 or 0712345678" />
+        <small class="form-text text-muted">Optional — used for contact or SMS receipts.</small>
+      </div>
+
+      <div class="mb-2">
+        <label class="form-label">Paid Now (optional)</label>
+        <input name="paid_amount" id="debt_paid_amount" class="form-control" type="number" step="0.01" value="0.00" />
+        <small class="form-text text-muted">If you accept part payment now enter amount, otherwise leave 0.</small>
+      </div>
+
+      <div class="mb-2">
+        <label class="form-label">Due Date (optional)</label>
+        <input name="due_date" id="debt_due_date" class="form-control" type="date" />
+        <small class="form-text text-muted">If left blank default terms will apply.</small>
+      </div>
+
+      <!-- footer buttons live outside body so they remain visible -->
+      <div style="height:6px;"></div>
+    </form>
+  </div>
+
+  <div id="debt_modal_footer">
+    <button id="debt_submit_btn" type="button" class="btn btn-warning" style="flex:1">Create Debt</button>
+    <button id="debt_cancel_btn" type="button" class="btn btn-secondary" style="flex:1">Cancel</button>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function(){
+    const overlay = document.getElementById('debt_modal_overlay');
+    const box = document.getElementById('debt_modal_box');
+    const header = document.getElementById('debt_modal_header');
+    const closeBtn = document.getElementById('debt_modal_close');
+    const cancelBtn = document.getElementById('debt_cancel_btn');
+    const submitBtn = document.getElementById('debt_submit_btn');
+    const form = document.getElementById('debtForm');
+    const debtorNameInput = document.getElementById('debt_debtor_name');
+    const paidInput = document.getElementById('debt_paid_amount');
+    const phoneInput = document.getElementById('debt_phone_number');
+    const dueEl = document.getElementById('debt_due_date');
+
+    // helper to show modal (centred)
+    window.openDebtModal = function(){
+      overlay.style.display = 'block';
+      box.style.display = 'block';
+      // reset to centered initial state
+      box.style.left = '50%';
+      box.style.top = '50%';
+      box.style.transform = 'translate(-50%, -50%)';
+      // set default due date if empty
+      try {
+        if (dueEl && !dueEl.value){
+          const d = new Date();
+          d.setDate(d.getDate() + 30);
+          const yyyy = d.getFullYear();
+          const mm = String(d.getMonth()+1).padStart(2,'0');
+          const dd = String(d.getDate()).padStart(2,'0');
+          dueEl.value = `${yyyy}-${mm}-${dd}`;
+        }
+      } catch(e){}
+      // small delay then focus
+      setTimeout(()=> { if(debtorNameInput) debtorNameInput.focus(); }, 60);
+    };
+
+    // hide modal
+    window.closeDebtModal = function(){
+      overlay.style.display = 'none';
+      box.style.display = 'none';
+      // clear fields (optional)
+      try {
+        debtorNameInput.value = '';
+        paidInput.value = '0.00';
+        phoneInput.value = '';
+        dueEl.value = '';
+      } catch(e){}
+    };
+
+    // close handlers
+    overlay.addEventListener('click', closeDebtModal);
+    closeBtn.addEventListener('click', closeDebtModal);
+    cancelBtn.addEventListener('click', closeDebtModal);
+
+    // submit handler (validate & post)
+    submitBtn.addEventListener('click', function(){
+      const name = (debtorNameInput.value || '').trim();
+      const paidRaw = (paidInput.value || "0").toString().replace(/,/g,'');
+      const paid = Number(paidRaw);
+      const phone = (phoneInput.value || '').trim();
+
+      if(!name){
+        alert('Please enter debtor name');
+        debtorNameInput.focus();
+        return;
+      }
+      if(isNaN(paid) || paid < 0){
+        alert('Paid amount must be a valid positive number or 0');
+        paidInput.focus();
+        return;
+      }
+      if(phone){
+        const cleaned = phone.replace(/[^0-9+]/g, '');
+        const digitsOnly = cleaned.replace(/\+/g,'').replace(/[^0-9]/g,'');
+        if(digitsOnly.length < 7){
+          alert('Phone number seems too short. Include area/country code if possible.');
+          phoneInput.focus();
+          return;
+        }
+      }
+
+      // disable to prevent double-click
+      submitBtn.disabled = true;
+      // submit form normally (POST)
+      form.submit();
+    });
+
+    // DRAGGING logic (mouse + touch) - unchanged
+    (function(){
+      let dragging = false;
+      let startX = 0, startY = 0;
+      let origLeft = 0, origTop = 0;
+      let usingTransform = true;
+
+      function getBoxRect(){
+        return box.getBoundingClientRect();
+      }
+
+      function startDrag(clientX, clientY){
+        const rect = getBoxRect();
+        if (box.style.transform) {
+          const leftPx = rect.left;
+          const topPx = rect.top;
+          box.style.transform = 'none';
+          box.style.left = leftPx + 'px';
+          box.style.top = topPx + 'px';
+          usingTransform = false;
+        }
+        startX = clientX;
+        startY = clientY;
+        origLeft = parseFloat(box.style.left || box.getBoundingClientRect().left);
+        origTop = parseFloat(box.style.top || box.getBoundingClientRect().top);
+        dragging = true;
+        header.classList.add('dragging');
+        document.body.style.userSelect = 'none';
+      }
+
+      function moveDrag(clientX, clientY){
+        if(!dragging) return;
+        const dx = clientX - startX;
+        const dy = clientY - startY;
+        let newLeft = origLeft + dx;
+        let newTop = origTop + dy;
+        const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+        const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
+        const rect = box.getBoundingClientRect();
+        const w = rect.width, h = rect.height;
+        const minLeft = 8, maxLeft = Math.max(vw - w - 8, 8);
+        const minTop = 8, maxTop = Math.max(vh - h - 8, 8);
+        newLeft = Math.min(Math.max(newLeft, minLeft), maxLeft);
+        newTop = Math.min(Math.max(newTop, minTop), maxTop);
+        box.style.left = newLeft + 'px';
+        box.style.top = newTop + 'px';
+      }
+
+      function endDrag(){
+        if(!dragging) return;
+        dragging = false;
+        header.classList.remove('dragging');
+        document.body.style.userSelect = '';
+      }
+
+      header.addEventListener('mousedown', function(ev){
+        ev.preventDefault();
+        startDrag(ev.clientX, ev.clientY);
+      });
+      document.addEventListener('mousemove', function(ev){
+        moveDrag(ev.clientX, ev.clientY);
+      });
+      document.addEventListener('mouseup', function(){
+        endDrag();
+      });
+
+      header.addEventListener('touchstart', function(ev){
+        if(ev.touches && ev.touches.length === 1){
+          const t = ev.touches[0];
+          startDrag(t.clientX, t.clientY);
+        }
+      }, {passive:false});
+      document.addEventListener('touchmove', function(ev){
+        if(ev.touches && ev.touches.length === 1){
+          const t = ev.touches[0];
+          moveDrag(t.clientX, t.clientY);
+        }
+      }, {passive:false});
+      document.addEventListener('touchend', function(){
+        endDrag();
+      });
+    })();
+
+    // keyboard: ESC to close
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape'){
+        if (box.style.display === 'block') closeDebtModal();
+      }
+    });
+  }); // DOMContentLoaded
+</script>
+
+<!-- ===== Autocomplete + Scanner-friendly AJAX (replaces old script) ===== -->
 <script>
 (function(){
   const input = document.getElementById('product-search-input');
   const list = document.getElementById('product-search-list');
+
+  // CSRF helper (Django cookie)
+  function getCookie(name) {
+    const v = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+    return v ? v.pop() : '';
+  }
+  const CSRFTOKEN = getCookie('csrftoken');
+
   let timer = null;
   let selectedIndex = -1;
   let currentItems = [];
@@ -303,11 +602,12 @@ Register | Online Retail POS
     for(let i=0;i<items.length;i++){
       const it = items[i];
       const qty = Number(it.qty) || 0;
-      const stockBadge = (qty === 0) ? '<span style="padding:2px 6px;background:#b02a37;color:#fff;border-radius:4px;margin-left:8px;font-weight:700;">OUT</span>' : (qty <= 5 ? '<span style="padding:2px 6px;background:#ffc107;color:#000;border-radius:4px;margin-left:8px;font-weight:700;">LOW</span>' : '');
-      html += `<div class="ps-item" data-i="${i}" style="padding:8px 10px;border-top:1px solid rgba(0,0,0,.02);cursor:pointer;display:flex;justify-content:space-between;align-items:center;">
-                 <div style="max-width:72%"><div style="font-weight:600">${escapeHtml(it.name)}</div><div style="font-size:12px;color:#666">${escapeHtml(it.barcode)} • ${it.sales_price}</div></div>
-                 <div style="text-align:right">${stockBadge}</div>
-               </div>`;
+      const stockBadge = (qty === 0) ? '<span style="padding:2px 6px;background:#b02a37;color:#fff;border-radius:4px;margin-left:8px;font-weight:700;">OUT</span>' :
+                         (qty <= 5 ? '<span style="padding:2px 6px;background:#ffc107;color:#000;border-radius:4px;margin-left:8px;font-weight:700;">LOW</span>' : '');
+      html += '<div class="ps-item" data-i="'+i+'" style="padding:8px 10px;border-top:1px solid rgba(0,0,0,.02);cursor:pointer;display:flex;justify-content:space-between;align-items:center;">' +
+                '<div style="max-width:72%"><div style="font-weight:600">'+escapeHtml(it.name)+'</div><div style="font-size:12px;color:#666">'+escapeHtml(it.barcode)+' • '+it.sales_price+'</div></div>' +
+                '<div style="text-align:right">'+stockBadge+'</div>' +
+              '</div>';
     }
     list.innerHTML = html;
     list.style.display = 'block';
@@ -315,7 +615,7 @@ Register | Online Retail POS
 
   function doSearch(q){
     if(!q || q.length < 1){ render([]); return; }
-    fetch(`/ajax/product_search/?q=${encodeURIComponent(q)}`, { credentials: 'same-origin' })
+    fetch('/ajax/product_search/?q=' + encodeURIComponent(q), { credentials: 'same-origin' })
       .then(r => r.json())
       .then(json => {
         const items = json.results || [];
@@ -326,26 +626,107 @@ Register | Online Retail POS
   input.addEventListener('input', function(e){
     clearTimeout(timer);
     const q = (this.value || '').trim();
-    timer = setTimeout(()=> doSearch(q), 220); // debounce 220ms
+    timer = setTimeout(()=> doSearch(q), 180);
   });
 
-  // keyboard navigation
+  // ---------- add to cart via AJAX ----------
+  function addProductToCart(barcode, qty){
+    if(!barcode) return;
+    fetch('/cart/add_ajax/', {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': CSRFTOKEN,
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({ barcode: String(barcode), quantity: Number(qty || 1) })
+    })
+    .then(r => r.json().then(j => ({ ok: r.ok, status: r.status, json: j })))
+    .then(obj => {
+      if(!obj.ok){
+        const msg = (obj.json && obj.json.error) ? obj.json.error : 'Could not add product';
+        alert(msg);
+        try{ if(typeof playStockAlert === 'function') playStockAlert(); }catch(e){}
+        input.value = '';
+        input.focus();
+        return;
+      }
+      const data = obj.json;
+      // Update DOM row if present
+      const row = document.querySelector(`tr[data-barcode="${barcode}"]`);
+      if(row){
+        const qtyEl = row.querySelector('.cart-qty');
+        if(qtyEl) qtyEl.textContent = data.new_quantity;
+        const lineTotalEl = row.querySelector('.cart-line-total');
+        if(lineTotalEl && (data.line_total || data.line_total_formatted)) lineTotalEl.textContent = '{{ currency }} ' + (data.line_total || data.line_total_formatted);
+        const taxEl = row.querySelector('.cart-tax');
+        if(taxEl && data.cart_tax_formatted) taxEl.textContent = '{{ currency }} ' + data.cart_tax_formatted;
+        const depositEl = row.querySelector('.cart-deposit');
+        if(depositEl && data.cart_deposit_formatted) depositEl.textContent = '{{ currency }} ' + data.cart_deposit_formatted;
+
+        // small highlight feedback
+        row.style.transition = 'background-color 0.25s';
+        row.style.backgroundColor = 'rgba(144, 238, 144, 0.4)';
+        setTimeout(()=> { row.style.backgroundColor = ''; }, 300);
+      } else {
+        // new product: reload to show new row (simple and robust)
+        location.reload();
+        return;
+      }
+
+      // Update transaction totals at top
+      const subtotalEl = document.getElementById('transaction-subtotal');
+      const taxElTop = document.getElementById('transaction-tax');
+      const totalEl = document.getElementById('transaction-total');
+      if(subtotalEl && data.cart_subtotal_formatted) subtotalEl.textContent = data.cart_subtotal_formatted;
+      if(taxElTop && data.cart_tax_formatted) taxElTop.textContent = data.cart_tax_formatted;
+      if(totalEl && data.cart_total_formatted) totalEl.textContent = data.cart_total_formatted;
+
+      // clear input and focus for next scan
+      input.value = '';
+      input.focus();
+    })
+    .catch(err => {
+      console.error('Add to cart error', err);
+      alert('Error adding product');
+      input.value = '';
+      input.focus();
+    });
+  }
+
+  // keyboard handling: arrow navigation and Enter for scanner
   input.addEventListener('keydown', function(e){
     const items = list.querySelectorAll('.ps-item');
-    if(!items || items.length === 0) return;
-    if(e.key === 'ArrowDown'){
+    if(e.key === 'ArrowDown' && items.length){
       e.preventDefault();
       selectedIndex = (selectedIndex + 1) % items.length;
       items.forEach((el, idx)=> el.style.background = idx === selectedIndex ? 'rgba(0,0,0,.04)' : '');
-    } else if(e.key === 'ArrowUp'){
+      return;
+    }
+    if(e.key === 'ArrowUp' && items.length){
       e.preventDefault();
       selectedIndex = (selectedIndex - 1 + items.length) % items.length;
       items.forEach((el, idx)=> el.style.background = idx === selectedIndex ? 'rgba(0,0,0,.04)' : '');
-    } else if(e.key === 'Enter'){
+      return;
+    }
+
+    if(e.key === 'Enter'){
       e.preventDefault();
-      if(selectedIndex >=0 && currentItems[selectedIndex]){
+      const q = (this.value || '').trim();
+      if(selectedIndex >= 0 && currentItems[selectedIndex]){
         const it = currentItems[selectedIndex];
-        window.location.href = `/cart/add/${encodeURIComponent(it.barcode)}/1/`;
+        addProductToCart(it.barcode, 1);
+        list.style.display = 'none';
+        return;
+      }
+      if(q){
+        if(currentItems.length === 1){
+          addProductToCart(currentItems[0].barcode, 1);
+        } else {
+          // assume raw barcode from scanner
+          addProductToCart(q, 1);
+        }
       }
     } else if(e.key === 'Escape'){
       list.style.display = 'none';
@@ -359,19 +740,20 @@ Register | Online Retail POS
     if(!el) return;
     const idx = parseInt(el.getAttribute('data-i'), 10);
     if(isNaN(idx) || !currentItems[idx]) return;
-    const it = currentItems[idx];
-    // redirect to add 1 to cart (reuse existing endpoint)
-    window.location.href = `/cart/add/${encodeURIComponent(it.barcode)}/1/`;
+    addProductToCart(currentItems[idx].barcode, 1);
   });
 
-  // click outside closes the list
   document.addEventListener('click', function(e){
     if(!input.contains(e.target) && !list.contains(e.target)){
       list.style.display = 'none';
     }
   });
+
+  // focus input so scanner is ready
+  input.setAttribute('autocomplete', 'off');
+  try { input.focus(); } catch(e) {}
+
 })();
 </script>
-<!-- ===== end Autocomplete JS ===== -->
 
 {% endblock %}

@@ -352,3 +352,81 @@ def product_search(request):
                 break
 
     return JsonResponse({"results": data})
+
+
+import json
+from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import csrf_protect
+
+@require_POST
+@login_required(login_url="/user/login")
+@csrf_protect
+def cart_add_ajax(request):
+    """
+    AJAX endpoint for barcode scanning.
+    Body: { "barcode": "...", "quantity": 1 }
+    Behaviour:
+      - If product already in cart → quantity increments
+      - If not → new line added
+    """
+    try:
+        payload = json.loads(request.body.decode("utf-8"))
+    except Exception:
+        return JsonResponse({"success": False, "error": "Invalid JSON"}, status=400)
+
+    barcode = str(payload.get("barcode", "")).strip()
+    quantity = payload.get("quantity", 1)
+
+    if not barcode:
+        return JsonResponse({"success": False, "error": "Barcode missing"}, status=400)
+
+    try:
+        qty = int(quantity)
+    except Exception:
+        qty = 1
+
+    if qty <= 0:
+        qty = 1
+
+    cart = Cart(request)
+
+    try:
+        product = Product.objects.get(barcode=barcode)
+    except Product.DoesNotExist:
+        return JsonResponse({"success": False, "error": "Product not found"}, status=404)
+
+    # 🔥 THIS IS THE IMPORTANT PART
+    # Your Cart.add already increments quantity correctly
+    result = cart.add(product=product, quantity=qty)
+
+    if isinstance(result, dict) and result.get("status") == "error":
+        return JsonResponse(
+            {
+                "success": False,
+                "error": result.get("message", "Insufficient stock"),
+            },
+            status=400,
+        )
+
+    # Fetch updated item from cart session
+    item = cart.to_dict().get(str(barcode))
+    if not item:
+        return JsonResponse({"success": False, "error": "Cart update failed"}, status=500)
+
+    # Recalculate totals using your helper
+    subtotal, tax_total, deposit_total, grand_total, count = _build_cart_totals(cart)
+
+    return JsonResponse(
+        {
+            "success": True,
+            "barcode": barcode,
+            "new_quantity": int(item.get("quantity", 0)),
+            "line_total": item.get("line_total"),
+            "line_total_formatted": item.get("line_total"),
+            "cart_subtotal_formatted": f"{subtotal:.2f}",
+            "cart_tax_formatted": f"{tax_total:.2f}",
+            "cart_deposit_formatted": f"{deposit_total:.2f}",
+            "cart_total_formatted": f"{grand_total:.2f}",
+            "count": count,
+        }
+    )

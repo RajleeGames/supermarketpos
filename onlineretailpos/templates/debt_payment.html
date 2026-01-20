@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}Record Debt Payment{% endblock %}
+
+{% block extra_styles %}
+<style>
+.payment-card {
+  box-shadow: 0 6px 20px rgba(0,0,0,.06);
+  border-radius: 10px;
+}
+.small-muted { font-size: 0.9rem; color: #6c757d; }
+.balance-text { color: #b02a37; font-weight: 700; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-3">
+
+  <!-- Header -->
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+    <div>
+      <h4 class="mb-0">Record Payment</h4>
+      <div class="small-muted">Debtor: <strong>{{ debt.debtor_name }}</strong></div>
+    </div>
+
+    <div class="mt-2 mt-md-0">
+      <a href="{% url 'debt_detail' debt.id %}" class="btn btn-outline-secondary btn-sm">← Back to Debt</a>
+    </div>
+  </div>
+
+  <!-- Debt Summary -->
+  <div class="row mb-4">
+    <div class="col-sm-4 mb-2">
+      <div class="card payment-card p-3">
+        <div class="small-muted">Total Debt</div>
+        <div class="fw-bold fs-5">{{ debt.total_amount|floatformat:2|intcomma }}</div>
+      </div>
+    </div>
+
+    <div class="col-sm-4 mb-2">
+      <div class="card payment-card p-3">
+        <div class="small-muted">Total Paid</div>
+        <div class="fw-bold fs-5 text-success">{{ debt.paid_amount|floatformat:2|intcomma }}</div>
+      </div>
+    </div>
+
+    <div class="col-sm-4 mb-2">
+      <div class="card payment-card p-3">
+        <div class="small-muted">Outstanding Balance</div>
+        <div class="fs-5 balance-text">{{ debt.balance|floatformat:2|intcomma }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Payment Form -->
+  <div class="card payment-card">
+    <div class="card-body p-4">
+      {% if messages %}
+        {% for msg in messages %}
+          <div class="alert alert-{{ msg.tags }}">{{ msg }}</div>
+        {% endfor %}
+      {% endif %}
+
+      <form method="post" novalidate>
+        {% csrf_token %}
+
+        <div class="row">
+          <div class="col-md-4 mb-3">
+            <label for="id_amount" class="form-label fw-bold">Amount</label>
+            <input
+              id="id_amount"
+              type="number"
+              name="amount"
+              step="0.01"
+              min="0.01"
+              max="{{ debt.balance }}"
+              class="form-control"
+              placeholder="Enter amount"
+              required
+              value="{{ request.POST.amount|default_if_none:'' }}"
+            >
+            <div class="small-muted mt-1">Cannot exceed remaining balance ({{ debt.balance|floatformat:2|intcomma }})</div>
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <label for="id_method" class="form-label fw-bold">Payment Method</label>
+            <select id="id_method" name="method" class="form-select">
+              <option value="CASH">Cash</option>
+              <option value="DEBIT/CREDIT">Debit / Credit</option>
+              <option value="BANK">Bank</option>
+              <option value="EBT">EBT</option>
+            </select>
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <label for="id_note" class="form-label fw-bold">Note (optional)</label>
+            <input id="id_note" type="text" name="note" class="form-control" placeholder="Receipt no, reference, etc." value="{{ request.POST.note|default_if_none:'' }}">
+          </div>
+        </div>
+
+        <div class="d-flex gap-2 mt-3">
+          <button id="saveBtn" type="submit" class="btn btn-success px-4">💾 Save Payment</button>
+          <a href="{% url 'debt_detail' debt.id %}" class="btn btn-outline-secondary px-4">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const amt = document.getElementById('id_amount');
+  const saveBtn = document.getElementById('saveBtn');
+  const maxVal = parseFloat("{{ debt.balance|default:0 }}") || 0;
+
+  function validateAmount() {
+    if (!amt) return true;
+    const v = parseFloat(amt.value || 0);
+    if (v <= 0) {
+      amt.setCustomValidity('Amount must be greater than 0');
+      return false;
+    }
+    if (v > maxVal) {
+      amt.setCustomValidity('Amount cannot exceed remaining balance');
+      return false;
+    }
+    amt.setCustomValidity('');
+    return true;
+  }
+
+  if (amt) {
+    amt.addEventListener('input', validateAmount);
+    amt.addEventListener('blur', validateAmount);
+  }
+
+  if (saveBtn) {
+    saveBtn.addEventListener('click', function (e) {
+      if (!validateAmount()) {
+        // show native validity UI
+        if (amt.reportValidity) amt.reportValidity();
+        e.preventDefault();
+        return false;
+      }
+    });
+  }
+});
+</script>
+{% endblock %}

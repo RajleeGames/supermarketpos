@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% load humanize %}
+{% block title %}Debt Details{% endblock %}
+
+{% block extra_styles %}
+<style>
+.debt-card {
+  box-shadow: 0 6px 20px rgba(0,0,0,.06);
+  border-radius: 10px;
+}
+.stat-label {
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+.stat-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+.balance-text {
+  color: #b02a37;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-3">
+
+  <!-- Header -->
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+    <div>
+      <h4 class="mb-0">Debt Details</h4>
+      <div class="stat-label">
+        Debtor: <strong>{{ debt.debtor_name }}</strong>
+      </div>
+    </div>
+
+    <div class="mt-2 mt-md-0">
+      <a href="{% url 'debts_list' %}" class="btn btn-outline-secondary btn-sm">
+        ← Back to Debts
+      </a>
+    </div>
+  </div>
+
+  <!-- Summary Cards -->
+  <div class="row mb-4">
+    <div class="col-md-3 mb-2">
+      <div class="card debt-card p-3">
+        <div class="stat-label">Debtor Type</div>
+        <div class="stat-value">
+          {{ debt.debtor_type|default:"Customer" }}
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3 mb-2">
+      <div class="card debt-card p-3">
+        <div class="stat-label">Total Debt</div>
+        <div class="stat-value">
+          {{ debt.total_amount|floatformat:2|intcomma }}
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3 mb-2">
+      <div class="card debt-card p-3">
+        <div class="stat-label">Paid</div>
+        <div class="stat-value text-success">
+          {{ debt.paid_amount|floatformat:2|intcomma }}
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3 mb-2">
+      <div class="card debt-card p-3">
+        <div class="stat-label">Balance</div>
+        <div class="stat-value balance-text">
+          {{ debt.balance|floatformat:2|intcomma }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="d-flex flex-wrap gap-2 mb-4">
+    <a href="{% url 'debt_payment' debt.id %}" class="btn btn-success">
+      ➕ Add Payment
+    </a>
+
+    <a href="{% url 'debt_payments_history' debt.id %}" class="btn btn-outline-primary">
+      📜 Payment History
+    </a>
+  </div>
+
+  <!-- Optional: transaction info -->
+  {% if debt.transaction %}
+  <div class="card debt-card">
+    <div class="card-body">
+      <h6 class="mb-3">Related Sale</h6>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="stat-label">Transaction ID</div>
+          <div class="fw-bold">{{ debt.transaction.transaction_id }}</div>
+        </div>
+        <div class="col-md-4">
+          <div class="stat-label">Sale Date</div>
+          <div>{{ debt.transaction.transaction_dt|date:"Y-m-d H:i" }}</div>
+        </div>
+        <div class="col-md-4">
+          <div class="stat-label">Served By</div>
+          <div>{{ debt.transaction.user }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}

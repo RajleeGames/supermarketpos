@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}Debts / Credit List{% endblock %}
+
+{% block extra_styles %}
+<style>
+  .debt-card { box-shadow: 0 6px 20px rgba(0,0,0,.06); border-radius: 10px; }
+  .bad-balance { color:#b02a37; font-weight:700; }
+  .small-muted { font-size:0.9rem; color:#6c757d; }
+  .action-btn { min-width: 92px; }
+  #debtFilter { max-width:360px; display:inline-block; }
+  #debtSearchBtn { display:inline-block; margin-left:8px; }
+  .text-center-muted { color:#6c757d; font-size:0.95rem; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-3">
+  <div class="row mb-3 align-items-center">
+    <div class="col-md-6">
+      <h4 class="mb-0">Debts / Credit</h4>
+      <div class="small-muted">Manage outstanding customer credit and view history.</div>
+    </div>
+
+    <div class="col-md-6 text-md-end mt-3 mt-md-0">
+      <!-- Search form (GET) - pressing Enter will submit -->
+      <form class="d-inline-block" method="get" action="">
+        <div class="input-group" style="max-width:420px;">
+          <input id="debtFilter" name="q" value="{{ query }}" class="form-control" placeholder="Search debtor name or phone..." autocomplete="off" />
+          <button id="debtSearchBtn" class="btn btn-primary" type="submit">Search</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="card debt-card">
+    <div class="card-body p-3">
+      <div class="table-responsive">
+        <table class="table table-hover table-sm debt-table">
+          <thead class="table-dark">
+            <tr>
+              <th style="width:48px">#</th>
+              <th>Debtor</th>
+              <th style="width:140px">Phone</th>
+              <th style="width:120px">Total</th>
+              <th style="width:120px">Paid</th>
+              <th style="width:120px">Balance</th>
+              <th style="width:160px">Created</th>
+              <th style="width:170px">Action</th>
+            </tr>
+          </thead>
+          <tbody id="debtsBody">
+            {% if debts %}
+              {% for debt in debts %}
+              <tr data-debtor-name="{{ debt.debtor_name|default:''|escape }}" data-phone="{{ debt.phone_number|default:''|escape }}">
+                <td class="row-index">{{ forloop.counter0|add:page_obj.start_index }}</td>
+                <td>
+                  <div style="font-weight:700;">{{ debt.debtor_name }}</div>
+                  <div class="small-muted">{{ debt.debtor_type|default:"Customer" }}</div>
+                </td>
+                <td class="phone-cell">{{ debt.phone_number|default:"—" }}</td>
+                <td class="text-end">{{ debt.total_amount|intcomma }}</td>
+                <td class="text-end">{{ debt.paid_amount|intcomma }}</td>
+                <td class="text-end bad-balance">{{ debt.balance|intcomma }}</td>
+                <td>{{ debt.created_at|date:"Y-m-d H:i" }}</td>
+                <td>
+                  <div class="d-flex gap-2">
+                    <a href="{% url 'debt_detail' debt.id %}" class="btn btn-sm btn-outline-primary action-btn">View</a>
+                    <a href="{% url 'debt_payments_history' debt.id %}" class="btn btn-sm btn-outline-secondary action-btn">Payments</a>
+                  </div>
+                </td>
+              </tr>
+              {% endfor %}
+            {% else %}
+              <tr id="no-debts-row">
+                <td colspan="8" class="text-center py-4 text-center-muted">No debts found.</td>
+              </tr>
+            {% endif %}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination controls -->
+      {% if page_obj.paginator.num_pages > 1 %}
+      <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-end mt-3 mb-0">
+          {% if page_obj.has_previous %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ page_obj.previous_page_number }}{{ extra_qs }}">Previous</a>
+            </li>
+          {% else %}
+            <li class="page-item disabled"><span class="page-link">Previous</span></li>
+          {% endif %}
+
+          <li class="page-item disabled">
+            <span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+          </li>
+
+          {% if page_obj.has_next %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ page_obj.next_page_number }}{{ extra_qs }}">Next</a>
+            </li>
+          {% else %}
+            <li class="page-item disabled"><span class="page-link">Next</span></li>
+          {% endif %}
+        </ul>
+      </nav>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{# JSON export (view supplies debts_json; safe) #}
+<script id="debts-data" type="application/json">{{ debts_json }}</script>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  // Optional: small UX touch — focus the search input on page load
+  document.addEventListener('DOMContentLoaded', function () {
+    const input = document.getElementById('debtFilter');
+    if (input) input.focus();
+  });
+</script>
+{% endblock %}

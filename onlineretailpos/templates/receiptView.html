@@ -1,13 +1,73 @@
 {% extends 'base.html' %}
+
 {% block title %}
     Transaction Receipt | Online Retail POS
 {% endblock %}
 
-{% block nav-item %}  Receipt - {{transNo}}  {% endblock %}
+{% block nav-item %}  
+    Receipt - {{ transNo }}  
+{% endblock %}
 
 {% block content %}  
-<a href="/transaction_receipt/{{transNo}}/print/" ><button class="btn-lg btn-primary" style="width: 20%; margin-top: 10px; margin-left: 10px;"> Print </button></a>
+
+<!-- Existing Review Receipt Button -->
+<a href="/transaction_receipt/{{ transNo }}/print/">
+    <button class="btn-lg btn-primary" style="width: 20%; margin-top: 10px; margin-left: 10px;">
+        Review / Print
+    </button>
+</a>
+
+<!-- Auto Print Button for QZ Tray -->
+<button id="qzPrintBtn" class="btn-lg btn-success" style="width: 20%; margin-top: 10px; margin-left: 10px;">
+    Auto Print
+</button>
+
+<!-- Receipt Display -->
 <div style="text-align: center; padding-top: 30px;">
-    <pre>{{receipt}}</pre>
- </div>
-{% endblock content %}  
+    <pre id="receiptContent">{{ receipt }}</pre>
+</div>
+
+<!-- QZ Tray JS (from their official CDN) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qz-tray/2.1.0/qz-tray.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const printBtn = document.getElementById('qzPrintBtn');
+    const receiptText = document.getElementById('receiptContent').innerText;
+
+    // QZ Tray Setup
+    qz.websocket.connect().then(() => {
+        console.log("QZ Tray connected!");
+    }).catch(err => {
+        console.error("QZ Tray connection error:", err);
+        alert("QZ Tray is not connected. Please make sure the tray app is running.");
+    });
+
+    // Function to auto-print
+    function autoPrint() {
+        // Replace with your exact printer name (check in QZ Tray)
+        const config = qz.configs.create("ZKT8008N"); 
+
+        const data = [{
+            type: 'raw', 
+            format: 'plain', 
+            data: receiptText
+        }];
+
+        qz.print(config, data).then(() => {
+            console.log("Printed successfully!");
+        }).catch(err => {
+            console.error("Printing error:", err);
+            alert("Error printing: " + err);
+        });
+    }
+
+    // Auto-print on button click
+    printBtn.addEventListener('click', autoPrint);
+
+    // Optional: auto-print as soon as page loads
+    // autoPrint();
+});
+</script>
+
+{% endblock content %}

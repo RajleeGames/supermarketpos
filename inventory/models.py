@@ -1,7 +1,10 @@
 # inventory/models.py
-from django.db import models
+from django.db import models, transaction
 from django.template.defaultfilters import slugify
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.exceptions import ValidationError
+from django.conf import settings
+from django.db.models import F
 from decimal import Decimal, ROUND_HALF_UP, InvalidOperation, getcontext
 
 # ensure Decimal precision is generous
@@ -286,3 +289,144 @@ class Product(models.Model):
         verbose_name = "Product"
         verbose_name_plural = "Products"
         ordering = ["name"]
+
+
+# -----------------------------
+# StockAdjustment model (new)
+# -----------------------------
+class StockAdjustment(models.Model):
+    """
+    Record adjustments that remove stock (expired, damaged, other write-offs).
+    - On creation, the Product.qty is decreased by `quantity` (atomic, select_for_update).
+    - Prevents going negative (validation).
+    - Adjustment is recorded for audit/history.
+    """
+
+    ADJUSTMENT_DAMAGED = "DAMAGED"
+    ADJUSTMENT_EXPIRED = "EXPIRED"
+    ADJUSTMENT_OTHER = "OTHER"
+
+    ADJUSTMENT_TYPE_CHOICES = (
+        (ADJUSTMENT_DAMAGED, "Damaged"),
+        (ADJUSTMENT_EXPIRED, "Expired"),
+        (ADJUSTMENT_OTHER, "Other"),
+    )
+
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="adjustments")
+    adjustment_type = models.CharField(max_length=16, choices=ADJUSTMENT_TYPE_CHOICES, default=ADJUSTMENT_OTHER)
+    quantity = models.PositiveIntegerField(default=1, help_text="Number of units removed from stock")
+    note = models.TextField(blank=True, null=True)
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL, related_name="stock_adjustments"
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Stock Adjustment"
+        verbose_name_plural = "Stock Adjustments"
+        ordering = ["-created_at"]
+        indexes = [
+            models.Index(fields=["product", "adjustment_type", "created_at"]),
+        ]
+
+    def __str__(self):
+        return f"{self.adjustment_type} - {self.quantity} x {self.product} @ {self.created_at:%Y-%m-%d %H:%M}"
+
+    def clean(self):
+        """
+        Validate before saving:
+         - quantity must be > 0
+         - quantity must not exceed current product qty (to avoid negative stock)
+        """
+        super_clean = getattr(super(StockAdjustment, self), "clean", None)
+        if callable(super_clean):
+            super_clean()
+
+        if self.quantity <= 0:
+            raise ValidationError({"quantity": "Quantity must be greater than zero."})
+
+        # If product available, check stock (note: product may be stale; exact check done on save in transaction)
+        try:
+            prod_qty = int(self.product.qty)
+            if self.quantity > prod_qty:
+                raise ValidationError({"quantity": f"Cannot adjust {self.quantity} units — only {prod_qty} available."})
+        except Exception:
+            # If product access fails for any reason, skip here; final authoritative check occurs in save()
+            pass
+
+    def save(self, *args, **kwargs):
+        """
+        On create: reduce product.qty atomically (select_for_update). On update: do NOT re-apply reduction.
+        """
+        # If updating an existing adjustment, behave normally (do not re-apply).
+        is_create = self.pk is None
+
+        if not is_create:
+            # For updates, just validate and save (we do not attempt to re-apply stock change).
+            self.full_clean()
+            return super().save(*args, **kwargs)
+
+        # On create: perform atomic stock decrement and then save adjustment record.
+        with transaction.atomic():
+            # Lock the product row to avoid race conditions
+            prod = Product.objects.select_for_update().get(pk=self.product.pk)
+
+            # Defensive: ensure qty is integer
+            try:
+                available = int(prod.qty or 0)
+            except Exception:
+                available = 0
+
+            if self.quantity <= 0:
+                raise ValidationError({"quantity": "Quantity must be greater than zero."})
+
+            if self.quantity > available:
+                raise ValidationError({"quantity": f"Cannot adjust {self.quantity} units — only {available} available."})
+
+            # Decrement using F expression for safety (then refresh_from_db)
+            prod.qty = F('qty') - self.quantity
+            prod.save(update_fields=["qty"])
+
+            # Refresh so subsequent code sees real value
+            prod.refresh_from_db(fields=["qty"])
+
+            # Now save the StockAdjustment record (safe, inside same transaction)
+            super().save(*args, **kwargs)
+
+    def apply_backfill(self):
+        """
+        (Optional helper) If you need to programmatically add an adjustment
+        and ensure stock is adjusted, call this method. It simply calls save().
+        """
+        return self.save()
+
+    @property
+    def remaining_stock_after(self):
+        """
+        Convenience: return product stock after this adjustment if possible.
+        Note: This assumes the adjustment has been saved already.
+        """
+        try:
+            return int(self.product.qty)
+        except Exception:
+            return None
+
+
+
+from django.db import models
+from django.contrib.auth.models import User
+
+class InventoryHistory(models.Model):
+    product = models.ForeignKey('Product', on_delete=models.CASCADE)
+    added_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    previous_qty = models.IntegerField()
+    added_qty = models.IntegerField()
+    total_qty = models.IntegerField()
+    phone_number = models.CharField(max_length=20, blank=True, null=True)  # if debtor
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-timestamp']
+
+    def __str__(self):
+        return f"{self.product.name} - {self.added_qty} added on {self.timestamp}"
