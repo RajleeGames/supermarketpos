@@ -217,6 +217,14 @@
         "documentation": {}
     },
     {
+        "label": "transaction",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
         "label": "models",
         "importPath": "django.db",
         "description": "django.db",
@@ -563,6 +571,14 @@
     },
     {
         "label": "InvalidOperation",
+        "importPath": "decimal",
+        "description": "decimal",
+        "isExtraImport": true,
+        "detail": "decimal",
+        "documentation": {}
+    },
+    {
+        "label": "Decimal",
         "importPath": "decimal",
         "description": "decimal",
         "isExtraImport": true,
@@ -971,6 +987,38 @@
     },
     {
         "label": "Product",
+        "importPath": "inventory.models",
+        "description": "inventory.models",
+        "isExtraImport": true,
+        "detail": "inventory.models",
+        "documentation": {}
+    },
+    {
+        "label": "Product",
+        "importPath": "inventory.models",
+        "description": "inventory.models",
+        "isExtraImport": true,
+        "detail": "inventory.models",
+        "documentation": {}
+    },
+    {
+        "label": "Department",
+        "importPath": "inventory.models",
+        "description": "inventory.models",
+        "isExtraImport": true,
+        "detail": "inventory.models",
+        "documentation": {}
+    },
+    {
+        "label": "Supplier",
+        "importPath": "inventory.models",
+        "description": "inventory.models",
+        "isExtraImport": true,
+        "detail": "inventory.models",
+        "documentation": {}
+    },
+    {
+        "label": "Tax",
         "importPath": "inventory.models",
         "description": "inventory.models",
         "isExtraImport": true,
@@ -1589,6 +1637,15 @@
         "documentation": {}
     },
     {
+        "label": "pandas",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "pandas",
+        "description": "pandas",
+        "detail": "pandas",
+        "documentation": {}
+    },
+    {
         "label": "slugify",
         "importPath": "django.template.defaultfilters",
         "description": "django.template.defaultfilters",
@@ -2101,15 +2158,6 @@
         "description": "datetime",
         "isExtraImport": true,
         "detail": "datetime",
-        "documentation": {}
-    },
-    {
-        "label": "pandas",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "pandas",
-        "description": "pandas",
-        "detail": "pandas",
         "documentation": {}
     },
     {
@@ -2736,6 +2784,15 @@
         "description": "inventory.forms",
         "peekOfCode": "class StockAdjustmentForm(forms.ModelForm):\n    \"\"\"\n    Form for creating expired / damaged stock entries.\n    - Uses ONLY `quantity` (the model field). Do NOT create a separate `qty` form field.\n    - The view must pass `product=product` when instantiating the form so validation can check stock.\n    - This form does NOT modify product stock; StockAdjustment.model.save() should handle that atomically.\n    \"\"\"\n    class Meta:\n        model = StockAdjustment\n        fields = (\"adjustment_type\", \"quantity\", \"note\")",
         "detail": "inventory.forms",
+        "documentation": {}
+    },
+    {
+        "label": "run",
+        "kind": 2,
+        "importPath": "inventory.import_products",
+        "description": "inventory.import_products",
+        "peekOfCode": "def run():\n    file_path = \"products.xlsx\"  # <-- your cleaned Excel file\n    df = pd.read_excel(file_path)\n    with transaction.atomic():\n        for _, row in df.iterrows():\n            # -------- REQUIRED FIELDS --------\n            barcode = str(row['barcode']).strip()\n            name = str(row['name']).strip()\n            qty = int(row.get('qty', 0) or 0)\n            sales_price = Decimal(str(row.get('sales_price', 0) or 0))",
+        "detail": "inventory.import_products",
         "documentation": {}
     },
     {

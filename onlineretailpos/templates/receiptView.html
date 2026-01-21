@@ -33,9 +33,28 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const printBtn = document.getElementById('qzPrintBtn');
-    const receiptText = document.getElementById('receiptContent').innerText;
+    // get the visible receipt text (keeps newlines)
+    const receiptText = document.getElementById('receiptContent').innerText || "";
 
-    // QZ Tray Setup
+    // helper: UTF-8 -> base64 (safe for non-ascii)
+    function utf8ToBase64(str) {
+        // encodeURIComponent + unescape produce proper bytes for btoa
+        return btoa(unescape(encodeURIComponent(str)));
+    }
+
+    // Common ESC/POS cutter command (GS V 0 or GS V 1  — 0x1D 0x56 0x00)
+    function escposCut() {
+        return String.fromCharCode(0x1D, 0x56, 0x00);
+    }
+
+    // Append a few newlines and a cut to ensure printer prints full body and cuts
+    function buildPayload(text) {
+        const trailing = "\n\n\n";                // spacing so the paper advances
+        const cut = escposCut();
+        return text + trailing + cut;
+    }
+
+    // Connect to QZ Tray
     qz.websocket.connect().then(() => {
         console.log("QZ Tray connected!");
     }).catch(err => {
@@ -43,15 +62,19 @@ document.addEventListener('DOMContentLoaded', function() {
         alert("QZ Tray is not connected. Please make sure the tray app is running.");
     });
 
-    // Function to auto-print
     function autoPrint() {
-        // Replace with your exact printer name (check in QZ Tray)
-        const config = qz.configs.create("ZKT8008N"); 
+        // Use exact printer name as shown in QZ Tray app
+        const printerName = "ZKP8008"; // <-- ensure this matches QZ Tray exactly
+        const config = qz.configs.create(printerName);
+
+        // Build payload, encode to base64
+        const payload = buildPayload(receiptText);
+        const base64 = utf8ToBase64(payload);
 
         const data = [{
-            type: 'raw', 
-            format: 'plain', 
-            data: receiptText
+            type: 'raw',
+            format: 'base64',
+            data: base64
         }];
 
         qz.print(config, data).then(() => {
@@ -62,12 +85,9 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Auto-print on button click
     printBtn.addEventListener('click', autoPrint);
-
-    // Optional: auto-print as soon as page loads
-    // autoPrint();
 });
 </script>
+
 
 {% endblock content %}
