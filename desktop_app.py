@@ -1,167 +1,168 @@
-# desktop_app.py
 import os
 import sys
 import time
-import socket
-import subprocess
-import logging
-import ctypes
-import platform
+import threading
+import webbrowser
+import traceback
+from pathlib import Path
+import importlib
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-LOG_PATH = os.path.join(BASE_DIR, "desktop_app.log")
+# -------------------------------------------------
+# 1) Detect PyInstaller EXE mode + paths
+# -------------------------------------------------
+IS_FROZEN = getattr(sys, "frozen", False)
 
-logging.basicConfig(
-    filename=LOG_PATH,
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s",
-)
 
-LOCK_HOST = "127.0.0.1"
-LOCK_PORT = 54321         # single-instance lock port
-DJANGO_HOST = "127.0.0.1"
-DJANGO_PORT = 8000
-DJANGO_ADDR = f"{DJANGO_HOST}:{DJANGO_PORT}"
+def get_exe_data_dir() -> Path:
+    if IS_FROZEN:
+        return Path(sys.executable).resolve().parent / "app_data"
+    return Path(__file__).resolve().parent / "app_data"
 
-def msgbox(title, text):
-    """Simple message box (Windows) fallback to print."""
+
+def get_exe_base_dir() -> Path:
+    if IS_FROZEN:
+        return Path(getattr(sys, "_MEIPASS"))
+    return Path(__file__).resolve().parent
+
+
+EXE_DATA_DIR = get_exe_data_dir()
+EXE_BASE_DIR = get_exe_base_dir()
+EXE_DATA_DIR.mkdir(parents=True, exist_ok=True)
+
+LOG_FILE = EXE_DATA_DIR / "app.log"
+
+
+def log(msg: str):
+    ts = time.strftime("%Y-%m-%d %H:%M:%S")
     try:
-        ctypes.windll.user32.MessageBoxW(None, text, title, 0)
+        with open(LOG_FILE, "a", encoding="utf-8") as f:
+            f.write(f"[{ts}] {msg}\n")
     except Exception:
-        print(title + ": " + text)
+        pass
 
-def acquire_lock():
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+
+def crash(e: Exception):
+    log("❌ CRASH: " + repr(e))
+    log(traceback.format_exc())
+
+
+# -------------------------------------------------
+# 2) Ensure project import path
+# -------------------------------------------------
+try:
+    sys.path.insert(0, str(EXE_BASE_DIR))
+
+    log(f"IS_FROZEN={IS_FROZEN}")
+    log(f"EXE_BASE_DIR={EXE_BASE_DIR}")
+    log(f"EXE_DATA_DIR={EXE_DATA_DIR}")
+    log(f"sys.path[0]={sys.path[0]}")
+
+except Exception as e:
+    crash(e)
+
+# -------------------------------------------------
+# 3) FIX escpos capabilities.json (IMPORTANT)
+# -------------------------------------------------
+try:
+    escpos_caps = EXE_BASE_DIR / "escpos" / "capabilities.json"
+    if escpos_caps.exists():
+        os.environ["ESCPOS_CAPABILITIES_FILE"] = str(escpos_caps)
+        log("✅ escpos capabilities.json configured")
+except Exception as e:
+    crash(e)
+
+# -------------------------------------------------
+# 4) Settings module
+# -------------------------------------------------
+SETTINGS_MODULE = "onlineretailpos.settings.settings"
+
+try:
+    importlib.import_module(SETTINGS_MODULE)
+except Exception as e:
+    crash(e)
+    raise SystemExit(1)
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", SETTINGS_MODULE)
+log(f"✅ DJANGO_SETTINGS_MODULE={SETTINGS_MODULE}")
+
+# -------------------------------------------------
+# SAFE ADMIN IMPORT ONLY
+# -------------------------------------------------
+try:
+    import onlineretailpos.admin
+    log("✅ Forced import OK: onlineretailpos.admin")
+except Exception as e:
+    crash(e)
+
+# -------------------------------------------------
+# 5) Run Django + Waitress
+# -------------------------------------------------
+def run_server():
     try:
-        s.bind((LOCK_HOST, LOCK_PORT))
-        s.listen(1)
-        logging.info("Lock acquired on %s:%d", LOCK_HOST, LOCK_PORT)
-        return s
-    except OSError as e:
-        logging.warning("Could not acquire lock on %s:%d - %s", LOCK_HOST, LOCK_PORT, e)
-        return None
+        import django
 
-def is_port_open(host, port, timeout=0.6):
-    try:
-        with socket.create_connection((host, port), timeout=timeout):
-            return True
-    except Exception:
-        return False
+        django.setup()
+        log("✅ django.setup() OK")
 
-def start_django():
-    """Start django runserver only if port is free. Return subprocess or None."""
-    if is_port_open(DJANGO_HOST, DJANGO_PORT):
-        logging.info("Django already listening on %s:%d", DJANGO_HOST, DJANGO_PORT)
-        return None
-
-    python = sys.executable or "python"
-    cmd = [python, "manage.py", "runserver", DJANGO_ADDR]
-    logging.info("Starting Django: %s (cwd=%s)", " ".join(cmd), BASE_DIR)
-    creationflags = 0
-    # hide console window on Windows
-    try:
-        creationflags = subprocess.CREATE_NO_WINDOW
-    except Exception:
-        creationflags = 0
-
-    proc = subprocess.Popen(
-        cmd,
-        cwd=BASE_DIR,
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
-        creationflags=creationflags,
-    )
-    logging.info("Django started pid=%s", proc.pid)
-    return proc
-
-def run_webview_force_mshtml():
-    """
-    Force MSHTML backend on Windows (uses IE engine). This avoids bundling CEF/Edge.
-    If not Windows or MSHTML fails, fallback to default webview.start().
-    """
-    import webview
-
-    url = f"http://{DJANGO_ADDR}"
-    logging.info("Creating webview window for %s (forcing mshtml backend on Windows if available)", url)
-
-    try:
-        # Create window first (works across backends)
-        webview.create_window("Adams Mini POS", url, width=1200, height=800, resizable=True)
-        if platform.system().lower().startswith("windows"):
-            # Prefer mshtml to avoid CEF/Edge-related subprocesses
-            try:
-                logging.info("Attempting webview.start(gui='mshtml')")
-                webview.start(gui='mshtml')
-                return
-            except Exception as e_ms:
-                logging.warning("mshtml gui failed: %s. Falling back to default start()", e_ms)
-        # default fallback
-        webview.start()
-    except Exception as e:
-        logging.exception("webview failed: %s", e)
-        raise
-
-def main():
-    logging.info("Launcher starting (base_dir=%s)", BASE_DIR)
-
-    lock = acquire_lock()
-    if not lock:
-        msg = "Adams Mini POS is already running. Close the existing instance first."
-        logging.error(msg)
-        msgbox("Adams Mini POS", msg)
-        return
-
-    django_proc = None
-    try:
-        django_proc = start_django()
-        # wait for django to respond
-        timeout = 20
-        start_ts = time.time()
-        while time.time() - start_ts < timeout:
-            if is_port_open(DJANGO_HOST, DJANGO_PORT):
-                logging.info("Django is up and listening.")
-                break
-            time.sleep(0.5)
-        else:
-            logging.error("Django did not start within %ds.", timeout)
-            msgbox("Adams Mini POS", "Django server did not start quickly. The app will show an error page.")
-
-        # Force mshtml on Windows to avoid cef/edge child processes
+        # -----------------------------------------
+        # AUTO DATABASE MIGRATIONS (FIRST RUN FIX)
+        # -----------------------------------------
         try:
-            run_webview_force_mshtml()
+            from django.core.management import call_command
+
+            db_file = EXE_DATA_DIR / "db.sqlite3"
+
+            if not db_file.exists():
+                log("⚙ First launch detected — running migrations...")
+                call_command("migrate", interactive=False, run_syncdb=True)
+                log("✅ Migrations completed")
+            else:
+                log("✅ Database already exists — skipping migrations")
+
         except Exception as e:
-            logging.exception("run_webview_force_mshtml failed: %s", e)
-            # final fallback: try default start
-            try:
-                import webview
-                webview.start()
-            except Exception as e2:
-                logging.exception("Final fallback webview.start() also failed: %s", e2)
-                msgbox("Adams Mini POS", "Failed to start embedded browser. See log.")
-    except Exception as e:
-        logging.exception("Unhandled exception in launcher: %s", e)
-        msgbox("Launcher Error", "An unexpected error occurred. Check desktop_app.log for details.")
-    finally:
-        # terminate django if started
-        try:
-            if django_proc and django_proc.poll() is None:
-                logging.info("Terminating django pid=%s", django_proc.pid)
-                django_proc.terminate()
-                try:
-                    django_proc.wait(timeout=5)
-                except Exception:
-                    django_proc.kill()
-        except Exception as e:
-            logging.exception("Error terminating django process: %s", e)
-        # close lock socket
-        try:
-            if lock:
-                lock.close()
-                logging.info("Lock socket closed.")
-        except Exception:
-            pass
-        logging.info("Launcher finished.")
+            crash(e)
 
+        # -----------------------------------------
+        # LOAD WSGI
+        # -----------------------------------------
+        from django.core.wsgi import get_wsgi_application
+        from waitress import serve
+
+        application = get_wsgi_application()
+        log("✅ WSGI application loaded OK")
+
+        # -----------------------------------------
+        # OPEN BROWSER
+        # -----------------------------------------
+        def open_browser():
+            time.sleep(2)
+            url = "http://127.0.0.1:8000/"
+            log(f"🌐 Opening browser: {url}")
+            try:
+                webbrowser.open(url, new=0)
+            except Exception as e:
+                crash(e)
+
+        threading.Thread(target=open_browser, daemon=True).start()
+
+        # -----------------------------------------
+        # START SERVER
+        # -----------------------------------------
+        log("🚀 Starting waitress on 127.0.0.1:8000 ...")
+
+        serve(
+            application,
+            host="127.0.0.1",
+            port=8000,
+            threads=8,
+        )
+
+    except Exception as e:
+        crash(e)
+
+
+# -------------------------------------------------
+# MAIN ENTRY
+# -------------------------------------------------
 if __name__ == "__main__":
-    main()
+    run_server()

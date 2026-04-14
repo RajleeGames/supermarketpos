@@ -8,66 +8,42 @@
     Receipt - {{ transNo }}  
 {% endblock %}
 
-{% block content %}  
+{% block content %}
 
-<!-- Existing Review Receipt Button -->
-<a href="/transaction_receipt/{{ transNo }}/print/">
-    <button class="btn-lg btn-primary" style="width: 20%; margin-top: 10px; margin-left: 10px;">
-        Review / Print
-    </button>
-</a>
-
-<!-- Auto Print Button for QZ Tray -->
 <button id="qzPrintBtn" class="btn-lg btn-success" style="width: 20%; margin-top: 10px; margin-left: 10px;">
-    Auto Print
+    Print Receipt
 </button>
 
-<!-- Receipt Display -->
 <div style="text-align: center; padding-top: 30px;">
     <pre id="receiptContent">{{ receipt }}</pre>
 </div>
 
-<!-- QZ Tray JS (from their official CDN) -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qz-tray/2.1.0/qz-tray.js"></script>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const printBtn = document.getElementById('qzPrintBtn');
-    // get the visible receipt text (keeps newlines)
     const receiptText = document.getElementById('receiptContent').innerText || "";
 
-    // helper: UTF-8 -> base64 (safe for non-ascii)
     function utf8ToBase64(str) {
-        // encodeURIComponent + unescape produce proper bytes for btoa
         return btoa(unescape(encodeURIComponent(str)));
     }
 
-    // Common ESC/POS cutter command (GS V 0 or GS V 1  — 0x1D 0x56 0x00)
-    function escposCut() {
-        return String.fromCharCode(0x1D, 0x56, 0x00);
-    }
-
-    // Append a few newlines and a cut to ensure printer prints full body and cuts
     function buildPayload(text) {
-        const trailing = "\n\n\n";                // spacing so the paper advances
-        const cut = escposCut();
-        return text + trailing + cut;
+        return text + "\n\n\n";
     }
 
-    // Connect to QZ Tray
     qz.websocket.connect().then(() => {
         console.log("QZ Tray connected!");
     }).catch(err => {
         console.error("QZ Tray connection error:", err);
-        alert("QZ Tray is not connected. Please make sure the tray app is running.");
+        alert("QZ Tray is not connected. Make sure QZ Tray is running.");
     });
 
     function autoPrint() {
-        // Use exact printer name as shown in QZ Tray app
-        const printerName = "ZKP8008"; // <-- ensure this matches QZ Tray exactly
+        const printerName = "Q108-V-Printer";   // change to exact printer name from QZ Tray
         const config = qz.configs.create(printerName);
 
-        // Build payload, encode to base64
         const payload = buildPayload(receiptText);
         const base64 = utf8ToBase64(payload);
 
@@ -88,6 +64,5 @@ document.addEventListener('DOMContentLoaded', function() {
     printBtn.addEventListener('click', autoPrint);
 });
 </script>
-
 
 {% endblock content %}

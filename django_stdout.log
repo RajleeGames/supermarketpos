@@ -1,0 +1,87 @@
+C:\Users\user\worldlink-projects\OnlineRetailPOS\venv\Lib\site-packages\escpos\capabilities.py:3: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+[21/Jan/2026 17:30:46] "GET / HTTP/1.1" 302 0
+[21/Jan/2026 17:30:46] "GET /user/login/?next=/ HTTP/1.1" 200 6879
+[21/Jan/2026 17:30:46] "GET /static/vendor/datatables/dataTables.bootstrap4.min.css HTTP/1.1" 200 5230
+[21/Jan/2026 17:30:46] "GET /static/vendor/fontawesome-free/css/all.min.css HTTP/1.1" 200 59348
+[21/Jan/2026 17:30:46] "GET /static/css/sb-admin-2.min.css HTTP/1.1" 200 170746
+[21/Jan/2026 17:30:46] "GET /static/img/log-in-gcb59d165a_1280.jpg HTTP/1.1" 200 97277
+[21/Jan/2026 17:30:46] "GET /static/vendor/jquery/jquery.min.js HTTP/1.1" 200 89503
+[21/Jan/2026 17:30:46] "GET /static/vendor/jquery-easing/jquery.easing.min.js HTTP/1.1" 200 2532
+[21/Jan/2026 17:30:46] "GET /static/vendor/bootstrap/js/bootstrap.bundle.min.js HTTP/1.1" 200 84384
+[21/Jan/2026 17:30:46] "GET /static/js/sb-admin-2.min.js HTTP/1.1" 200 1271
+[21/Jan/2026 17:30:46] "GET /static/vendor/datatables/jquery.dataTables.min.js HTTP/1.1" 200 83770
+[21/Jan/2026 17:30:46] "GET /static/vendor/datatables/dataTables.bootstrap4.min.js HTTP/1.1" 200 2106
+[21/Jan/2026 17:30:46] "GET /static/js/demo/datatables-demo.js HTTP/1.1" 200 107
+[21/Jan/2026 17:30:52] "GET /static/note.mp3 HTTP/1.1" 200 30510
+[21/Jan/2026 17:30:53] "GET /favicon.ico HTTP/1.1" 302 0
+[21/Jan/2026 17:30:53] "GET /static/img/cash-register-g87e120a86_640.png HTTP/1.1" 200 75437
+[21/Jan/2026 17:31:02] "POST /user/login/ HTTP/1.1" 302 0
+C:\Users\user\worldlink-projects\OnlineRetailPOS\onlineretailpos\views.py:362: FutureWarning:
+
+Series.__getitem__ treating keys as positions is deprecated. In a future version, integer keys will always be treated as labels (consistent with DataFrame behavior). To access a value by position, use `ser.iloc[pos]`
+
+C:\Users\user\worldlink-projects\OnlineRetailPOS\onlineretailpos\views.py:363: FutureWarning:
+
+Series.__getitem__ treating keys as positions is deprecated. In a future version, integer keys will always be treated as labels (consistent with DataFrame behavior). To access a value by position, use `ser.iloc[pos]`
+
+C:\Users\user\worldlink-projects\OnlineRetailPOS\onlineretailpos\views.py:364: FutureWarning:
+
+'M' is deprecated and will be removed in a future version, please use 'ME' instead.
+
+C:\Users\user\worldlink-projects\OnlineRetailPOS\onlineretailpos\views.py:364: FutureWarning:
+
+Series.__getitem__ treating keys as positions is deprecated. In a future version, integer keys will always be treated as labels (consistent with DataFrame behavior). To access a value by position, use `ser.iloc[pos]`
+
+C:\Users\user\worldlink-projects\OnlineRetailPOS\onlineretailpos\views.py:365: FutureWarning:
+
+'Y' is deprecated and will be removed in a future version, please use 'YE' instead.
+
+C:\Users\user\worldlink-projects\OnlineRetailPOS\onlineretailpos\views.py:365: FutureWarning:
+
+Series.__getitem__ treating keys as positions is deprecated. In a future version, integer keys will always be treated as labels (consistent with DataFrame behavior). To access a value by position, use `ser.iloc[pos]`
+
+[21/Jan/2026 17:31:03] "GET / HTTP/1.1" 200 38831
+[21/Jan/2026 17:31:03] "GET /static/vendor/fontawesome-free/webfonts/fa-solid-900.woff2 HTTP/1.1" 200 78196
+[21/Jan/2026 17:31:03] "GET /favicon.ico HTTP/1.1" 302 0
+[21/Jan/2026 17:31:06] "GET /register/ HTTP/1.1" 200 41568
+[21/Jan/2026 17:31:06] "GET /static/sounds/alert.mp3 HTTP/1.1" 200 56006
+[21/Jan/2026 17:31:06] "GET /favicon.ico HTTP/1.1" 302 0
+C:\Users\user\worldlink-projects\OnlineRetailPOS\onlineretailpos\views.py:362: FutureWarning:
+
+Series.__getitem__ treating keys as positions is deprecated. In a future version, integer keys will always be treated as labels (consistent with DataFrame behavior). To access a value by position, use `ser.iloc[pos]`
+
+C:\Users\user\worldlink-projects\OnlineRetailPOS\onlineretailpos\views.py:363: FutureWarning:
+
+Series.__getitem__ treating keys as positions is deprecated. In a future version, integer keys will always be treated as labels (consistent with DataFrame behavior). To access a value by position, use `ser.iloc[pos]`
+
+C:\Users\user\worldlink-projects\OnlineRetailPOS\onlineretailpos\views.py:364: FutureWarning:
+
+'M' is deprecated and will be removed in a future version, please use 'ME' instead.
+
+C:\Users\user\worldlink-projects\OnlineRetailPOS\onlineretailpos\views.py:364: FutureWarning:
+
+Series.__getitem__ treating keys as positions is deprecated. In a future version, integer keys will always be treated as labels (consistent with DataFrame behavior). To access a value by position, use `ser.iloc[pos]`
+
+C:\Users\user\worldlink-projects\OnlineRetailPOS\onlineretailpos\views.py:365: FutureWarning:
+
+'Y' is deprecated and will be removed in a future version, please use 'YE' instead.
+
+C:\Users\user\worldlink-projects\OnlineRetailPOS\onlineretailpos\views.py:365: FutureWarning:
+
+Series.__getitem__ treating keys as positions is deprecated. In a future version, integer keys will always be treated as labels (consistent with DataFrame behavior). To access a value by position, use `ser.iloc[pos]`
+
+[21/Jan/2026 17:31:08] "GET /dashboard_sales/ HTTP/1.1" 200 38831
+[21/Jan/2026 17:31:08] "GET /favicon.ico HTTP/1.1" 302 0
+[21/Jan/2026 17:31:09] "GET /inventory/adjust/ HTTP/1.1" 200 13187
+[21/Jan/2026 17:31:09] "GET /favicon.ico HTTP/1.1" 302 0
+[21/Jan/2026 17:31:09] "GET /transaction/ HTTP/1.1" 200 19582
+[21/Jan/2026 17:31:10] "GET /favicon.ico HTTP/1.1" 302 0
+[21/Jan/2026 17:31:11] "GET /transaction/debts/ HTTP/1.1" 200 25428
+[21/Jan/2026 17:31:11] "GET /favicon.ico HTTP/1.1" 302 0
+[21/Jan/2026 17:31:14] "GET /staff_portal/login/ HTTP/1.1" 302 0
+[21/Jan/2026 17:31:14] "GET /staff_portal/ HTTP/1.1" 200 18608
+[21/Jan/2026 17:31:23] "GET /dashboard_products/ HTTP/1.1" 200 41507
+[21/Jan/2026 17:31:23] "GET /favicon.ico HTTP/1.1" 302 0
+[21/Jan/2026 17:31:27] "GET /register/ HTTP/1.1" 200 41568
+[21/Jan/2026 17:31:27] "GET /favicon.ico HTTP/1.1" 302 0

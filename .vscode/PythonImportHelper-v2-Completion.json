@@ -1862,12 +1862,29 @@
         "documentation": {}
     },
     {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
+        "documentation": {}
+    },
+    {
         "label": "os",
         "kind": 6,
         "isExtraImport": true,
         "importPath": "os",
         "description": "os",
         "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "sys",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "sys",
+        "description": "sys",
+        "detail": "sys",
         "documentation": {}
     },
     {
@@ -2349,15 +2366,6 @@
         "documentation": {}
     },
     {
-        "label": "sys",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "sys",
-        "description": "sys",
-        "detail": "sys",
-        "documentation": {}
-    },
-    {
         "label": "base64,",
         "kind": 6,
         "isExtraImport": true,
@@ -2400,39 +2408,30 @@
         "documentation": {}
     },
     {
-        "label": "subprocess",
+        "label": "threading",
         "kind": 6,
         "isExtraImport": true,
-        "importPath": "subprocess",
-        "description": "subprocess",
-        "detail": "subprocess",
+        "importPath": "threading",
+        "description": "threading",
+        "detail": "threading",
         "documentation": {}
     },
     {
-        "label": "logging",
+        "label": "webbrowser",
         "kind": 6,
         "isExtraImport": true,
-        "importPath": "logging",
-        "description": "logging",
-        "detail": "logging",
+        "importPath": "webbrowser",
+        "description": "webbrowser",
+        "detail": "webbrowser",
         "documentation": {}
     },
     {
-        "label": "ctypes",
+        "label": "importlib",
         "kind": 6,
         "isExtraImport": true,
-        "importPath": "ctypes",
-        "description": "ctypes",
-        "detail": "ctypes",
-        "documentation": {}
-    },
-    {
-        "label": "platform",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "platform",
-        "description": "platform",
-        "detail": "platform",
+        "importPath": "importlib",
+        "description": "importlib",
+        "detail": "importlib",
         "documentation": {}
     },
     {
@@ -2944,7 +2943,7 @@
         "kind": 2,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "def str_to_bool(s: str) -> bool:\n    return str(s).lower() in (\"1\", \"true\", \"yes\", \"on\")\ndef csv_to_list(s: str):\n    return [item.strip() for item in s.split(\",\") if item.strip()]\n# ---------- Debug / Secret ----------\nDEBUG = str_to_bool(os.getenv(\"DEBUG\", \"True\"))\nSECRET_KEY = os.getenv(\"SECRET_KEY\", \"django_dev_secret_key_online-retail-pos-1234\")\n# ---------- Hosts & CSRF ----------\n# Default hosts to include local and your domain (so VPS won't error)\n_default_hosts = [\"127.0.0.1\", \"localhost\", \"adamsmini.shop\", \"www.adamsmini.shop\"]",
+        "peekOfCode": "def str_to_bool(s: str) -> bool:\n    return str(s).strip().lower() in (\"1\", \"true\", \"yes\", \"on\")\ndef csv_to_list(s: str):\n    return [x.strip() for x in (s or \"\").split(\",\") if x.strip()]\n# -------------------------------------------------\n# ✅ Core Django settings (must always exist!)\n# -------------------------------------------------\nSECRET_KEY = os.getenv(\"SECRET_KEY\", \"django_dev_secret_key_online-retail-pos-1234\")\n# In EXE mode you can keep True while testing\nDEBUG = str_to_bool(os.getenv(\"DEBUG\", \"True\"))",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -2953,7 +2952,16 @@
         "kind": 2,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "def csv_to_list(s: str):\n    return [item.strip() for item in s.split(\",\") if item.strip()]\n# ---------- Debug / Secret ----------\nDEBUG = str_to_bool(os.getenv(\"DEBUG\", \"True\"))\nSECRET_KEY = os.getenv(\"SECRET_KEY\", \"django_dev_secret_key_online-retail-pos-1234\")\n# ---------- Hosts & CSRF ----------\n# Default hosts to include local and your domain (so VPS won't error)\n_default_hosts = [\"127.0.0.1\", \"localhost\", \"adamsmini.shop\", \"www.adamsmini.shop\"]\nenv_allowed = os.getenv(\"ALLOWED_HOSTS\", \"\")\nif env_allowed:",
+        "peekOfCode": "def csv_to_list(s: str):\n    return [x.strip() for x in (s or \"\").split(\",\") if x.strip()]\n# -------------------------------------------------\n# ✅ Core Django settings (must always exist!)\n# -------------------------------------------------\nSECRET_KEY = os.getenv(\"SECRET_KEY\", \"django_dev_secret_key_online-retail-pos-1234\")\n# In EXE mode you can keep True while testing\nDEBUG = str_to_bool(os.getenv(\"DEBUG\", \"True\"))\nROOT_URLCONF = \"onlineretailpos.urls\"\nWSGI_APPLICATION = \"onlineretailpos.wsgi.application\"",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "IS_FROZEN",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "IS_FROZEN = getattr(sys, \"frozen\", False)\ndef _exe_base_dir() -> Path:\n    # In onefile EXE, this is the extracted temp dir\n    return Path(getattr(sys, \"_MEIPASS\", Path.cwd()))\ndef _exe_data_dir() -> Path:\n    # Persistent writable folder next to exe\n    if IS_FROZEN:\n        return Path(sys.executable).resolve().parent / \"app_data\"\n    return Path.cwd() / \"app_data\"\n# Project root (your repo folder)",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -2962,7 +2970,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "BASE_DIR = Path(__file__).resolve().parents[2]\nPROJECT_DIR = BASE_DIR / \"onlineretailpos\"\n# ---------- small helpers ----------\ndef str_to_bool(s: str) -> bool:\n    return str(s).lower() in (\"1\", \"true\", \"yes\", \"on\")\ndef csv_to_list(s: str):\n    return [item.strip() for item in s.split(\",\") if item.strip()]\n# ---------- Debug / Secret ----------\nDEBUG = str_to_bool(os.getenv(\"DEBUG\", \"True\"))\nSECRET_KEY = os.getenv(\"SECRET_KEY\", \"django_dev_secret_key_online-retail-pos-1234\")",
+        "peekOfCode": "BASE_DIR = Path(__file__).resolve().parents[2]\nPROJECT_DIR = BASE_DIR / \"onlineretailpos\"\nEXE_BASE_DIR = _exe_base_dir()\nEXE_DATA_DIR = _exe_data_dir()\nEXE_DATA_DIR.mkdir(parents=True, exist_ok=True)\n# -------------------------------------------------\n# Helpers\n# -------------------------------------------------\ndef str_to_bool(s: str) -> bool:\n    return str(s).strip().lower() in (\"1\", \"true\", \"yes\", \"on\")",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -2971,16 +2979,25 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "PROJECT_DIR = BASE_DIR / \"onlineretailpos\"\n# ---------- small helpers ----------\ndef str_to_bool(s: str) -> bool:\n    return str(s).lower() in (\"1\", \"true\", \"yes\", \"on\")\ndef csv_to_list(s: str):\n    return [item.strip() for item in s.split(\",\") if item.strip()]\n# ---------- Debug / Secret ----------\nDEBUG = str_to_bool(os.getenv(\"DEBUG\", \"True\"))\nSECRET_KEY = os.getenv(\"SECRET_KEY\", \"django_dev_secret_key_online-retail-pos-1234\")\n# ---------- Hosts & CSRF ----------",
+        "peekOfCode": "PROJECT_DIR = BASE_DIR / \"onlineretailpos\"\nEXE_BASE_DIR = _exe_base_dir()\nEXE_DATA_DIR = _exe_data_dir()\nEXE_DATA_DIR.mkdir(parents=True, exist_ok=True)\n# -------------------------------------------------\n# Helpers\n# -------------------------------------------------\ndef str_to_bool(s: str) -> bool:\n    return str(s).strip().lower() in (\"1\", \"true\", \"yes\", \"on\")\ndef csv_to_list(s: str):",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
     {
-        "label": "DEBUG",
+        "label": "EXE_BASE_DIR",
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "DEBUG = str_to_bool(os.getenv(\"DEBUG\", \"True\"))\nSECRET_KEY = os.getenv(\"SECRET_KEY\", \"django_dev_secret_key_online-retail-pos-1234\")\n# ---------- Hosts & CSRF ----------\n# Default hosts to include local and your domain (so VPS won't error)\n_default_hosts = [\"127.0.0.1\", \"localhost\", \"adamsmini.shop\", \"www.adamsmini.shop\"]\nenv_allowed = os.getenv(\"ALLOWED_HOSTS\", \"\")\nif env_allowed:\n    ALLOWED_HOSTS = csv_to_list(env_allowed)\n    # ensure the essential hosts are present\n    for h in _default_hosts:",
+        "peekOfCode": "EXE_BASE_DIR = _exe_base_dir()\nEXE_DATA_DIR = _exe_data_dir()\nEXE_DATA_DIR.mkdir(parents=True, exist_ok=True)\n# -------------------------------------------------\n# Helpers\n# -------------------------------------------------\ndef str_to_bool(s: str) -> bool:\n    return str(s).strip().lower() in (\"1\", \"true\", \"yes\", \"on\")\ndef csv_to_list(s: str):\n    return [x.strip() for x in (s or \"\").split(\",\") if x.strip()]",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "EXE_DATA_DIR",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "EXE_DATA_DIR = _exe_data_dir()\nEXE_DATA_DIR.mkdir(parents=True, exist_ok=True)\n# -------------------------------------------------\n# Helpers\n# -------------------------------------------------\ndef str_to_bool(s: str) -> bool:\n    return str(s).strip().lower() in (\"1\", \"true\", \"yes\", \"on\")\ndef csv_to_list(s: str):\n    return [x.strip() for x in (s or \"\").split(\",\") if x.strip()]\n# -------------------------------------------------",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -2989,79 +3006,16 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "SECRET_KEY = os.getenv(\"SECRET_KEY\", \"django_dev_secret_key_online-retail-pos-1234\")\n# ---------- Hosts & CSRF ----------\n# Default hosts to include local and your domain (so VPS won't error)\n_default_hosts = [\"127.0.0.1\", \"localhost\", \"adamsmini.shop\", \"www.adamsmini.shop\"]\nenv_allowed = os.getenv(\"ALLOWED_HOSTS\", \"\")\nif env_allowed:\n    ALLOWED_HOSTS = csv_to_list(env_allowed)\n    # ensure the essential hosts are present\n    for h in _default_hosts:\n        if h not in ALLOWED_HOSTS:",
+        "peekOfCode": "SECRET_KEY = os.getenv(\"SECRET_KEY\", \"django_dev_secret_key_online-retail-pos-1234\")\n# In EXE mode you can keep True while testing\nDEBUG = str_to_bool(os.getenv(\"DEBUG\", \"True\"))\nROOT_URLCONF = \"onlineretailpos.urls\"\nWSGI_APPLICATION = \"onlineretailpos.wsgi.application\"\nASGI_APPLICATION = \"onlineretailpos.asgi.application\"\n# -------------------------------------------------\n# ✅ Hosts & CSRF\n# -------------------------------------------------\n_default_hosts = [\"127.0.0.1\", \"localhost\", \"adamsmini.shop\", \"www.adamsmini.shop\"]",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
     {
-        "label": "_default_hosts",
+        "label": "DEBUG",
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "_default_hosts = [\"127.0.0.1\", \"localhost\", \"adamsmini.shop\", \"www.adamsmini.shop\"]\nenv_allowed = os.getenv(\"ALLOWED_HOSTS\", \"\")\nif env_allowed:\n    ALLOWED_HOSTS = csv_to_list(env_allowed)\n    # ensure the essential hosts are present\n    for h in _default_hosts:\n        if h not in ALLOWED_HOSTS:\n            ALLOWED_HOSTS.append(h)\nelse:\n    ALLOWED_HOSTS = _default_hosts.copy()",
-        "detail": "onlineretailpos.settings.settings",
-        "documentation": {}
-    },
-    {
-        "label": "env_allowed",
-        "kind": 5,
-        "importPath": "onlineretailpos.settings.settings",
-        "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "env_allowed = os.getenv(\"ALLOWED_HOSTS\", \"\")\nif env_allowed:\n    ALLOWED_HOSTS = csv_to_list(env_allowed)\n    # ensure the essential hosts are present\n    for h in _default_hosts:\n        if h not in ALLOWED_HOSTS:\n            ALLOWED_HOSTS.append(h)\nelse:\n    ALLOWED_HOSTS = _default_hosts.copy()\n# CSRF trusted origins: prefer explicit https origins for production.",
-        "detail": "onlineretailpos.settings.settings",
-        "documentation": {}
-    },
-    {
-        "label": "env_csrf",
-        "kind": 5,
-        "importPath": "onlineretailpos.settings.settings",
-        "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "env_csrf = os.getenv(\"CSRF_TRUSTED_ORIGINS\", \"\")\ndefault_csrf = [\"https://adamsmini.shop\", \"https://www.adamsmini.shop\"]\nif env_csrf:\n    CSRF_TRUSTED_ORIGINS = csv_to_list(env_csrf)\n    for origin in default_csrf:\n        if origin not in CSRF_TRUSTED_ORIGINS:\n            CSRF_TRUSTED_ORIGINS.append(origin)\nelse:\n    CSRF_TRUSTED_ORIGINS = default_csrf.copy()\n# Add local http origins for local testing (optional)",
-        "detail": "onlineretailpos.settings.settings",
-        "documentation": {}
-    },
-    {
-        "label": "default_csrf",
-        "kind": 5,
-        "importPath": "onlineretailpos.settings.settings",
-        "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "default_csrf = [\"https://adamsmini.shop\", \"https://www.adamsmini.shop\"]\nif env_csrf:\n    CSRF_TRUSTED_ORIGINS = csv_to_list(env_csrf)\n    for origin in default_csrf:\n        if origin not in CSRF_TRUSTED_ORIGINS:\n            CSRF_TRUSTED_ORIGINS.append(origin)\nelse:\n    CSRF_TRUSTED_ORIGINS = default_csrf.copy()\n# Add local http origins for local testing (optional)\nif \"http://127.0.0.1\" not in CSRF_TRUSTED_ORIGINS:",
-        "detail": "onlineretailpos.settings.settings",
-        "documentation": {}
-    },
-    {
-        "label": "INSTALLED_APPS",
-        "kind": 5,
-        "importPath": "onlineretailpos.settings.settings",
-        "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "INSTALLED_APPS = [\n    \"colorfield\",\n    'onlineretailpos.admin.MyAdminConfig',  # custom admin config\n    'django.contrib.auth',\n    'django.contrib.contenttypes',\n    'django.contrib.sessions',\n    'django.contrib.messages',\n    'django.contrib.staticfiles',\n    'django.contrib.humanize',\n    'jquery',",
-        "detail": "onlineretailpos.settings.settings",
-        "documentation": {}
-    },
-    {
-        "label": "MIDDLEWARE",
-        "kind": 5,
-        "importPath": "onlineretailpos.settings.settings",
-        "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "MIDDLEWARE = [\n    'django.middleware.security.SecurityMiddleware',\n    'django.contrib.sessions.middleware.SessionMiddleware',\n    'django.middleware.common.CommonMiddleware',\n    'django.middleware.csrf.CsrfViewMiddleware',\n    'django.contrib.auth.middleware.AuthenticationMiddleware',\n    'django.contrib.messages.middleware.MessageMiddleware',\n    'django.middleware.clickjacking.XFrameOptionsMiddleware',\n]\nX_FRAME_OPTIONS = \"SAMEORIGIN\"",
-        "detail": "onlineretailpos.settings.settings",
-        "documentation": {}
-    },
-    {
-        "label": "X_FRAME_OPTIONS",
-        "kind": 5,
-        "importPath": "onlineretailpos.settings.settings",
-        "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "X_FRAME_OPTIONS = \"SAMEORIGIN\"\nSILENCED_SYSTEM_CHECKS = [\"security.W019\"]\nROOT_URLCONF = 'onlineretailpos.urls'\nTEMPLATES = [\n    {\n        'BACKEND': 'django.template.backends.django.DjangoTemplates',\n        'DIRS': [str(PROJECT_DIR / \"templates\")],\n        'APP_DIRS': True,\n        'OPTIONS': {\n            'context_processors': [",
-        "detail": "onlineretailpos.settings.settings",
-        "documentation": {}
-    },
-    {
-        "label": "SILENCED_SYSTEM_CHECKS",
-        "kind": 5,
-        "importPath": "onlineretailpos.settings.settings",
-        "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "SILENCED_SYSTEM_CHECKS = [\"security.W019\"]\nROOT_URLCONF = 'onlineretailpos.urls'\nTEMPLATES = [\n    {\n        'BACKEND': 'django.template.backends.django.DjangoTemplates',\n        'DIRS': [str(PROJECT_DIR / \"templates\")],\n        'APP_DIRS': True,\n        'OPTIONS': {\n            'context_processors': [\n                'django.template.context_processors.debug',",
+        "peekOfCode": "DEBUG = str_to_bool(os.getenv(\"DEBUG\", \"True\"))\nROOT_URLCONF = \"onlineretailpos.urls\"\nWSGI_APPLICATION = \"onlineretailpos.wsgi.application\"\nASGI_APPLICATION = \"onlineretailpos.asgi.application\"\n# -------------------------------------------------\n# ✅ Hosts & CSRF\n# -------------------------------------------------\n_default_hosts = [\"127.0.0.1\", \"localhost\", \"adamsmini.shop\", \"www.adamsmini.shop\"]\nenv_allowed = os.getenv(\"ALLOWED_HOSTS\", \"\")\nif env_allowed:",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3070,16 +3024,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "ROOT_URLCONF = 'onlineretailpos.urls'\nTEMPLATES = [\n    {\n        'BACKEND': 'django.template.backends.django.DjangoTemplates',\n        'DIRS': [str(PROJECT_DIR / \"templates\")],\n        'APP_DIRS': True,\n        'OPTIONS': {\n            'context_processors': [\n                'django.template.context_processors.debug',\n                'django.template.context_processors.request',",
-        "detail": "onlineretailpos.settings.settings",
-        "documentation": {}
-    },
-    {
-        "label": "TEMPLATES",
-        "kind": 5,
-        "importPath": "onlineretailpos.settings.settings",
-        "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "TEMPLATES = [\n    {\n        'BACKEND': 'django.template.backends.django.DjangoTemplates',\n        'DIRS': [str(PROJECT_DIR / \"templates\")],\n        'APP_DIRS': True,\n        'OPTIONS': {\n            'context_processors': [\n                'django.template.context_processors.debug',\n                'django.template.context_processors.request',\n                'django.contrib.auth.context_processors.auth',",
+        "peekOfCode": "ROOT_URLCONF = \"onlineretailpos.urls\"\nWSGI_APPLICATION = \"onlineretailpos.wsgi.application\"\nASGI_APPLICATION = \"onlineretailpos.asgi.application\"\n# -------------------------------------------------\n# ✅ Hosts & CSRF\n# -------------------------------------------------\n_default_hosts = [\"127.0.0.1\", \"localhost\", \"adamsmini.shop\", \"www.adamsmini.shop\"]\nenv_allowed = os.getenv(\"ALLOWED_HOSTS\", \"\")\nif env_allowed:\n    ALLOWED_HOSTS = csv_to_list(env_allowed)",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3088,142 +3033,88 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "WSGI_APPLICATION = 'onlineretailpos.wsgi.application'\n# Channels (default in-memory for now)\nCHANNEL_LAYERS = {\n    \"default\": {\n        \"BACKEND\": \"channels.layers.InMemoryChannelLayer\"\n    }\n}\n# ---------- Password validators ----------\nAUTH_PASSWORD_VALIDATORS = [\n    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',},",
+        "peekOfCode": "WSGI_APPLICATION = \"onlineretailpos.wsgi.application\"\nASGI_APPLICATION = \"onlineretailpos.asgi.application\"\n# -------------------------------------------------\n# ✅ Hosts & CSRF\n# -------------------------------------------------\n_default_hosts = [\"127.0.0.1\", \"localhost\", \"adamsmini.shop\", \"www.adamsmini.shop\"]\nenv_allowed = os.getenv(\"ALLOWED_HOSTS\", \"\")\nif env_allowed:\n    ALLOWED_HOSTS = csv_to_list(env_allowed)\n    for h in _default_hosts:",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
     {
-        "label": "CHANNEL_LAYERS",
+        "label": "ASGI_APPLICATION",
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "CHANNEL_LAYERS = {\n    \"default\": {\n        \"BACKEND\": \"channels.layers.InMemoryChannelLayer\"\n    }\n}\n# ---------- Password validators ----------\nAUTH_PASSWORD_VALIDATORS = [\n    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',},\n    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',},\n    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',},",
+        "peekOfCode": "ASGI_APPLICATION = \"onlineretailpos.asgi.application\"\n# -------------------------------------------------\n# ✅ Hosts & CSRF\n# -------------------------------------------------\n_default_hosts = [\"127.0.0.1\", \"localhost\", \"adamsmini.shop\", \"www.adamsmini.shop\"]\nenv_allowed = os.getenv(\"ALLOWED_HOSTS\", \"\")\nif env_allowed:\n    ALLOWED_HOSTS = csv_to_list(env_allowed)\n    for h in _default_hosts:\n        if h not in ALLOWED_HOSTS:",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
     {
-        "label": "AUTH_PASSWORD_VALIDATORS",
+        "label": "_default_hosts",
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "AUTH_PASSWORD_VALIDATORS = [\n    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',},\n    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',},\n    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',},\n    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',},\n]\n# ---------- Internationalization ----------\nLANGUAGE_CODE = 'en-us'\nTIME_ZONE = 'Africa/Dar_es_Salaam'\nUSE_I18N = True",
+        "peekOfCode": "_default_hosts = [\"127.0.0.1\", \"localhost\", \"adamsmini.shop\", \"www.adamsmini.shop\"]\nenv_allowed = os.getenv(\"ALLOWED_HOSTS\", \"\")\nif env_allowed:\n    ALLOWED_HOSTS = csv_to_list(env_allowed)\n    for h in _default_hosts:\n        if h not in ALLOWED_HOSTS:\n            ALLOWED_HOSTS.append(h)\nelse:\n    ALLOWED_HOSTS = _default_hosts.copy()\nenv_csrf = os.getenv(\"CSRF_TRUSTED_ORIGINS\", \"\")",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
     {
-        "label": "LANGUAGE_CODE",
+        "label": "env_allowed",
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "LANGUAGE_CODE = 'en-us'\nTIME_ZONE = 'Africa/Dar_es_Salaam'\nUSE_I18N = True\nUSE_TZ = True\nCURRENCY_SYMBOL = \"TZS\"\n# ---------- Static & Media ----------\nSTATIC_URL = '/static/'\nSTATICFILES_DIRS = [ BASE_DIR / 'onlineretailpos' / 'static' ]\nSTATIC_ROOT = BASE_DIR / 'staticfiles'   # for collectstatic in production\nMEDIA_URL = \"/media/\"",
+        "peekOfCode": "env_allowed = os.getenv(\"ALLOWED_HOSTS\", \"\")\nif env_allowed:\n    ALLOWED_HOSTS = csv_to_list(env_allowed)\n    for h in _default_hosts:\n        if h not in ALLOWED_HOSTS:\n            ALLOWED_HOSTS.append(h)\nelse:\n    ALLOWED_HOSTS = _default_hosts.copy()\nenv_csrf = os.getenv(\"CSRF_TRUSTED_ORIGINS\", \"\")\ndefault_csrf = [\"https://adamsmini.shop\", \"https://www.adamsmini.shop\"]",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
     {
-        "label": "TIME_ZONE",
+        "label": "env_csrf",
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "TIME_ZONE = 'Africa/Dar_es_Salaam'\nUSE_I18N = True\nUSE_TZ = True\nCURRENCY_SYMBOL = \"TZS\"\n# ---------- Static & Media ----------\nSTATIC_URL = '/static/'\nSTATICFILES_DIRS = [ BASE_DIR / 'onlineretailpos' / 'static' ]\nSTATIC_ROOT = BASE_DIR / 'staticfiles'   # for collectstatic in production\nMEDIA_URL = \"/media/\"\nMEDIA_ROOT = PROJECT_DIR / \"media\"",
+        "peekOfCode": "env_csrf = os.getenv(\"CSRF_TRUSTED_ORIGINS\", \"\")\ndefault_csrf = [\"https://adamsmini.shop\", \"https://www.adamsmini.shop\"]\nCSRF_TRUSTED_ORIGINS = csv_to_list(env_csrf) if env_csrf else default_csrf.copy()\n# local dev origins\nfor origin in [\"http://127.0.0.1\", \"http://localhost\"]:\n    if origin not in CSRF_TRUSTED_ORIGINS:\n        CSRF_TRUSTED_ORIGINS.append(origin)\n# add LAN IP for testing in network\ntry:\n    local_ip = socket.gethostbyname(socket.gethostname())",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
     {
-        "label": "USE_I18N",
+        "label": "default_csrf",
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "USE_I18N = True\nUSE_TZ = True\nCURRENCY_SYMBOL = \"TZS\"\n# ---------- Static & Media ----------\nSTATIC_URL = '/static/'\nSTATICFILES_DIRS = [ BASE_DIR / 'onlineretailpos' / 'static' ]\nSTATIC_ROOT = BASE_DIR / 'staticfiles'   # for collectstatic in production\nMEDIA_URL = \"/media/\"\nMEDIA_ROOT = PROJECT_DIR / \"media\"\n# ---------- Cart session ----------",
+        "peekOfCode": "default_csrf = [\"https://adamsmini.shop\", \"https://www.adamsmini.shop\"]\nCSRF_TRUSTED_ORIGINS = csv_to_list(env_csrf) if env_csrf else default_csrf.copy()\n# local dev origins\nfor origin in [\"http://127.0.0.1\", \"http://localhost\"]:\n    if origin not in CSRF_TRUSTED_ORIGINS:\n        CSRF_TRUSTED_ORIGINS.append(origin)\n# add LAN IP for testing in network\ntry:\n    local_ip = socket.gethostbyname(socket.gethostname())\n    if local_ip and local_ip not in ALLOWED_HOSTS:",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
     {
-        "label": "USE_TZ",
+        "label": "CSRF_TRUSTED_ORIGINS",
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "USE_TZ = True\nCURRENCY_SYMBOL = \"TZS\"\n# ---------- Static & Media ----------\nSTATIC_URL = '/static/'\nSTATICFILES_DIRS = [ BASE_DIR / 'onlineretailpos' / 'static' ]\nSTATIC_ROOT = BASE_DIR / 'staticfiles'   # for collectstatic in production\nMEDIA_URL = \"/media/\"\nMEDIA_ROOT = PROJECT_DIR / \"media\"\n# ---------- Cart session ----------\nCART_SESSION_ID = 'cart'",
+        "peekOfCode": "CSRF_TRUSTED_ORIGINS = csv_to_list(env_csrf) if env_csrf else default_csrf.copy()\n# local dev origins\nfor origin in [\"http://127.0.0.1\", \"http://localhost\"]:\n    if origin not in CSRF_TRUSTED_ORIGINS:\n        CSRF_TRUSTED_ORIGINS.append(origin)\n# add LAN IP for testing in network\ntry:\n    local_ip = socket.gethostbyname(socket.gethostname())\n    if local_ip and local_ip not in ALLOWED_HOSTS:\n        ALLOWED_HOSTS.append(local_ip)",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
     {
-        "label": "CURRENCY_SYMBOL",
+        "label": "INSTALLED_APPS",
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "CURRENCY_SYMBOL = \"TZS\"\n# ---------- Static & Media ----------\nSTATIC_URL = '/static/'\nSTATICFILES_DIRS = [ BASE_DIR / 'onlineretailpos' / 'static' ]\nSTATIC_ROOT = BASE_DIR / 'staticfiles'   # for collectstatic in production\nMEDIA_URL = \"/media/\"\nMEDIA_ROOT = PROJECT_DIR / \"media\"\n# ---------- Cart session ----------\nCART_SESSION_ID = 'cart'\n# ---------- Databases ----------",
+        "peekOfCode": "INSTALLED_APPS = [\n    \"colorfield\",\n    # ✅ custom admin config (replaces django.contrib.admin)\n    \"onlineretailpos.admin.MyAdminConfig\",\n    \"django.contrib.auth\",\n    \"django.contrib.contenttypes\",\n    \"django.contrib.sessions\",\n    \"django.contrib.messages\",\n    \"django.contrib.staticfiles\",\n    \"django.contrib.humanize\",",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
     {
-        "label": "STATIC_URL",
+        "label": "MIDDLEWARE",
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "STATIC_URL = '/static/'\nSTATICFILES_DIRS = [ BASE_DIR / 'onlineretailpos' / 'static' ]\nSTATIC_ROOT = BASE_DIR / 'staticfiles'   # for collectstatic in production\nMEDIA_URL = \"/media/\"\nMEDIA_ROOT = PROJECT_DIR / \"media\"\n# ---------- Cart session ----------\nCART_SESSION_ID = 'cart'\n# ---------- Databases ----------\n# You can set NAME_OF_DATABASE to \"sqlite\", \"postgres\", or \"mysql\".\ndatabase_dict = {",
+        "peekOfCode": "MIDDLEWARE = [\n    \"django.middleware.security.SecurityMiddleware\",\n]\nif HAS_WHITENOISE:\n    MIDDLEWARE.append(\"whitenoise.middleware.WhiteNoiseMiddleware\")\nMIDDLEWARE += [\n    \"django.contrib.sessions.middleware.SessionMiddleware\",\n    \"django.middleware.common.CommonMiddleware\",\n    \"django.middleware.csrf.CsrfViewMiddleware\",\n    \"django.contrib.auth.middleware.AuthenticationMiddleware\",",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
     {
-        "label": "STATICFILES_DIRS",
+        "label": "TEMPLATES",
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "STATICFILES_DIRS = [ BASE_DIR / 'onlineretailpos' / 'static' ]\nSTATIC_ROOT = BASE_DIR / 'staticfiles'   # for collectstatic in production\nMEDIA_URL = \"/media/\"\nMEDIA_ROOT = PROJECT_DIR / \"media\"\n# ---------- Cart session ----------\nCART_SESSION_ID = 'cart'\n# ---------- Databases ----------\n# You can set NAME_OF_DATABASE to \"sqlite\", \"postgres\", or \"mysql\".\ndatabase_dict = {\n    'sqlite' :  {",
-        "detail": "onlineretailpos.settings.settings",
-        "documentation": {}
-    },
-    {
-        "label": "STATIC_ROOT",
-        "kind": 5,
-        "importPath": "onlineretailpos.settings.settings",
-        "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "STATIC_ROOT = BASE_DIR / 'staticfiles'   # for collectstatic in production\nMEDIA_URL = \"/media/\"\nMEDIA_ROOT = PROJECT_DIR / \"media\"\n# ---------- Cart session ----------\nCART_SESSION_ID = 'cart'\n# ---------- Databases ----------\n# You can set NAME_OF_DATABASE to \"sqlite\", \"postgres\", or \"mysql\".\ndatabase_dict = {\n    'sqlite' :  {\n        'ENGINE': 'django.db.backends.sqlite3',",
-        "detail": "onlineretailpos.settings.settings",
-        "documentation": {}
-    },
-    {
-        "label": "MEDIA_URL",
-        "kind": 5,
-        "importPath": "onlineretailpos.settings.settings",
-        "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "MEDIA_URL = \"/media/\"\nMEDIA_ROOT = PROJECT_DIR / \"media\"\n# ---------- Cart session ----------\nCART_SESSION_ID = 'cart'\n# ---------- Databases ----------\n# You can set NAME_OF_DATABASE to \"sqlite\", \"postgres\", or \"mysql\".\ndatabase_dict = {\n    'sqlite' :  {\n        'ENGINE': 'django.db.backends.sqlite3',\n        'NAME': BASE_DIR / 'db.sqlite3',",
-        "detail": "onlineretailpos.settings.settings",
-        "documentation": {}
-    },
-    {
-        "label": "MEDIA_ROOT",
-        "kind": 5,
-        "importPath": "onlineretailpos.settings.settings",
-        "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "MEDIA_ROOT = PROJECT_DIR / \"media\"\n# ---------- Cart session ----------\nCART_SESSION_ID = 'cart'\n# ---------- Databases ----------\n# You can set NAME_OF_DATABASE to \"sqlite\", \"postgres\", or \"mysql\".\ndatabase_dict = {\n    'sqlite' :  {\n        'ENGINE': 'django.db.backends.sqlite3',\n        'NAME': BASE_DIR / 'db.sqlite3',\n    },",
-        "detail": "onlineretailpos.settings.settings",
-        "documentation": {}
-    },
-    {
-        "label": "CART_SESSION_ID",
-        "kind": 5,
-        "importPath": "onlineretailpos.settings.settings",
-        "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "CART_SESSION_ID = 'cart'\n# ---------- Databases ----------\n# You can set NAME_OF_DATABASE to \"sqlite\", \"postgres\", or \"mysql\".\ndatabase_dict = {\n    'sqlite' :  {\n        'ENGINE': 'django.db.backends.sqlite3',\n        'NAME': BASE_DIR / 'db.sqlite3',\n    },\n    'postgres' : {\n        'ENGINE': 'django.db.backends.postgresql',",
-        "detail": "onlineretailpos.settings.settings",
-        "documentation": {}
-    },
-    {
-        "label": "database_dict",
-        "kind": 5,
-        "importPath": "onlineretailpos.settings.settings",
-        "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "database_dict = {\n    'sqlite' :  {\n        'ENGINE': 'django.db.backends.sqlite3',\n        'NAME': BASE_DIR / 'db.sqlite3',\n    },\n    'postgres' : {\n        'ENGINE': 'django.db.backends.postgresql',\n        'NAME': os.getenv('DB_NAME', \"OnlineRetailPOS\"),\n        'USER': os.getenv('DB_USERNAME', \"\"),\n        'PASSWORD': os.getenv('DB_PASSWORD', \"\"),",
-        "detail": "onlineretailpos.settings.settings",
-        "documentation": {}
-    },
-    {
-        "label": "chosen_db",
-        "kind": 5,
-        "importPath": "onlineretailpos.settings.settings",
-        "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "chosen_db = os.getenv('NAME_OF_DATABASE', 'sqlite').lower()\nif chosen_db not in database_dict:\n    chosen_db = 'sqlite'\nDATABASES = {'default': database_dict[chosen_db]}\n# Informational print (helpful while testing locally)\nprint(f\"[settings] DEBUG={DEBUG} | DB={DATABASES['default']['ENGINE']} | ALLOWED_HOSTS={ALLOWED_HOSTS}\")\nif CSRF_TRUSTED_ORIGINS:\n    print(f\"[settings] CSRF_TRUSTED_ORIGINS={CSRF_TRUSTED_ORIGINS}\")\n# ---------- Default primary key ----------\nDEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'",
+        "peekOfCode": "TEMPLATES = [\n    {\n        \"BACKEND\": \"django.template.backends.django.DjangoTemplates\",\n        \"DIRS\": [TEMPLATE_DIR],\n        \"APP_DIRS\": True,\n        \"OPTIONS\": {\n            \"context_processors\": [\n                \"django.template.context_processors.debug\",\n                \"django.template.context_processors.request\",\n                \"django.contrib.auth.context_processors.auth\",",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3232,7 +3123,61 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "DATABASES = {'default': database_dict[chosen_db]}\n# Informational print (helpful while testing locally)\nprint(f\"[settings] DEBUG={DEBUG} | DB={DATABASES['default']['ENGINE']} | ALLOWED_HOSTS={ALLOWED_HOSTS}\")\nif CSRF_TRUSTED_ORIGINS:\n    print(f\"[settings] CSRF_TRUSTED_ORIGINS={CSRF_TRUSTED_ORIGINS}\")\n# ---------- Default primary key ----------\nDEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'\n# ---------- Receipt / Store Settings ----------\n# Controls receipt appearance and printer options.\n# You can override any of these via environment variables.",
+        "peekOfCode": "DATABASES = {\n    \"default\": {\n        \"ENGINE\": \"django.db.backends.sqlite3\",\n        \"NAME\": str(DB_PATH),\n    }\n}\n# -------------------------------------------------\n# ✅ Static & media\n# -------------------------------------------------\nSTATIC_URL = \"/static/\"",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "STATIC_URL",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "STATIC_URL = \"/static/\"\nMEDIA_URL = \"/media/\"\nif IS_FROZEN:\n    # bundled via --add-data \"staticfiles;staticfiles\"\n    STATICFILES_DIRS = []\n    STATIC_ROOT = EXE_BASE_DIR / \"staticfiles\"\n    MEDIA_ROOT = EXE_DATA_DIR / \"media\"\n    MEDIA_ROOT.mkdir(parents=True, exist_ok=True)\nelse:\n    STATICFILES_DIRS = [BASE_DIR / \"onlineretailpos\" / \"static\"]",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "MEDIA_URL",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "MEDIA_URL = \"/media/\"\nif IS_FROZEN:\n    # bundled via --add-data \"staticfiles;staticfiles\"\n    STATICFILES_DIRS = []\n    STATIC_ROOT = EXE_BASE_DIR / \"staticfiles\"\n    MEDIA_ROOT = EXE_DATA_DIR / \"media\"\n    MEDIA_ROOT.mkdir(parents=True, exist_ok=True)\nelse:\n    STATICFILES_DIRS = [BASE_DIR / \"onlineretailpos\" / \"static\"]\n    STATIC_ROOT = BASE_DIR / \"staticfiles\"",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "LANGUAGE_CODE",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "LANGUAGE_CODE = \"en-us\"\nTIME_ZONE = \"Africa/Dar_es_Salaam\"\nUSE_I18N = True\nUSE_TZ = True\nDEFAULT_AUTO_FIELD = \"django.db.models.BigAutoField\"\n# -------------------------------------------------\n# ✅ Your store/receipt settings (THIS FIXES STORE_NAME)\n# -------------------------------------------------\nRECEIPT_CHAR_COUNT = int(os.getenv(\"RECEIPT_CHAR_COUNT\", \"32\"))\nSTORE_NAME = os.getenv(\"STORE_NAME\", \"ADAMS MINI SUPERMARKET\")",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "TIME_ZONE",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "TIME_ZONE = \"Africa/Dar_es_Salaam\"\nUSE_I18N = True\nUSE_TZ = True\nDEFAULT_AUTO_FIELD = \"django.db.models.BigAutoField\"\n# -------------------------------------------------\n# ✅ Your store/receipt settings (THIS FIXES STORE_NAME)\n# -------------------------------------------------\nRECEIPT_CHAR_COUNT = int(os.getenv(\"RECEIPT_CHAR_COUNT\", \"32\"))\nSTORE_NAME = os.getenv(\"STORE_NAME\", \"ADAMS MINI SUPERMARKET\")\nSTORE_ADDRESS = os.getenv(\"STORE_ADDRESS\", \"PO BOX 942 MOSHI\\nJ.K. Nyerere Street\")",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "USE_I18N",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "USE_I18N = True\nUSE_TZ = True\nDEFAULT_AUTO_FIELD = \"django.db.models.BigAutoField\"\n# -------------------------------------------------\n# ✅ Your store/receipt settings (THIS FIXES STORE_NAME)\n# -------------------------------------------------\nRECEIPT_CHAR_COUNT = int(os.getenv(\"RECEIPT_CHAR_COUNT\", \"32\"))\nSTORE_NAME = os.getenv(\"STORE_NAME\", \"ADAMS MINI SUPERMARKET\")\nSTORE_ADDRESS = os.getenv(\"STORE_ADDRESS\", \"PO BOX 942 MOSHI\\nJ.K. Nyerere Street\")\nSTORE_PHONE = os.getenv(\"STORE_PHONE\", \"+255744844699\")",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "USE_TZ",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "USE_TZ = True\nDEFAULT_AUTO_FIELD = \"django.db.models.BigAutoField\"\n# -------------------------------------------------\n# ✅ Your store/receipt settings (THIS FIXES STORE_NAME)\n# -------------------------------------------------\nRECEIPT_CHAR_COUNT = int(os.getenv(\"RECEIPT_CHAR_COUNT\", \"32\"))\nSTORE_NAME = os.getenv(\"STORE_NAME\", \"ADAMS MINI SUPERMARKET\")\nSTORE_ADDRESS = os.getenv(\"STORE_ADDRESS\", \"PO BOX 942 MOSHI\\nJ.K. Nyerere Street\")\nSTORE_PHONE = os.getenv(\"STORE_PHONE\", \"+255744844699\")\nSTORE_EMAIL = os.getenv(\"STORE_EMAIL\", \"adamssupermarket@gmail.com\")",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3241,7 +3186,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'\n# ---------- Receipt / Store Settings ----------\n# Controls receipt appearance and printer options.\n# You can override any of these via environment variables.\n# Number of characters per line on your thermal printer (commonly 32 for 58mm, 48+ for 80mm)\nRECEIPT_CHAR_COUNT = int(os.getenv(\"RECEIPT_CHAR_COUNT\", \"32\"))\n# Store identity (defaults chosen to match your photo)\nSTORE_NAME = os.getenv(\"STORE_NAME\", \"ADAMS MINI SUPERMARKET\")\nSTORE_ADDRESS = os.getenv(\"STORE_ADDRESS\", \"PO BOX 942 MOSHI\\nJ.K. Nyerere Street\")\nSTORE_PHONE = os.getenv(\"STORE_PHONE\", \"+255744844699\")",
+        "peekOfCode": "DEFAULT_AUTO_FIELD = \"django.db.models.BigAutoField\"\n# -------------------------------------------------\n# ✅ Your store/receipt settings (THIS FIXES STORE_NAME)\n# -------------------------------------------------\nRECEIPT_CHAR_COUNT = int(os.getenv(\"RECEIPT_CHAR_COUNT\", \"32\"))\nSTORE_NAME = os.getenv(\"STORE_NAME\", \"ADAMS MINI SUPERMARKET\")\nSTORE_ADDRESS = os.getenv(\"STORE_ADDRESS\", \"PO BOX 942 MOSHI\\nJ.K. Nyerere Street\")\nSTORE_PHONE = os.getenv(\"STORE_PHONE\", \"+255744844699\")\nSTORE_EMAIL = os.getenv(\"STORE_EMAIL\", \"adamssupermarket@gmail.com\")\nSTORE_TIN = os.getenv(\"STORE_TIN\", \"102-188-357\")",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3250,7 +3195,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "RECEIPT_CHAR_COUNT = int(os.getenv(\"RECEIPT_CHAR_COUNT\", \"32\"))\n# Store identity (defaults chosen to match your photo)\nSTORE_NAME = os.getenv(\"STORE_NAME\", \"ADAMS MINI SUPERMARKET\")\nSTORE_ADDRESS = os.getenv(\"STORE_ADDRESS\", \"PO BOX 942 MOSHI\\nJ.K. Nyerere Street\")\nSTORE_PHONE = os.getenv(\"STORE_PHONE\", \"+255744844699\")\nSTORE_EMAIL = os.getenv(\"STORE_EMAIL\", \"adamssupermarket@gmail.com\")\n# Tax / registration numbers (optional)\nSTORE_TIN = os.getenv(\"STORE_TIN\", \"102-188-357\")\nSTORE_VRN = os.getenv(\"STORE_VRN\", \"\")\n# Additional heading lines you may want to include (e.g. branch name, tagline)",
+        "peekOfCode": "RECEIPT_CHAR_COUNT = int(os.getenv(\"RECEIPT_CHAR_COUNT\", \"32\"))\nSTORE_NAME = os.getenv(\"STORE_NAME\", \"ADAMS MINI SUPERMARKET\")\nSTORE_ADDRESS = os.getenv(\"STORE_ADDRESS\", \"PO BOX 942 MOSHI\\nJ.K. Nyerere Street\")\nSTORE_PHONE = os.getenv(\"STORE_PHONE\", \"+255744844699\")\nSTORE_EMAIL = os.getenv(\"STORE_EMAIL\", \"adamssupermarket@gmail.com\")\nSTORE_TIN = os.getenv(\"STORE_TIN\", \"102-188-357\")\nSTORE_VRN = os.getenv(\"STORE_VRN\", \"\")\nRECEIPT_ADDITIONAL_HEADING = os.getenv(\"RECEIPT_ADDITIONAL_HEADING\", \"\")\nINCLUDE_PHONE_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_PHONE_IN_HEADING\", \"True\"))\nINCLUDE_EMAIL_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_EMAIL_IN_HEADING\", \"True\"))",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3259,7 +3204,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "STORE_NAME = os.getenv(\"STORE_NAME\", \"ADAMS MINI SUPERMARKET\")\nSTORE_ADDRESS = os.getenv(\"STORE_ADDRESS\", \"PO BOX 942 MOSHI\\nJ.K. Nyerere Street\")\nSTORE_PHONE = os.getenv(\"STORE_PHONE\", \"+255744844699\")\nSTORE_EMAIL = os.getenv(\"STORE_EMAIL\", \"adamssupermarket@gmail.com\")\n# Tax / registration numbers (optional)\nSTORE_TIN = os.getenv(\"STORE_TIN\", \"102-188-357\")\nSTORE_VRN = os.getenv(\"STORE_VRN\", \"\")\n# Additional heading lines you may want to include (e.g. branch name, tagline)\nRECEIPT_ADDITIONAL_HEADING = os.getenv(\"RECEIPT_ADDITIONAL_HEADING\", \"\")\n# Whether to include phone or email line in header (env true/false)",
+        "peekOfCode": "STORE_NAME = os.getenv(\"STORE_NAME\", \"ADAMS MINI SUPERMARKET\")\nSTORE_ADDRESS = os.getenv(\"STORE_ADDRESS\", \"PO BOX 942 MOSHI\\nJ.K. Nyerere Street\")\nSTORE_PHONE = os.getenv(\"STORE_PHONE\", \"+255744844699\")\nSTORE_EMAIL = os.getenv(\"STORE_EMAIL\", \"adamssupermarket@gmail.com\")\nSTORE_TIN = os.getenv(\"STORE_TIN\", \"102-188-357\")\nSTORE_VRN = os.getenv(\"STORE_VRN\", \"\")\nRECEIPT_ADDITIONAL_HEADING = os.getenv(\"RECEIPT_ADDITIONAL_HEADING\", \"\")\nINCLUDE_PHONE_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_PHONE_IN_HEADING\", \"True\"))\nINCLUDE_EMAIL_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_EMAIL_IN_HEADING\", \"True\"))\nRECEIPT_FOOTER = os.getenv(\"RECEIPT_FOOTER\", \"You are Welcomed !\")",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3268,7 +3213,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "STORE_ADDRESS = os.getenv(\"STORE_ADDRESS\", \"PO BOX 942 MOSHI\\nJ.K. Nyerere Street\")\nSTORE_PHONE = os.getenv(\"STORE_PHONE\", \"+255744844699\")\nSTORE_EMAIL = os.getenv(\"STORE_EMAIL\", \"adamssupermarket@gmail.com\")\n# Tax / registration numbers (optional)\nSTORE_TIN = os.getenv(\"STORE_TIN\", \"102-188-357\")\nSTORE_VRN = os.getenv(\"STORE_VRN\", \"\")\n# Additional heading lines you may want to include (e.g. branch name, tagline)\nRECEIPT_ADDITIONAL_HEADING = os.getenv(\"RECEIPT_ADDITIONAL_HEADING\", \"\")\n# Whether to include phone or email line in header (env true/false)\nINCLUDE_PHONE_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_PHONE_IN_HEADING\", \"True\"))",
+        "peekOfCode": "STORE_ADDRESS = os.getenv(\"STORE_ADDRESS\", \"PO BOX 942 MOSHI\\nJ.K. Nyerere Street\")\nSTORE_PHONE = os.getenv(\"STORE_PHONE\", \"+255744844699\")\nSTORE_EMAIL = os.getenv(\"STORE_EMAIL\", \"adamssupermarket@gmail.com\")\nSTORE_TIN = os.getenv(\"STORE_TIN\", \"102-188-357\")\nSTORE_VRN = os.getenv(\"STORE_VRN\", \"\")\nRECEIPT_ADDITIONAL_HEADING = os.getenv(\"RECEIPT_ADDITIONAL_HEADING\", \"\")\nINCLUDE_PHONE_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_PHONE_IN_HEADING\", \"True\"))\nINCLUDE_EMAIL_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_EMAIL_IN_HEADING\", \"True\"))\nRECEIPT_FOOTER = os.getenv(\"RECEIPT_FOOTER\", \"You are Welcomed !\")\nRECEIPT_SALES_TITLE = os.getenv(\"RECEIPT_SALES_TITLE\", \"*** Sales Receipt ***\")",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3277,7 +3222,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "STORE_PHONE = os.getenv(\"STORE_PHONE\", \"+255744844699\")\nSTORE_EMAIL = os.getenv(\"STORE_EMAIL\", \"adamssupermarket@gmail.com\")\n# Tax / registration numbers (optional)\nSTORE_TIN = os.getenv(\"STORE_TIN\", \"102-188-357\")\nSTORE_VRN = os.getenv(\"STORE_VRN\", \"\")\n# Additional heading lines you may want to include (e.g. branch name, tagline)\nRECEIPT_ADDITIONAL_HEADING = os.getenv(\"RECEIPT_ADDITIONAL_HEADING\", \"\")\n# Whether to include phone or email line in header (env true/false)\nINCLUDE_PHONE_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_PHONE_IN_HEADING\", \"True\"))\nINCLUDE_EMAIL_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_EMAIL_IN_HEADING\", \"True\"))",
+        "peekOfCode": "STORE_PHONE = os.getenv(\"STORE_PHONE\", \"+255744844699\")\nSTORE_EMAIL = os.getenv(\"STORE_EMAIL\", \"adamssupermarket@gmail.com\")\nSTORE_TIN = os.getenv(\"STORE_TIN\", \"102-188-357\")\nSTORE_VRN = os.getenv(\"STORE_VRN\", \"\")\nRECEIPT_ADDITIONAL_HEADING = os.getenv(\"RECEIPT_ADDITIONAL_HEADING\", \"\")\nINCLUDE_PHONE_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_PHONE_IN_HEADING\", \"True\"))\nINCLUDE_EMAIL_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_EMAIL_IN_HEADING\", \"True\"))\nRECEIPT_FOOTER = os.getenv(\"RECEIPT_FOOTER\", \"You are Welcomed !\")\nRECEIPT_SALES_TITLE = os.getenv(\"RECEIPT_SALES_TITLE\", \"*** Sales Receipt ***\")\nRECEIPT_NONFISCAL_TEXT = os.getenv(\"RECEIPT_NONFISCAL_TEXT\", \"*** NON-FISCAL RECEIPT ***\")",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3286,7 +3231,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "STORE_EMAIL = os.getenv(\"STORE_EMAIL\", \"adamssupermarket@gmail.com\")\n# Tax / registration numbers (optional)\nSTORE_TIN = os.getenv(\"STORE_TIN\", \"102-188-357\")\nSTORE_VRN = os.getenv(\"STORE_VRN\", \"\")\n# Additional heading lines you may want to include (e.g. branch name, tagline)\nRECEIPT_ADDITIONAL_HEADING = os.getenv(\"RECEIPT_ADDITIONAL_HEADING\", \"\")\n# Whether to include phone or email line in header (env true/false)\nINCLUDE_PHONE_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_PHONE_IN_HEADING\", \"True\"))\nINCLUDE_EMAIL_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_EMAIL_IN_HEADING\", \"True\"))\n# Footer line(s)",
+        "peekOfCode": "STORE_EMAIL = os.getenv(\"STORE_EMAIL\", \"adamssupermarket@gmail.com\")\nSTORE_TIN = os.getenv(\"STORE_TIN\", \"102-188-357\")\nSTORE_VRN = os.getenv(\"STORE_VRN\", \"\")\nRECEIPT_ADDITIONAL_HEADING = os.getenv(\"RECEIPT_ADDITIONAL_HEADING\", \"\")\nINCLUDE_PHONE_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_PHONE_IN_HEADING\", \"True\"))\nINCLUDE_EMAIL_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_EMAIL_IN_HEADING\", \"True\"))\nRECEIPT_FOOTER = os.getenv(\"RECEIPT_FOOTER\", \"You are Welcomed !\")\nRECEIPT_SALES_TITLE = os.getenv(\"RECEIPT_SALES_TITLE\", \"*** Sales Receipt ***\")\nRECEIPT_NONFISCAL_TEXT = os.getenv(\"RECEIPT_NONFISCAL_TEXT\", \"*** NON-FISCAL RECEIPT ***\")\nPRINTER_VENDOR_ID = os.getenv(\"PRINTER_VENDOR_ID\", \"\")",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3295,7 +3240,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "STORE_TIN = os.getenv(\"STORE_TIN\", \"102-188-357\")\nSTORE_VRN = os.getenv(\"STORE_VRN\", \"\")\n# Additional heading lines you may want to include (e.g. branch name, tagline)\nRECEIPT_ADDITIONAL_HEADING = os.getenv(\"RECEIPT_ADDITIONAL_HEADING\", \"\")\n# Whether to include phone or email line in header (env true/false)\nINCLUDE_PHONE_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_PHONE_IN_HEADING\", \"True\"))\nINCLUDE_EMAIL_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_EMAIL_IN_HEADING\", \"True\"))\n# Footer line(s)\nRECEIPT_FOOTER = os.getenv(\"RECEIPT_FOOTER\", \"You are Welcomed !\")\n# Receipt markers (e.g., fiscal/non-fiscal text)",
+        "peekOfCode": "STORE_TIN = os.getenv(\"STORE_TIN\", \"102-188-357\")\nSTORE_VRN = os.getenv(\"STORE_VRN\", \"\")\nRECEIPT_ADDITIONAL_HEADING = os.getenv(\"RECEIPT_ADDITIONAL_HEADING\", \"\")\nINCLUDE_PHONE_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_PHONE_IN_HEADING\", \"True\"))\nINCLUDE_EMAIL_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_EMAIL_IN_HEADING\", \"True\"))\nRECEIPT_FOOTER = os.getenv(\"RECEIPT_FOOTER\", \"You are Welcomed !\")\nRECEIPT_SALES_TITLE = os.getenv(\"RECEIPT_SALES_TITLE\", \"*** Sales Receipt ***\")\nRECEIPT_NONFISCAL_TEXT = os.getenv(\"RECEIPT_NONFISCAL_TEXT\", \"*** NON-FISCAL RECEIPT ***\")\nPRINTER_VENDOR_ID = os.getenv(\"PRINTER_VENDOR_ID\", \"\")\nPRINTER_PRODUCT_ID = os.getenv(\"PRINTER_PRODUCT_ID\", \"\")",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3304,7 +3249,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "STORE_VRN = os.getenv(\"STORE_VRN\", \"\")\n# Additional heading lines you may want to include (e.g. branch name, tagline)\nRECEIPT_ADDITIONAL_HEADING = os.getenv(\"RECEIPT_ADDITIONAL_HEADING\", \"\")\n# Whether to include phone or email line in header (env true/false)\nINCLUDE_PHONE_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_PHONE_IN_HEADING\", \"True\"))\nINCLUDE_EMAIL_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_EMAIL_IN_HEADING\", \"True\"))\n# Footer line(s)\nRECEIPT_FOOTER = os.getenv(\"RECEIPT_FOOTER\", \"You are Welcomed !\")\n# Receipt markers (e.g., fiscal/non-fiscal text)\nRECEIPT_SALES_TITLE = os.getenv(\"RECEIPT_SALES_TITLE\", \"*** Sales Receipt ***\")",
+        "peekOfCode": "STORE_VRN = os.getenv(\"STORE_VRN\", \"\")\nRECEIPT_ADDITIONAL_HEADING = os.getenv(\"RECEIPT_ADDITIONAL_HEADING\", \"\")\nINCLUDE_PHONE_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_PHONE_IN_HEADING\", \"True\"))\nINCLUDE_EMAIL_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_EMAIL_IN_HEADING\", \"True\"))\nRECEIPT_FOOTER = os.getenv(\"RECEIPT_FOOTER\", \"You are Welcomed !\")\nRECEIPT_SALES_TITLE = os.getenv(\"RECEIPT_SALES_TITLE\", \"*** Sales Receipt ***\")\nRECEIPT_NONFISCAL_TEXT = os.getenv(\"RECEIPT_NONFISCAL_TEXT\", \"*** NON-FISCAL RECEIPT ***\")\nPRINTER_VENDOR_ID = os.getenv(\"PRINTER_VENDOR_ID\", \"\")\nPRINTER_PRODUCT_ID = os.getenv(\"PRINTER_PRODUCT_ID\", \"\")\nPRINT_RECEIPT = str_to_bool(os.getenv(\"PRINT_RECEIPT\", \"True\"))",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3313,7 +3258,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "RECEIPT_ADDITIONAL_HEADING = os.getenv(\"RECEIPT_ADDITIONAL_HEADING\", \"\")\n# Whether to include phone or email line in header (env true/false)\nINCLUDE_PHONE_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_PHONE_IN_HEADING\", \"True\"))\nINCLUDE_EMAIL_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_EMAIL_IN_HEADING\", \"True\"))\n# Footer line(s)\nRECEIPT_FOOTER = os.getenv(\"RECEIPT_FOOTER\", \"You are Welcomed !\")\n# Receipt markers (e.g., fiscal/non-fiscal text)\nRECEIPT_SALES_TITLE = os.getenv(\"RECEIPT_SALES_TITLE\", \"*** Sales Receipt ***\")\nRECEIPT_NONFISCAL_TEXT = os.getenv(\"RECEIPT_NONFISCAL_TEXT\", \"*** NON-FISCAL RECEIPT ***\")\n# Printer hardware settings (optional)",
+        "peekOfCode": "RECEIPT_ADDITIONAL_HEADING = os.getenv(\"RECEIPT_ADDITIONAL_HEADING\", \"\")\nINCLUDE_PHONE_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_PHONE_IN_HEADING\", \"True\"))\nINCLUDE_EMAIL_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_EMAIL_IN_HEADING\", \"True\"))\nRECEIPT_FOOTER = os.getenv(\"RECEIPT_FOOTER\", \"You are Welcomed !\")\nRECEIPT_SALES_TITLE = os.getenv(\"RECEIPT_SALES_TITLE\", \"*** Sales Receipt ***\")\nRECEIPT_NONFISCAL_TEXT = os.getenv(\"RECEIPT_NONFISCAL_TEXT\", \"*** NON-FISCAL RECEIPT ***\")\nPRINTER_VENDOR_ID = os.getenv(\"PRINTER_VENDOR_ID\", \"\")\nPRINTER_PRODUCT_ID = os.getenv(\"PRINTER_PRODUCT_ID\", \"\")\nPRINT_RECEIPT = str_to_bool(os.getenv(\"PRINT_RECEIPT\", \"True\"))\nCASH_DRAWER = str_to_bool(os.getenv(\"CASH_DRAWER\", \"False\"))",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3322,7 +3267,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "INCLUDE_PHONE_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_PHONE_IN_HEADING\", \"True\"))\nINCLUDE_EMAIL_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_EMAIL_IN_HEADING\", \"True\"))\n# Footer line(s)\nRECEIPT_FOOTER = os.getenv(\"RECEIPT_FOOTER\", \"You are Welcomed !\")\n# Receipt markers (e.g., fiscal/non-fiscal text)\nRECEIPT_SALES_TITLE = os.getenv(\"RECEIPT_SALES_TITLE\", \"*** Sales Receipt ***\")\nRECEIPT_NONFISCAL_TEXT = os.getenv(\"RECEIPT_NONFISCAL_TEXT\", \"*** NON-FISCAL RECEIPT ***\")\n# Printer hardware settings (optional)\nPRINTER_VENDOR_ID = os.getenv(\"PRINTER_VENDOR_ID\", \"\")\nPRINTER_PRODUCT_ID = os.getenv(\"PRINTER_PRODUCT_ID\", \"\")",
+        "peekOfCode": "INCLUDE_PHONE_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_PHONE_IN_HEADING\", \"True\"))\nINCLUDE_EMAIL_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_EMAIL_IN_HEADING\", \"True\"))\nRECEIPT_FOOTER = os.getenv(\"RECEIPT_FOOTER\", \"You are Welcomed !\")\nRECEIPT_SALES_TITLE = os.getenv(\"RECEIPT_SALES_TITLE\", \"*** Sales Receipt ***\")\nRECEIPT_NONFISCAL_TEXT = os.getenv(\"RECEIPT_NONFISCAL_TEXT\", \"*** NON-FISCAL RECEIPT ***\")\nPRINTER_VENDOR_ID = os.getenv(\"PRINTER_VENDOR_ID\", \"\")\nPRINTER_PRODUCT_ID = os.getenv(\"PRINTER_PRODUCT_ID\", \"\")\nPRINT_RECEIPT = str_to_bool(os.getenv(\"PRINT_RECEIPT\", \"True\"))\nCASH_DRAWER = str_to_bool(os.getenv(\"CASH_DRAWER\", \"False\"))\n_receipt_header_lines = [STORE_NAME]",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3331,7 +3276,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "INCLUDE_EMAIL_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_EMAIL_IN_HEADING\", \"True\"))\n# Footer line(s)\nRECEIPT_FOOTER = os.getenv(\"RECEIPT_FOOTER\", \"You are Welcomed !\")\n# Receipt markers (e.g., fiscal/non-fiscal text)\nRECEIPT_SALES_TITLE = os.getenv(\"RECEIPT_SALES_TITLE\", \"*** Sales Receipt ***\")\nRECEIPT_NONFISCAL_TEXT = os.getenv(\"RECEIPT_NONFISCAL_TEXT\", \"*** NON-FISCAL RECEIPT ***\")\n# Printer hardware settings (optional)\nPRINTER_VENDOR_ID = os.getenv(\"PRINTER_VENDOR_ID\", \"\")\nPRINTER_PRODUCT_ID = os.getenv(\"PRINTER_PRODUCT_ID\", \"\")\nPRINT_RECEIPT = str_to_bool(os.getenv(\"PRINT_RECEIPT\", \"True\"))",
+        "peekOfCode": "INCLUDE_EMAIL_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_EMAIL_IN_HEADING\", \"True\"))\nRECEIPT_FOOTER = os.getenv(\"RECEIPT_FOOTER\", \"You are Welcomed !\")\nRECEIPT_SALES_TITLE = os.getenv(\"RECEIPT_SALES_TITLE\", \"*** Sales Receipt ***\")\nRECEIPT_NONFISCAL_TEXT = os.getenv(\"RECEIPT_NONFISCAL_TEXT\", \"*** NON-FISCAL RECEIPT ***\")\nPRINTER_VENDOR_ID = os.getenv(\"PRINTER_VENDOR_ID\", \"\")\nPRINTER_PRODUCT_ID = os.getenv(\"PRINTER_PRODUCT_ID\", \"\")\nPRINT_RECEIPT = str_to_bool(os.getenv(\"PRINT_RECEIPT\", \"True\"))\nCASH_DRAWER = str_to_bool(os.getenv(\"CASH_DRAWER\", \"False\"))\n_receipt_header_lines = [STORE_NAME]\nif STORE_ADDRESS:",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3340,7 +3285,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "RECEIPT_FOOTER = os.getenv(\"RECEIPT_FOOTER\", \"You are Welcomed !\")\n# Receipt markers (e.g., fiscal/non-fiscal text)\nRECEIPT_SALES_TITLE = os.getenv(\"RECEIPT_SALES_TITLE\", \"*** Sales Receipt ***\")\nRECEIPT_NONFISCAL_TEXT = os.getenv(\"RECEIPT_NONFISCAL_TEXT\", \"*** NON-FISCAL RECEIPT ***\")\n# Printer hardware settings (optional)\nPRINTER_VENDOR_ID = os.getenv(\"PRINTER_VENDOR_ID\", \"\")\nPRINTER_PRODUCT_ID = os.getenv(\"PRINTER_PRODUCT_ID\", \"\")\nPRINT_RECEIPT = str_to_bool(os.getenv(\"PRINT_RECEIPT\", \"True\"))\nCASH_DRAWER = str_to_bool(os.getenv(\"CASH_DRAWER\", \"False\"))\n# Helper: build a standard receipt header string (multi-line)",
+        "peekOfCode": "RECEIPT_FOOTER = os.getenv(\"RECEIPT_FOOTER\", \"You are Welcomed !\")\nRECEIPT_SALES_TITLE = os.getenv(\"RECEIPT_SALES_TITLE\", \"*** Sales Receipt ***\")\nRECEIPT_NONFISCAL_TEXT = os.getenv(\"RECEIPT_NONFISCAL_TEXT\", \"*** NON-FISCAL RECEIPT ***\")\nPRINTER_VENDOR_ID = os.getenv(\"PRINTER_VENDOR_ID\", \"\")\nPRINTER_PRODUCT_ID = os.getenv(\"PRINTER_PRODUCT_ID\", \"\")\nPRINT_RECEIPT = str_to_bool(os.getenv(\"PRINT_RECEIPT\", \"True\"))\nCASH_DRAWER = str_to_bool(os.getenv(\"CASH_DRAWER\", \"False\"))\n_receipt_header_lines = [STORE_NAME]\nif STORE_ADDRESS:\n    _receipt_header_lines.extend([line for line in STORE_ADDRESS.splitlines() if line.strip()])",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3349,7 +3294,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "RECEIPT_SALES_TITLE = os.getenv(\"RECEIPT_SALES_TITLE\", \"*** Sales Receipt ***\")\nRECEIPT_NONFISCAL_TEXT = os.getenv(\"RECEIPT_NONFISCAL_TEXT\", \"*** NON-FISCAL RECEIPT ***\")\n# Printer hardware settings (optional)\nPRINTER_VENDOR_ID = os.getenv(\"PRINTER_VENDOR_ID\", \"\")\nPRINTER_PRODUCT_ID = os.getenv(\"PRINTER_PRODUCT_ID\", \"\")\nPRINT_RECEIPT = str_to_bool(os.getenv(\"PRINT_RECEIPT\", \"True\"))\nCASH_DRAWER = str_to_bool(os.getenv(\"CASH_DRAWER\", \"False\"))\n# Helper: build a standard receipt header string (multi-line)\n_receipt_header_lines = []\n_receipt_header_lines.append(STORE_NAME)",
+        "peekOfCode": "RECEIPT_SALES_TITLE = os.getenv(\"RECEIPT_SALES_TITLE\", \"*** Sales Receipt ***\")\nRECEIPT_NONFISCAL_TEXT = os.getenv(\"RECEIPT_NONFISCAL_TEXT\", \"*** NON-FISCAL RECEIPT ***\")\nPRINTER_VENDOR_ID = os.getenv(\"PRINTER_VENDOR_ID\", \"\")\nPRINTER_PRODUCT_ID = os.getenv(\"PRINTER_PRODUCT_ID\", \"\")\nPRINT_RECEIPT = str_to_bool(os.getenv(\"PRINT_RECEIPT\", \"True\"))\nCASH_DRAWER = str_to_bool(os.getenv(\"CASH_DRAWER\", \"False\"))\n_receipt_header_lines = [STORE_NAME]\nif STORE_ADDRESS:\n    _receipt_header_lines.extend([line for line in STORE_ADDRESS.splitlines() if line.strip()])\nif INCLUDE_PHONE_IN_HEADING and STORE_PHONE:",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3358,7 +3303,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "RECEIPT_NONFISCAL_TEXT = os.getenv(\"RECEIPT_NONFISCAL_TEXT\", \"*** NON-FISCAL RECEIPT ***\")\n# Printer hardware settings (optional)\nPRINTER_VENDOR_ID = os.getenv(\"PRINTER_VENDOR_ID\", \"\")\nPRINTER_PRODUCT_ID = os.getenv(\"PRINTER_PRODUCT_ID\", \"\")\nPRINT_RECEIPT = str_to_bool(os.getenv(\"PRINT_RECEIPT\", \"True\"))\nCASH_DRAWER = str_to_bool(os.getenv(\"CASH_DRAWER\", \"False\"))\n# Helper: build a standard receipt header string (multi-line)\n_receipt_header_lines = []\n_receipt_header_lines.append(STORE_NAME)\n# If address contains newlines keep them; otherwise add one line",
+        "peekOfCode": "RECEIPT_NONFISCAL_TEXT = os.getenv(\"RECEIPT_NONFISCAL_TEXT\", \"*** NON-FISCAL RECEIPT ***\")\nPRINTER_VENDOR_ID = os.getenv(\"PRINTER_VENDOR_ID\", \"\")\nPRINTER_PRODUCT_ID = os.getenv(\"PRINTER_PRODUCT_ID\", \"\")\nPRINT_RECEIPT = str_to_bool(os.getenv(\"PRINT_RECEIPT\", \"True\"))\nCASH_DRAWER = str_to_bool(os.getenv(\"CASH_DRAWER\", \"False\"))\n_receipt_header_lines = [STORE_NAME]\nif STORE_ADDRESS:\n    _receipt_header_lines.extend([line for line in STORE_ADDRESS.splitlines() if line.strip()])\nif INCLUDE_PHONE_IN_HEADING and STORE_PHONE:\n    _receipt_header_lines.append(STORE_PHONE)",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3367,7 +3312,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "PRINTER_VENDOR_ID = os.getenv(\"PRINTER_VENDOR_ID\", \"\")\nPRINTER_PRODUCT_ID = os.getenv(\"PRINTER_PRODUCT_ID\", \"\")\nPRINT_RECEIPT = str_to_bool(os.getenv(\"PRINT_RECEIPT\", \"True\"))\nCASH_DRAWER = str_to_bool(os.getenv(\"CASH_DRAWER\", \"False\"))\n# Helper: build a standard receipt header string (multi-line)\n_receipt_header_lines = []\n_receipt_header_lines.append(STORE_NAME)\n# If address contains newlines keep them; otherwise add one line\nif STORE_ADDRESS:\n    _receipt_header_lines.extend([line for line in STORE_ADDRESS.splitlines() if line.strip()])",
+        "peekOfCode": "PRINTER_VENDOR_ID = os.getenv(\"PRINTER_VENDOR_ID\", \"\")\nPRINTER_PRODUCT_ID = os.getenv(\"PRINTER_PRODUCT_ID\", \"\")\nPRINT_RECEIPT = str_to_bool(os.getenv(\"PRINT_RECEIPT\", \"True\"))\nCASH_DRAWER = str_to_bool(os.getenv(\"CASH_DRAWER\", \"False\"))\n_receipt_header_lines = [STORE_NAME]\nif STORE_ADDRESS:\n    _receipt_header_lines.extend([line for line in STORE_ADDRESS.splitlines() if line.strip()])\nif INCLUDE_PHONE_IN_HEADING and STORE_PHONE:\n    _receipt_header_lines.append(STORE_PHONE)\nif INCLUDE_EMAIL_IN_HEADING and STORE_EMAIL:",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3376,7 +3321,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "PRINTER_PRODUCT_ID = os.getenv(\"PRINTER_PRODUCT_ID\", \"\")\nPRINT_RECEIPT = str_to_bool(os.getenv(\"PRINT_RECEIPT\", \"True\"))\nCASH_DRAWER = str_to_bool(os.getenv(\"CASH_DRAWER\", \"False\"))\n# Helper: build a standard receipt header string (multi-line)\n_receipt_header_lines = []\n_receipt_header_lines.append(STORE_NAME)\n# If address contains newlines keep them; otherwise add one line\nif STORE_ADDRESS:\n    _receipt_header_lines.extend([line for line in STORE_ADDRESS.splitlines() if line.strip()])\nif INCLUDE_PHONE_IN_HEADING and STORE_PHONE:",
+        "peekOfCode": "PRINTER_PRODUCT_ID = os.getenv(\"PRINTER_PRODUCT_ID\", \"\")\nPRINT_RECEIPT = str_to_bool(os.getenv(\"PRINT_RECEIPT\", \"True\"))\nCASH_DRAWER = str_to_bool(os.getenv(\"CASH_DRAWER\", \"False\"))\n_receipt_header_lines = [STORE_NAME]\nif STORE_ADDRESS:\n    _receipt_header_lines.extend([line for line in STORE_ADDRESS.splitlines() if line.strip()])\nif INCLUDE_PHONE_IN_HEADING and STORE_PHONE:\n    _receipt_header_lines.append(STORE_PHONE)\nif INCLUDE_EMAIL_IN_HEADING and STORE_EMAIL:\n    _receipt_header_lines.append(STORE_EMAIL)",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3385,7 +3330,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "PRINT_RECEIPT = str_to_bool(os.getenv(\"PRINT_RECEIPT\", \"True\"))\nCASH_DRAWER = str_to_bool(os.getenv(\"CASH_DRAWER\", \"False\"))\n# Helper: build a standard receipt header string (multi-line)\n_receipt_header_lines = []\n_receipt_header_lines.append(STORE_NAME)\n# If address contains newlines keep them; otherwise add one line\nif STORE_ADDRESS:\n    _receipt_header_lines.extend([line for line in STORE_ADDRESS.splitlines() if line.strip()])\nif INCLUDE_PHONE_IN_HEADING and STORE_PHONE:\n    _receipt_header_lines.append(STORE_PHONE)",
+        "peekOfCode": "PRINT_RECEIPT = str_to_bool(os.getenv(\"PRINT_RECEIPT\", \"True\"))\nCASH_DRAWER = str_to_bool(os.getenv(\"CASH_DRAWER\", \"False\"))\n_receipt_header_lines = [STORE_NAME]\nif STORE_ADDRESS:\n    _receipt_header_lines.extend([line for line in STORE_ADDRESS.splitlines() if line.strip()])\nif INCLUDE_PHONE_IN_HEADING and STORE_PHONE:\n    _receipt_header_lines.append(STORE_PHONE)\nif INCLUDE_EMAIL_IN_HEADING and STORE_EMAIL:\n    _receipt_header_lines.append(STORE_EMAIL)\nif RECEIPT_ADDITIONAL_HEADING:",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3394,7 +3339,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "CASH_DRAWER = str_to_bool(os.getenv(\"CASH_DRAWER\", \"False\"))\n# Helper: build a standard receipt header string (multi-line)\n_receipt_header_lines = []\n_receipt_header_lines.append(STORE_NAME)\n# If address contains newlines keep them; otherwise add one line\nif STORE_ADDRESS:\n    _receipt_header_lines.extend([line for line in STORE_ADDRESS.splitlines() if line.strip()])\nif INCLUDE_PHONE_IN_HEADING and STORE_PHONE:\n    _receipt_header_lines.append(STORE_PHONE)\nif INCLUDE_EMAIL_IN_HEADING and STORE_EMAIL:",
+        "peekOfCode": "CASH_DRAWER = str_to_bool(os.getenv(\"CASH_DRAWER\", \"False\"))\n_receipt_header_lines = [STORE_NAME]\nif STORE_ADDRESS:\n    _receipt_header_lines.extend([line for line in STORE_ADDRESS.splitlines() if line.strip()])\nif INCLUDE_PHONE_IN_HEADING and STORE_PHONE:\n    _receipt_header_lines.append(STORE_PHONE)\nif INCLUDE_EMAIL_IN_HEADING and STORE_EMAIL:\n    _receipt_header_lines.append(STORE_EMAIL)\nif RECEIPT_ADDITIONAL_HEADING:\n    _receipt_header_lines.append(RECEIPT_ADDITIONAL_HEADING)",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3403,7 +3348,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "_receipt_header_lines = []\n_receipt_header_lines.append(STORE_NAME)\n# If address contains newlines keep them; otherwise add one line\nif STORE_ADDRESS:\n    _receipt_header_lines.extend([line for line in STORE_ADDRESS.splitlines() if line.strip()])\nif INCLUDE_PHONE_IN_HEADING and STORE_PHONE:\n    _receipt_header_lines.append(STORE_PHONE)\nif INCLUDE_EMAIL_IN_HEADING and STORE_EMAIL:\n    _receipt_header_lines.append(STORE_EMAIL)\n# Add optional additional heading",
+        "peekOfCode": "_receipt_header_lines = [STORE_NAME]\nif STORE_ADDRESS:\n    _receipt_header_lines.extend([line for line in STORE_ADDRESS.splitlines() if line.strip()])\nif INCLUDE_PHONE_IN_HEADING and STORE_PHONE:\n    _receipt_header_lines.append(STORE_PHONE)\nif INCLUDE_EMAIL_IN_HEADING and STORE_EMAIL:\n    _receipt_header_lines.append(STORE_EMAIL)\nif RECEIPT_ADDITIONAL_HEADING:\n    _receipt_header_lines.append(RECEIPT_ADDITIONAL_HEADING)\n_receipt_header_lines += [\"\", RECEIPT_SALES_TITLE]",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3412,7 +3357,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "RECEIPT_HEADER = \"\\n\".join(_receipt_header_lines)\n# Default layout strings you can reuse in code (for clarity)\nRECEIPT_SEPARATOR = \"-\" * RECEIPT_CHAR_COUNT\nRECEIPT_COLUMN_HEADER = \"DESCRIPTION\\nQTY   PRICE     AMOUNT\"\n# Print debug info at startup (helpful during local dev)\nprint(f\"[settings] RECEIPT: char_count={RECEIPT_CHAR_COUNT} | store='{STORE_NAME}' | print={PRINT_RECEIPT}\")\n# ---------- Security for production ----------\nif not DEBUG:\n    # Basic production security settings\n    SESSION_COOKIE_SECURE = True",
+        "peekOfCode": "RECEIPT_HEADER = \"\\n\".join(_receipt_header_lines)\nRECEIPT_SEPARATOR = \"-\" * RECEIPT_CHAR_COUNT\nRECEIPT_COLUMN_HEADER = \"DESCRIPTION\\nQTY   PRICE     AMOUNT\"\n# -------------------------------------------------\n# ✅ Security production toggles\n# -------------------------------------------------\nif not DEBUG:\n    SESSION_COOKIE_SECURE = True\n    CSRF_COOKIE_SECURE = True\n    SECURE_SSL_REDIRECT = True",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3421,7 +3366,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "RECEIPT_SEPARATOR = \"-\" * RECEIPT_CHAR_COUNT\nRECEIPT_COLUMN_HEADER = \"DESCRIPTION\\nQTY   PRICE     AMOUNT\"\n# Print debug info at startup (helpful during local dev)\nprint(f\"[settings] RECEIPT: char_count={RECEIPT_CHAR_COUNT} | store='{STORE_NAME}' | print={PRINT_RECEIPT}\")\n# ---------- Security for production ----------\nif not DEBUG:\n    # Basic production security settings\n    SESSION_COOKIE_SECURE = True\n    CSRF_COOKIE_SECURE = True\n    SECURE_SSL_REDIRECT = True",
+        "peekOfCode": "RECEIPT_SEPARATOR = \"-\" * RECEIPT_CHAR_COUNT\nRECEIPT_COLUMN_HEADER = \"DESCRIPTION\\nQTY   PRICE     AMOUNT\"\n# -------------------------------------------------\n# ✅ Security production toggles\n# -------------------------------------------------\nif not DEBUG:\n    SESSION_COOKIE_SECURE = True\n    CSRF_COOKIE_SECURE = True\n    SECURE_SSL_REDIRECT = True\n    SECURE_HSTS_SECONDS = int(os.getenv(\"SECURE_HSTS_SECONDS\", \"120\"))",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3430,7 +3375,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "RECEIPT_COLUMN_HEADER = \"DESCRIPTION\\nQTY   PRICE     AMOUNT\"\n# Print debug info at startup (helpful during local dev)\nprint(f\"[settings] RECEIPT: char_count={RECEIPT_CHAR_COUNT} | store='{STORE_NAME}' | print={PRINT_RECEIPT}\")\n# ---------- Security for production ----------\nif not DEBUG:\n    # Basic production security settings\n    SESSION_COOKIE_SECURE = True\n    CSRF_COOKIE_SECURE = True\n    SECURE_SSL_REDIRECT = True\n    SECURE_HSTS_SECONDS = int(os.getenv('SECURE_HSTS_SECONDS', 120))",
+        "peekOfCode": "RECEIPT_COLUMN_HEADER = \"DESCRIPTION\\nQTY   PRICE     AMOUNT\"\n# -------------------------------------------------\n# ✅ Security production toggles\n# -------------------------------------------------\nif not DEBUG:\n    SESSION_COOKIE_SECURE = True\n    CSRF_COOKIE_SECURE = True\n    SECURE_SSL_REDIRECT = True\n    SECURE_HSTS_SECONDS = int(os.getenv(\"SECURE_HSTS_SECONDS\", \"120\"))\n    SECURE_HSTS_PRELOAD = True",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3439,7 +3384,7 @@
         "kind": 6,
         "importPath": "onlineretailpos.admin",
         "description": "onlineretailpos.admin",
-        "peekOfCode": "class MyAdminSite(admin.AdminSite):\n    site_header = f\"{settings.STORE_NAME} - Data Portal\"\n    site_title = \"Online Retail POS\"\n    index_title = \"Data Administration\"\nclass MyAdminConfig(AdminConfig):\n    default_site = 'onlineretailpos.admin.MyAdminSite'",
+        "peekOfCode": "class MyAdminSite(admin.AdminSite):\n    # ✅ safe: won't crash if STORE_NAME isn't ready yet\n    site_header = f\"{getattr(settings, 'STORE_NAME', 'Online Retail POS')} - Data Portal\"\n    site_title = getattr(settings, \"STORE_NAME\", \"Online Retail POS\")\n    index_title = \"Data Administration\"\nclass MyAdminConfig(AdminConfig):\n    default_site = \"onlineretailpos.admin.MyAdminSite\"",
         "detail": "onlineretailpos.admin",
         "documentation": {}
     },
@@ -3448,7 +3393,7 @@
         "kind": 6,
         "importPath": "onlineretailpos.admin",
         "description": "onlineretailpos.admin",
-        "peekOfCode": "class MyAdminConfig(AdminConfig):\n    default_site = 'onlineretailpos.admin.MyAdminSite'",
+        "peekOfCode": "class MyAdminConfig(AdminConfig):\n    default_site = \"onlineretailpos.admin.MyAdminSite\"",
         "detail": "onlineretailpos.admin",
         "documentation": {}
     },
@@ -5289,119 +5234,92 @@
         "documentation": {}
     },
     {
-        "label": "msgbox",
+        "label": "get_exe_data_dir",
         "kind": 2,
         "importPath": "desktop_app",
         "description": "desktop_app",
-        "peekOfCode": "def msgbox(title, text):\n    \"\"\"Simple message box (Windows) fallback to print.\"\"\"\n    try:\n        ctypes.windll.user32.MessageBoxW(None, text, title, 0)\n    except Exception:\n        print(title + \": \" + text)\ndef acquire_lock():\n    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)\n    s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)\n    try:",
+        "peekOfCode": "def get_exe_data_dir() -> Path:\n    if IS_FROZEN:\n        return Path(sys.executable).resolve().parent / \"app_data\"\n    return Path(__file__).resolve().parent / \"app_data\"\ndef get_exe_base_dir() -> Path:\n    if IS_FROZEN:\n        return Path(getattr(sys, \"_MEIPASS\"))\n    return Path(__file__).resolve().parent\nEXE_DATA_DIR = get_exe_data_dir()\nEXE_BASE_DIR = get_exe_base_dir()",
         "detail": "desktop_app",
         "documentation": {}
     },
     {
-        "label": "acquire_lock",
+        "label": "get_exe_base_dir",
         "kind": 2,
         "importPath": "desktop_app",
         "description": "desktop_app",
-        "peekOfCode": "def acquire_lock():\n    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)\n    s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)\n    try:\n        s.bind((LOCK_HOST, LOCK_PORT))\n        s.listen(1)\n        logging.info(\"Lock acquired on %s:%d\", LOCK_HOST, LOCK_PORT)\n        return s\n    except OSError as e:\n        logging.warning(\"Could not acquire lock on %s:%d - %s\", LOCK_HOST, LOCK_PORT, e)",
+        "peekOfCode": "def get_exe_base_dir() -> Path:\n    if IS_FROZEN:\n        return Path(getattr(sys, \"_MEIPASS\"))\n    return Path(__file__).resolve().parent\nEXE_DATA_DIR = get_exe_data_dir()\nEXE_BASE_DIR = get_exe_base_dir()\nEXE_DATA_DIR.mkdir(parents=True, exist_ok=True)\nLOG_FILE = EXE_DATA_DIR / \"app.log\"\ndef log(msg: str):\n    ts = time.strftime(\"%Y-%m-%d %H:%M:%S\")",
         "detail": "desktop_app",
         "documentation": {}
     },
     {
-        "label": "is_port_open",
+        "label": "log",
         "kind": 2,
         "importPath": "desktop_app",
         "description": "desktop_app",
-        "peekOfCode": "def is_port_open(host, port, timeout=0.6):\n    try:\n        with socket.create_connection((host, port), timeout=timeout):\n            return True\n    except Exception:\n        return False\ndef start_django():\n    \"\"\"Start django runserver only if port is free. Return subprocess or None.\"\"\"\n    if is_port_open(DJANGO_HOST, DJANGO_PORT):\n        logging.info(\"Django already listening on %s:%d\", DJANGO_HOST, DJANGO_PORT)",
+        "peekOfCode": "def log(msg: str):\n    ts = time.strftime(\"%Y-%m-%d %H:%M:%S\")\n    try:\n        with open(LOG_FILE, \"a\", encoding=\"utf-8\") as f:\n            f.write(f\"[{ts}] {msg}\\n\")\n    except Exception:\n        pass\ndef crash(e: Exception):\n    log(\"❌ CRASH: \" + repr(e))\n    log(traceback.format_exc())",
         "detail": "desktop_app",
         "documentation": {}
     },
     {
-        "label": "start_django",
+        "label": "crash",
         "kind": 2,
         "importPath": "desktop_app",
         "description": "desktop_app",
-        "peekOfCode": "def start_django():\n    \"\"\"Start django runserver only if port is free. Return subprocess or None.\"\"\"\n    if is_port_open(DJANGO_HOST, DJANGO_PORT):\n        logging.info(\"Django already listening on %s:%d\", DJANGO_HOST, DJANGO_PORT)\n        return None\n    python = sys.executable or \"python\"\n    cmd = [python, \"manage.py\", \"runserver\", DJANGO_ADDR]\n    logging.info(\"Starting Django: %s (cwd=%s)\", \" \".join(cmd), BASE_DIR)\n    creationflags = 0\n    # hide console window on Windows",
+        "peekOfCode": "def crash(e: Exception):\n    log(\"❌ CRASH: \" + repr(e))\n    log(traceback.format_exc())\n# -------------------------------------------------\n# 2) Ensure project import path\n# -------------------------------------------------\ntry:\n    sys.path.insert(0, str(EXE_BASE_DIR))\n    log(f\"IS_FROZEN={IS_FROZEN}\")\n    log(f\"EXE_BASE_DIR={EXE_BASE_DIR}\")",
         "detail": "desktop_app",
         "documentation": {}
     },
     {
-        "label": "run_webview_force_mshtml",
+        "label": "run_server",
         "kind": 2,
         "importPath": "desktop_app",
         "description": "desktop_app",
-        "peekOfCode": "def run_webview_force_mshtml():\n    \"\"\"\n    Force MSHTML backend on Windows (uses IE engine). This avoids bundling CEF/Edge.\n    If not Windows or MSHTML fails, fallback to default webview.start().\n    \"\"\"\n    import webview\n    url = f\"http://{DJANGO_ADDR}\"\n    logging.info(\"Creating webview window for %s (forcing mshtml backend on Windows if available)\", url)\n    try:\n        # Create window first (works across backends)",
+        "peekOfCode": "def run_server():\n    try:\n        import django\n        django.setup()\n        log(\"✅ django.setup() OK\")\n        # -----------------------------------------\n        # AUTO DATABASE MIGRATIONS (FIRST RUN FIX)\n        # -----------------------------------------\n        try:\n            from django.core.management import call_command",
         "detail": "desktop_app",
         "documentation": {}
     },
     {
-        "label": "main",
-        "kind": 2,
-        "importPath": "desktop_app",
-        "description": "desktop_app",
-        "peekOfCode": "def main():\n    logging.info(\"Launcher starting (base_dir=%s)\", BASE_DIR)\n    lock = acquire_lock()\n    if not lock:\n        msg = \"Adams Mini POS is already running. Close the existing instance first.\"\n        logging.error(msg)\n        msgbox(\"Adams Mini POS\", msg)\n        return\n    django_proc = None\n    try:",
-        "detail": "desktop_app",
-        "documentation": {}
-    },
-    {
-        "label": "BASE_DIR",
+        "label": "IS_FROZEN",
         "kind": 5,
         "importPath": "desktop_app",
         "description": "desktop_app",
-        "peekOfCode": "BASE_DIR = os.path.dirname(os.path.abspath(__file__))\nLOG_PATH = os.path.join(BASE_DIR, \"desktop_app.log\")\nlogging.basicConfig(\n    filename=LOG_PATH,\n    level=logging.INFO,\n    format=\"%(asctime)s [%(levelname)s] %(message)s\",\n)\nLOCK_HOST = \"127.0.0.1\"\nLOCK_PORT = 54321         # single-instance lock port\nDJANGO_HOST = \"127.0.0.1\"",
+        "peekOfCode": "IS_FROZEN = getattr(sys, \"frozen\", False)\ndef get_exe_data_dir() -> Path:\n    if IS_FROZEN:\n        return Path(sys.executable).resolve().parent / \"app_data\"\n    return Path(__file__).resolve().parent / \"app_data\"\ndef get_exe_base_dir() -> Path:\n    if IS_FROZEN:\n        return Path(getattr(sys, \"_MEIPASS\"))\n    return Path(__file__).resolve().parent\nEXE_DATA_DIR = get_exe_data_dir()",
         "detail": "desktop_app",
         "documentation": {}
     },
     {
-        "label": "LOG_PATH",
+        "label": "EXE_DATA_DIR",
         "kind": 5,
         "importPath": "desktop_app",
         "description": "desktop_app",
-        "peekOfCode": "LOG_PATH = os.path.join(BASE_DIR, \"desktop_app.log\")\nlogging.basicConfig(\n    filename=LOG_PATH,\n    level=logging.INFO,\n    format=\"%(asctime)s [%(levelname)s] %(message)s\",\n)\nLOCK_HOST = \"127.0.0.1\"\nLOCK_PORT = 54321         # single-instance lock port\nDJANGO_HOST = \"127.0.0.1\"\nDJANGO_PORT = 8000",
+        "peekOfCode": "EXE_DATA_DIR = get_exe_data_dir()\nEXE_BASE_DIR = get_exe_base_dir()\nEXE_DATA_DIR.mkdir(parents=True, exist_ok=True)\nLOG_FILE = EXE_DATA_DIR / \"app.log\"\ndef log(msg: str):\n    ts = time.strftime(\"%Y-%m-%d %H:%M:%S\")\n    try:\n        with open(LOG_FILE, \"a\", encoding=\"utf-8\") as f:\n            f.write(f\"[{ts}] {msg}\\n\")\n    except Exception:",
         "detail": "desktop_app",
         "documentation": {}
     },
     {
-        "label": "LOCK_HOST",
+        "label": "EXE_BASE_DIR",
         "kind": 5,
         "importPath": "desktop_app",
         "description": "desktop_app",
-        "peekOfCode": "LOCK_HOST = \"127.0.0.1\"\nLOCK_PORT = 54321         # single-instance lock port\nDJANGO_HOST = \"127.0.0.1\"\nDJANGO_PORT = 8000\nDJANGO_ADDR = f\"{DJANGO_HOST}:{DJANGO_PORT}\"\ndef msgbox(title, text):\n    \"\"\"Simple message box (Windows) fallback to print.\"\"\"\n    try:\n        ctypes.windll.user32.MessageBoxW(None, text, title, 0)\n    except Exception:",
+        "peekOfCode": "EXE_BASE_DIR = get_exe_base_dir()\nEXE_DATA_DIR.mkdir(parents=True, exist_ok=True)\nLOG_FILE = EXE_DATA_DIR / \"app.log\"\ndef log(msg: str):\n    ts = time.strftime(\"%Y-%m-%d %H:%M:%S\")\n    try:\n        with open(LOG_FILE, \"a\", encoding=\"utf-8\") as f:\n            f.write(f\"[{ts}] {msg}\\n\")\n    except Exception:\n        pass",
         "detail": "desktop_app",
         "documentation": {}
     },
     {
-        "label": "LOCK_PORT",
+        "label": "LOG_FILE",
         "kind": 5,
         "importPath": "desktop_app",
         "description": "desktop_app",
-        "peekOfCode": "LOCK_PORT = 54321         # single-instance lock port\nDJANGO_HOST = \"127.0.0.1\"\nDJANGO_PORT = 8000\nDJANGO_ADDR = f\"{DJANGO_HOST}:{DJANGO_PORT}\"\ndef msgbox(title, text):\n    \"\"\"Simple message box (Windows) fallback to print.\"\"\"\n    try:\n        ctypes.windll.user32.MessageBoxW(None, text, title, 0)\n    except Exception:\n        print(title + \": \" + text)",
+        "peekOfCode": "LOG_FILE = EXE_DATA_DIR / \"app.log\"\ndef log(msg: str):\n    ts = time.strftime(\"%Y-%m-%d %H:%M:%S\")\n    try:\n        with open(LOG_FILE, \"a\", encoding=\"utf-8\") as f:\n            f.write(f\"[{ts}] {msg}\\n\")\n    except Exception:\n        pass\ndef crash(e: Exception):\n    log(\"❌ CRASH: \" + repr(e))",
         "detail": "desktop_app",
         "documentation": {}
     },
     {
-        "label": "DJANGO_HOST",
+        "label": "SETTINGS_MODULE",
         "kind": 5,
         "importPath": "desktop_app",
         "description": "desktop_app",
-        "peekOfCode": "DJANGO_HOST = \"127.0.0.1\"\nDJANGO_PORT = 8000\nDJANGO_ADDR = f\"{DJANGO_HOST}:{DJANGO_PORT}\"\ndef msgbox(title, text):\n    \"\"\"Simple message box (Windows) fallback to print.\"\"\"\n    try:\n        ctypes.windll.user32.MessageBoxW(None, text, title, 0)\n    except Exception:\n        print(title + \": \" + text)\ndef acquire_lock():",
-        "detail": "desktop_app",
-        "documentation": {}
-    },
-    {
-        "label": "DJANGO_PORT",
-        "kind": 5,
-        "importPath": "desktop_app",
-        "description": "desktop_app",
-        "peekOfCode": "DJANGO_PORT = 8000\nDJANGO_ADDR = f\"{DJANGO_HOST}:{DJANGO_PORT}\"\ndef msgbox(title, text):\n    \"\"\"Simple message box (Windows) fallback to print.\"\"\"\n    try:\n        ctypes.windll.user32.MessageBoxW(None, text, title, 0)\n    except Exception:\n        print(title + \": \" + text)\ndef acquire_lock():\n    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)",
-        "detail": "desktop_app",
-        "documentation": {}
-    },
-    {
-        "label": "DJANGO_ADDR",
-        "kind": 5,
-        "importPath": "desktop_app",
-        "description": "desktop_app",
-        "peekOfCode": "DJANGO_ADDR = f\"{DJANGO_HOST}:{DJANGO_PORT}\"\ndef msgbox(title, text):\n    \"\"\"Simple message box (Windows) fallback to print.\"\"\"\n    try:\n        ctypes.windll.user32.MessageBoxW(None, text, title, 0)\n    except Exception:\n        print(title + \": \" + text)\ndef acquire_lock():\n    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)\n    s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)",
+        "peekOfCode": "SETTINGS_MODULE = \"onlineretailpos.settings.settings\"\ntry:\n    importlib.import_module(SETTINGS_MODULE)\nexcept Exception as e:\n    crash(e)\n    raise SystemExit(1)\nos.environ.setdefault(\"DJANGO_SETTINGS_MODULE\", SETTINGS_MODULE)\nlog(f\"✅ DJANGO_SETTINGS_MODULE={SETTINGS_MODULE}\")\n# -------------------------------------------------\n# SAFE ADMIN IMPORT ONLY",
         "detail": "desktop_app",
         "documentation": {}
     },
