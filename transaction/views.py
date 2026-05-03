@@ -661,7 +661,6 @@ from django.db.models import Sum
 # Ensure you have these model names imported in this module:
 
 
-
 def addTransaction(user,
                    payment_type,
                    total=None,
@@ -673,26 +672,24 @@ def addTransaction(user,
                    phone_number=None):
     """
     Creates and saves a transaction.
-    - total: authoritative Decimal or None to compute from cart.
-    - For DEBT: create Debt and initial DebtPayment record (if paid_amount > 0).
-    - phone_number is optional and will be added to Debt if the field exists.
-    NOTE: This function expects your Django models to be available in the module:
-          - `transaction` (Transaction model class)
-          - `Debt` (Debt model class)
-          - `DebtPayment` (DebtPayment model class)
+    Receipt format fixed for ZKP8008 80mm:
+    - width forced to 42 chars
+    - product name on one line
+    - qty @ price = amount below product name
+    - totals aligned like supermarket receipt
+    - footer spaced for proper cut
     """
 
-    VAT_RATE = Decimal("18")
     transaction_id = datetime.now().strftime('%Y%m%d%H%M%S%f')
 
-    # Build cart_df defensively
+    # -----------------------------
+    # Build cart dataframe safely
+    # -----------------------------
     try:
         if cart is None:
             cart_df = pd.DataFrame()
         else:
-            # Accept both dict-of-items and list-of-dicts
             if isinstance(cart, dict):
-                # if values are dict-like
                 cart_df = pd.DataFrame(list(cart.values())).reset_index(drop=True)
             else:
                 cart_df = pd.DataFrame(cart).reset_index(drop=True)
@@ -715,13 +712,18 @@ def addTransaction(user,
     tax_total = Decimal("0.00")
     enhanced_rows = []
 
+    # -----------------------------
+    # Prepare receipt rows
+    # -----------------------------
     if not cart_df.empty:
         for _, row in cart_df.iterrows():
             name = str(row.get("name", "")).strip()
+
             try:
                 qty = int(row.get("quantity", 0))
             except Exception:
                 qty = 0
+
             price = safe_decimal(row.get("price", 0))
 
             if "line_total" in row and row.get("line_total", None) not in (None, ""):
@@ -735,7 +737,7 @@ def addTransaction(user,
                 tax_pct = Decimal("18") if safe_decimal(row.get("tax_value", 0)) > 0 else Decimal("0")
 
             if tax_pct > 0:
-                denom = (Decimal("100") + tax_pct)
+                denom = Decimal("100") + tax_pct
                 try:
                     raw_line_vat = (line_total * tax_pct) / denom
                 except Exception:
@@ -756,7 +758,11 @@ def addTransaction(user,
                 "line_vat": line_vat,
             })
 
+    # -----------------------------
+    # Deposit / totals
+    # -----------------------------
     INCLUDE_DEPOSIT_IN_TOTAL = getattr(settings, "INCLUDE_DEPOSIT_IN_TOTAL", False)
+
     if INCLUDE_DEPOSIT_IN_TOTAL and "deposit_value" in cart_df.columns:
         try:
             deposit_total = safe_decimal(cart_df["deposit_value"].sum())
@@ -771,52 +777,158 @@ def addTransaction(user,
         total_dec = (total_lines_sum + deposit_total).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
 
     tax_total = tax_total.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+
     merchant_sub_total = (total_dec - tax_total).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
     if merchant_sub_total < Decimal("0.00"):
         merchant_sub_total = Decimal("0.00")
 
-    # Build receipt (simple)
-    rows = ["DESCRIPTION", "QTY   PRICE     AMOUNT"]
-    receipt_width = int(getattr(settings, "RECEIPT_CHAR_COUNT", 40))
-    rows.append("-" * receipt_width)
-    for r in enhanced_rows:
-        name = r["name"][:receipt_width - 2] if r.get("name") else ""
-        rows.append(name)
-        rows.append(f"{r['qty']} @ {fmt_no_sym(r['price'])} = {fmt_no_sym(r['amount'])}")
-        rows.append("")
+    # -----------------------------
+    # Receipt formatting helpers
+    # -----------------------------
+    receipt_width = 42
     separator = "-" * receipt_width
-    cart_string = f"Transaction:{transaction_id}\n{separator}\n" + "\n".join(rows)
 
-    # Totals block string building (kept minimal)
-    total_lines = [
-        separator,
-        f"Sub Total      {fmt_no_sym(merchant_sub_total)}",
-        f"Tax            {fmt_no_sym(tax_total)}",
-        f"Total Amount   {fmt_no_sym(total_dec)}",
-        ""
-    ]
+    def money_line(label, amount):
+        left = str(label)
+        right = fmt_no_sym(amount)
+        spaces = receipt_width - len(left) - len(right)
+        if spaces < 1:
+            spaces = 1
+        return left + (" " * spaces) + right
 
-    total_string = "\n".join(total_lines)
-    header = getattr(settings, "RECEIPT_HEADER", "")
-    # parse datetime from transaction_id without microseconds
+    def split_product_name(name, width=42):
+        """
+        Split long product names nicely without breaking receipt style.
+        """
+        name = str(name or "").strip().upper()
+        if not name:
+            return [""]
+
+        words = name.split()
+        lines = []
+        current = ""
+
+        for word in words:
+            if not current:
+                current = word
+            elif len(current) + 1 + len(word) <= width:
+                current += " " + word
+            else:
+                lines.append(current)
+                current = word
+
+        if current:
+            lines.append(current)
+
+        return lines or [""]
+
+    # -----------------------------
+    # Sale datetime
+    # -----------------------------
     try:
-        transaction_dt = datetime.strptime(transaction_id[:-6], '%Y%m%d%H%M%S')
-        sale_datetime_str = transaction_dt.strftime("%d/%m/%Y %H:%M")
+        transaction_dt_obj = datetime.strptime(transaction_id[:-6], '%Y%m%d%H%M%S')
+        sale_datetime_str = transaction_dt_obj.strftime("%Y-%m-%d %H:%M:%S")
     except Exception:
-        sale_datetime_str = datetime.now().strftime("%d/%m/%Y %H:%M")
+        transaction_dt_obj = datetime.now()
+        sale_datetime_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     username_str = getattr(user, "username", "Unknown")
-    footer_lines = [
-        getattr(settings, "RECEIPT_FOOTER", "You are Welcomed !"),
-        f"Sale Date: {sale_datetime_str}",
-        f"Served by: {username_str}",
-        ""
-    ]
-    footer = "\n".join(footer_lines)
-    receipt_raw = header + "\n\n" + cart_string + "\n" + total_string + "\n\n" + footer
-    receipt = "\n".join([i.center(receipt_width) for i in receipt_raw.splitlines()])
 
+    # -----------------------------
+    # Build receipt exactly like first image
+    # -----------------------------
+    receipt_lines = []
+
+    header = getattr(settings, "RECEIPT_HEADER", "")
+
+    if header:
+        for line in header.splitlines():
+            line = str(line).strip()
+            if line:
+                receipt_lines.append(line.center(receipt_width))
+            else:
+                receipt_lines.append("")
+    else:
+        receipt_lines.append("ADAMS MINI SUPERMARKET".center(receipt_width))
+        receipt_lines.append("PO BOX 942 MOSHI".center(receipt_width))
+        receipt_lines.append("J.K. Nyerere Street".center(receipt_width))
+        receipt_lines.append("+255744844699".center(receipt_width))
+        receipt_lines.append("adamssupermarket@gmail.com".center(receipt_width))
+        receipt_lines.append("")
+        receipt_lines.append("*** Sales Receipt ***".center(receipt_width))
+        receipt_lines.append("TIN: 102-188-357".center(receipt_width))
+        receipt_lines.append("*** NON-FISCAL RECEIPT ***".center(receipt_width))
+
+    receipt_lines.append("")
+    receipt_lines.append(f"Receipt No: {transaction_id}")
+    receipt_lines.append("")
+    receipt_lines.append("DESCRIPTION".center(receipt_width))
+    receipt_lines.append("QTY   PRICE      AMOUNT".center(receipt_width))
+    receipt_lines.append("")
+
+    for r in enhanced_rows:
+        for name_line in split_product_name(r["name"], receipt_width):
+            receipt_lines.append(name_line)
+
+        qty_text = str(r["qty"])
+        price_text = fmt_no_sym(r["price"])
+        amount_text = fmt_no_sym(r["amount"])
+
+        receipt_lines.append(f"{qty_text} @ {price_text} = {amount_text}")
+        receipt_lines.append("")
+
+    receipt_lines.append(separator)
+    receipt_lines.append(money_line("Sub Total", merchant_sub_total))
+    receipt_lines.append(money_line("Tax", tax_total))
+    receipt_lines.append(money_line("Total Amount", total_dec))
+    receipt_lines.append("")
+
+    pay_type = str(payment_type).strip().upper()
+
+    if pay_type == "CASH":
+        paid_dec = safe_decimal(paid_amount)
+        balance = paid_dec - total_dec
+        if balance < Decimal("0.00"):
+            balance = Decimal("0.00")
+
+        receipt_lines.append(money_line("Cash", paid_dec))
+        receipt_lines.append(money_line("Balance", balance))
+
+    elif pay_type == "DEBT":
+        paid_dec = safe_decimal(paid_amount)
+        balance = total_dec - paid_dec
+        if balance < Decimal("0.00"):
+            balance = Decimal("0.00")
+
+        receipt_lines.append(money_line("Paid", paid_dec))
+        receipt_lines.append(money_line("Debt Balance", balance))
+
+        if debtor_name:
+            receipt_lines.append(f"Debtor: {str(debtor_name)[:30]}")
+        if phone_number:
+            receipt_lines.append(f"Phone: {str(phone_number)[:20]}")
+
+    else:
+        receipt_lines.append(f"Payment Type: {pay_type}")
+
+    receipt_lines.append("")
+    receipt_lines.append(getattr(settings, "RECEIPT_FOOTER", "You are Welcomed !").center(receipt_width))
+    receipt_lines.append(f"Sale Datetime: {sale_datetime_str}".center(receipt_width))
+    receipt_lines.append("")
+    receipt_lines.append(f"Served by: {username_str}".center(receipt_width))
+
+    # bottom feed space so cutter does not cut footer
+    receipt_lines.append("")
+    receipt_lines.append("")
+    receipt_lines.append("")
+    receipt_lines.append("")
+    receipt_lines.append("")
+
+    receipt = "\n".join(receipt_lines)
+
+    # -----------------------------
     # Parse debt_due_date
+    # -----------------------------
     due_date_obj = None
     if debt_due_date:
         try:
@@ -830,7 +942,9 @@ def addTransaction(user,
         except Exception:
             due_date_obj = None
 
+    # -----------------------------
     # Normalize phone
+    # -----------------------------
     phone_clean = None
     if phone_number:
         try:
@@ -838,12 +952,14 @@ def addTransaction(user,
         except Exception:
             phone_clean = None
 
-    # Save transaction + Debt inside atomic block
+    # -----------------------------
+    # Save transaction + Debt
+    # -----------------------------
     try:
         with db_transaction.atomic():
             header_kwargs = dict(
                 transaction_id=transaction_id,
-                transaction_dt=datetime.strptime(transaction_id[:-6], '%Y%m%d%H%M%S'),
+                transaction_dt=transaction_dt_obj,
                 user=user,
                 total_sale=total_dec,
                 sub_total=merchant_sub_total,
@@ -856,17 +972,24 @@ def addTransaction(user,
                 debt_due_date=due_date_obj,
             )
 
-            # Filter to actual transaction model fields (if `transaction` model variable exists)
+            # keep only fields that exist in transaction model
             try:
-                tx_fields = {f.name for f in transaction._meta.get_fields() if getattr(f, "concrete", True)}
-                header_kwargs = {k: v for k, v in header_kwargs.items() if k in tx_fields}
+                tx_fields = {
+                    f.name for f in transaction._meta.get_fields()
+                    if getattr(f, "concrete", True)
+                }
+                header_kwargs = {
+                    k: v for k, v in header_kwargs.items()
+                    if k in tx_fields
+                }
             except Exception:
-                # if transaction model not present or introspection fails, keep header_kwargs as-is
                 pass
 
             obj = transaction.objects.create(**header_kwargs)
 
-            # DEBT creation
+            # -----------------------------
+            # Debt creation
+            # -----------------------------
             if str(payment_type).strip().upper() == "DEBT":
                 candidate_kwargs = {
                     "transaction": obj,
@@ -878,49 +1001,49 @@ def addTransaction(user,
                     "created_by": user,
                 }
 
-                # Determine allowed Debt fields (defensive)
                 try:
-                    allowed_debt_fields = {f.name for f in Debt._meta.get_fields() if getattr(f, "concrete", True)}
+                    allowed_debt_fields = {
+                        f.name for f in Debt._meta.get_fields()
+                        if getattr(f, "concrete", True)
+                    }
                 except Exception:
                     allowed_debt_fields = set(candidate_kwargs.keys())
 
-                debt_create_kwargs = {k: v for k, v in candidate_kwargs.items() if k in allowed_debt_fields}
-                dropped = [k for k in candidate_kwargs.keys() if k not in debt_create_kwargs]
-                if dropped:
-                    print("addTransaction: dropping unexpected Debt fields:", dropped)
+                debt_create_kwargs = {
+                    k: v for k, v in candidate_kwargs.items()
+                    if k in allowed_debt_fields
+                }
 
-                # Create or get existing Debt
                 try:
                     debt, created = Debt.objects.get_or_create(
-                        transaction=obj,  # ensure this is the same transaction object
+                        transaction=obj,
                         defaults=debt_create_kwargs
                     )
 
                     if not created:
-                        # Optional: update fields if debt already exists
-                        for field, value in debt_create_kwargs.items():
-                            setattr(debt, field, value)
+                        for field, field_value in debt_create_kwargs.items():
+                            setattr(debt, field, field_value)
                         debt.save()
-                        print(f"addTransaction: debt already existed for transaction {getattr(obj, 'id', transaction_id)}, updated fields")
-                    else:
-                        print(f"addTransaction: debt created for transaction {getattr(obj, 'id', transaction_id)}")
 
                 except TypeError as te:
                     print("addTransaction: Debt.get_or_create TypeError:", te)
                     minimal_kw = {}
+
                     if "transaction" in allowed_debt_fields:
                         minimal_kw["transaction"] = obj
                     if "total_amount" in allowed_debt_fields:
                         minimal_kw["total_amount"] = total_dec
+
                     debt, _ = Debt.objects.get_or_create(
                         transaction=obj,
                         defaults=minimal_kw
                     )
 
-                # ===== Initial payment logic =====
+                # initial debt payment
                 initial_paid = safe_decimal(paid_amount)
                 if initial_paid > Decimal("0.00"):
                     actual_initial = initial_paid if initial_paid <= total_dec else total_dec
+
                     DebtPayment.objects.create(
                         debt=debt,
                         amount=actual_initial,
@@ -929,17 +1052,24 @@ def addTransaction(user,
                         paid_by=user
                     )
 
-                # recompute paid_amount from payments
+                # recompute debt paid amount
                 try:
-                    payments_sum = DebtPayment.objects.filter(debt=debt).aggregate(total=Sum('amount'))["total"] or Decimal("0.00")
+                    payments_sum = (
+                        DebtPayment.objects
+                        .filter(debt=debt)
+                        .aggregate(total=Sum('amount'))["total"]
+                        or Decimal("0.00")
+                    )
                     payments_sum = safe_decimal(payments_sum)
+
                     if "paid_amount" in allowed_debt_fields:
                         debt.paid_amount = payments_sum
+
                     try:
-                        # Some Debt models may have update_status helper
                         debt.update_status()
                     except Exception:
                         debt.save()
+
                 except Exception as e:
                     print("addTransaction: failed to recompute debt.paid_amount:", e)
                     try:
@@ -947,7 +1077,6 @@ def addTransaction(user,
                     except Exception:
                         pass
 
-        # End atomic
         print("Saved transaction:", getattr(obj, "transaction_id", transaction_id))
         return obj
 
@@ -955,7 +1084,6 @@ def addTransaction(user,
         print("addTransaction: Failed to save transaction:", e)
         traceback.print_exc()
         return None
-
 
 
 # -----------------------------

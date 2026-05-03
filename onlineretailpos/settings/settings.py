@@ -2,26 +2,23 @@ from pathlib import Path
 import os
 import sys
 import socket
-from dotenv import load_dotenv
-
-load_dotenv()
 
 # -------------------------------------------------
-# ✅ Detect PyInstaller (EXE) mode
+# Detect PyInstaller EXE mode
 # -------------------------------------------------
 IS_FROZEN = getattr(sys, "frozen", False)
 
+
 def _exe_base_dir() -> Path:
-    # In onefile EXE, this is the extracted temp dir
     return Path(getattr(sys, "_MEIPASS", Path.cwd()))
 
+
 def _exe_data_dir() -> Path:
-    # Persistent writable folder next to exe
     if IS_FROZEN:
         return Path(sys.executable).resolve().parent / "app_data"
     return Path.cwd() / "app_data"
 
-# Project root (your repo folder)
+
 BASE_DIR = Path(__file__).resolve().parents[2]
 PROJECT_DIR = BASE_DIR / "onlineretailpos"
 
@@ -30,50 +27,34 @@ EXE_DATA_DIR = _exe_data_dir()
 EXE_DATA_DIR.mkdir(parents=True, exist_ok=True)
 
 # -------------------------------------------------
-# Helpers
+# Core Django settings
 # -------------------------------------------------
-def str_to_bool(s: str) -> bool:
-    return str(s).strip().lower() in ("1", "true", "yes", "on")
+SECRET_KEY = "django_live_secret_key_adamsmini_change_later_2026"
 
-def csv_to_list(s: str):
-    return [x.strip() for x in (s or "").split(",") if x.strip()]
-
-# -------------------------------------------------
-# ✅ Core Django settings (must always exist!)
-# -------------------------------------------------
-SECRET_KEY = os.getenv("SECRET_KEY", "django_dev_secret_key_online-retail-pos-1234")
-
-# In EXE mode you can keep True while testing
-DEBUG = str_to_bool(os.getenv("DEBUG", "True"))
+DEBUG = False
 
 ROOT_URLCONF = "onlineretailpos.urls"
 WSGI_APPLICATION = "onlineretailpos.wsgi.application"
 ASGI_APPLICATION = "onlineretailpos.asgi.application"
 
 # -------------------------------------------------
-# ✅ Hosts & CSRF
+# Hosts & CSRF
 # -------------------------------------------------
-_default_hosts = ["127.0.0.1", "localhost", "adamsmini.shop", "www.adamsmini.shop"]
+ALLOWED_HOSTS = [
+    "127.0.0.1",
+    "localhost",
+    "adamsmini.shop",
+    "www.adamsmini.shop",
+    "31.97.52.238",
+]
 
-env_allowed = os.getenv("ALLOWED_HOSTS", "")
-if env_allowed:
-    ALLOWED_HOSTS = csv_to_list(env_allowed)
-    for h in _default_hosts:
-        if h not in ALLOWED_HOSTS:
-            ALLOWED_HOSTS.append(h)
-else:
-    ALLOWED_HOSTS = _default_hosts.copy()
+CSRF_TRUSTED_ORIGINS = [
+    "https://adamsmini.shop",
+    "https://www.adamsmini.shop",
+    "http://127.0.0.1",
+    "http://localhost",
+]
 
-env_csrf = os.getenv("CSRF_TRUSTED_ORIGINS", "")
-default_csrf = ["https://adamsmini.shop", "https://www.adamsmini.shop"]
-CSRF_TRUSTED_ORIGINS = csv_to_list(env_csrf) if env_csrf else default_csrf.copy()
-
-# local dev origins
-for origin in ["http://127.0.0.1", "http://localhost"]:
-    if origin not in CSRF_TRUSTED_ORIGINS:
-        CSRF_TRUSTED_ORIGINS.append(origin)
-
-# add LAN IP for testing in network
 try:
     local_ip = socket.gethostbyname(socket.gethostname())
     if local_ip and local_ip not in ALLOWED_HOSTS:
@@ -82,7 +63,7 @@ except Exception:
     pass
 
 # -------------------------------------------------
-# ✅ Whitenoise optional import
+# Whitenoise optional
 # -------------------------------------------------
 try:
     import whitenoise  # noqa
@@ -91,12 +72,12 @@ except Exception:
     HAS_WHITENOISE = False
 
 # -------------------------------------------------
-# ✅ Installed apps
+# Installed apps
 # -------------------------------------------------
 INSTALLED_APPS = [
     "colorfield",
 
-    # ✅ custom admin config (replaces django.contrib.admin)
+    # custom admin config
     "onlineretailpos.admin.MyAdminConfig",
 
     "django.contrib.auth",
@@ -106,25 +87,24 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.humanize",
 
-    # 3rd party
+    # third party
     "jquery",
     "mathfilters",
     "import_export",
     "rangefilter",
     "django_admin_logs",
 
-    # your apps
+    # project apps
     "inventory",
     "transaction",
     "cart",
 ]
 
-# only add whitenoise app if installed
 if HAS_WHITENOISE:
     INSTALLED_APPS.append("whitenoise.runserver_nostatic")
 
 # -------------------------------------------------
-# ✅ Middleware
+# Middleware
 # -------------------------------------------------
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -143,7 +123,7 @@ MIDDLEWARE += [
 ]
 
 # -------------------------------------------------
-# ✅ Templates
+# Templates
 # -------------------------------------------------
 if IS_FROZEN:
     TEMPLATE_DIR = str(EXE_BASE_DIR / "onlineretailpos" / "templates")
@@ -167,7 +147,7 @@ TEMPLATES = [
 ]
 
 # -------------------------------------------------
-# ✅ Database (force sqlite for EXE)
+# Database
 # -------------------------------------------------
 if IS_FROZEN:
     DB_PATH = EXE_DATA_DIR / "db.sqlite3"
@@ -182,13 +162,12 @@ DATABASES = {
 }
 
 # -------------------------------------------------
-# ✅ Static & media
+# Static & media
 # -------------------------------------------------
 STATIC_URL = "/static/"
 MEDIA_URL = "/media/"
 
 if IS_FROZEN:
-    # bundled via --add-data "staticfiles;staticfiles"
     STATICFILES_DIRS = []
     STATIC_ROOT = EXE_BASE_DIR / "staticfiles"
 
@@ -199,12 +178,11 @@ else:
     STATIC_ROOT = BASE_DIR / "staticfiles"
     MEDIA_ROOT = PROJECT_DIR / "media"
 
-# whitenoise storage only if installed
 if HAS_WHITENOISE:
     STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # -------------------------------------------------
-# ✅ Basic config
+# Basic config
 # -------------------------------------------------
 LANGUAGE_CODE = "en-us"
 TIME_ZONE = "Africa/Dar_es_Salaam"
@@ -213,36 +191,38 @@ USE_TZ = True
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # -------------------------------------------------
-# ✅ Your store/receipt settings (THIS FIXES STORE_NAME)
+# Receipt/store settings
 # -------------------------------------------------
-RECEIPT_CHAR_COUNT = int(os.getenv("RECEIPT_CHAR_COUNT", "32"))
+RECEIPT_CHAR_COUNT = 42
 
-STORE_NAME = os.getenv("STORE_NAME", "ADAMS MINI SUPERMARKET")
-STORE_ADDRESS = os.getenv("STORE_ADDRESS", "PO BOX 942 MOSHI\nJ.K. Nyerere Street")
-STORE_PHONE = os.getenv("STORE_PHONE", "+255744844699")
-STORE_EMAIL = os.getenv("STORE_EMAIL", "adamssupermarket@gmail.com")
+STORE_NAME = "ADAMS MINI SUPERMARKET"
+STORE_ADDRESS = "PO BOX 942 MOSHI\nJ.K. Nyerere Street"
+STORE_PHONE = "+255744844699"
+STORE_EMAIL = "adamssupermarket@gmail.com"
 
-STORE_TIN = os.getenv("STORE_TIN", "102-188-357")
-STORE_VRN = os.getenv("STORE_VRN", "")
+STORE_TIN = "102-188-357"
+STORE_VRN = ""
 
-RECEIPT_ADDITIONAL_HEADING = os.getenv("RECEIPT_ADDITIONAL_HEADING", "")
+RECEIPT_ADDITIONAL_HEADING = ""
 
-INCLUDE_PHONE_IN_HEADING = str_to_bool(os.getenv("INCLUDE_PHONE_IN_HEADING", "True"))
-INCLUDE_EMAIL_IN_HEADING = str_to_bool(os.getenv("INCLUDE_EMAIL_IN_HEADING", "True"))
+INCLUDE_PHONE_IN_HEADING = True
+INCLUDE_EMAIL_IN_HEADING = True
 
-RECEIPT_FOOTER = os.getenv("RECEIPT_FOOTER", "You are Welcomed !")
-RECEIPT_SALES_TITLE = os.getenv("RECEIPT_SALES_TITLE", "*** Sales Receipt ***")
-RECEIPT_NONFISCAL_TEXT = os.getenv("RECEIPT_NONFISCAL_TEXT", "*** NON-FISCAL RECEIPT ***")
+RECEIPT_FOOTER = "You are Welcomed !"
+RECEIPT_SALES_TITLE = "*** Sales Receipt ***"
+RECEIPT_NONFISCAL_TEXT = "*** NON-FISCAL RECEIPT ***"
 
-PRINTER_VENDOR_ID = os.getenv("PRINTER_VENDOR_ID", "")
-PRINTER_PRODUCT_ID = os.getenv("PRINTER_PRODUCT_ID", "")
-PRINT_RECEIPT = str_to_bool(os.getenv("PRINT_RECEIPT", "True"))
-CASH_DRAWER = str_to_bool(os.getenv("CASH_DRAWER", "False"))
+PRINTER_VENDOR_ID = ""
+PRINTER_PRODUCT_ID = ""
+PRINT_RECEIPT = True
+CASH_DRAWER = False
 
 _receipt_header_lines = [STORE_NAME]
 
 if STORE_ADDRESS:
-    _receipt_header_lines.extend([line for line in STORE_ADDRESS.splitlines() if line.strip()])
+    _receipt_header_lines.extend(
+        [line for line in STORE_ADDRESS.splitlines() if line.strip()]
+    )
 
 if INCLUDE_PHONE_IN_HEADING and STORE_PHONE:
     _receipt_header_lines.append(STORE_PHONE)
@@ -257,6 +237,7 @@ _receipt_header_lines += ["", RECEIPT_SALES_TITLE]
 
 if STORE_TIN:
     _receipt_header_lines.append(f"TIN: {STORE_TIN}")
+
 if STORE_VRN:
     _receipt_header_lines.append(f"VRN: {STORE_VRN}")
 
@@ -264,19 +245,38 @@ _receipt_header_lines += [RECEIPT_NONFISCAL_TEXT, ""]
 
 RECEIPT_HEADER = "\n".join(_receipt_header_lines)
 RECEIPT_SEPARATOR = "-" * RECEIPT_CHAR_COUNT
-RECEIPT_COLUMN_HEADER = "DESCRIPTION\nQTY   PRICE     AMOUNT"
+RECEIPT_COLUMN_HEADER = "DESCRIPTION\nQTY   PRICE      AMOUNT"
 
 # -------------------------------------------------
-# ✅ Security production toggles
+# Login/session settings
 # -------------------------------------------------
-if not DEBUG:
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
-    SECURE_SSL_REDIRECT = True
-    SECURE_HSTS_SECONDS = int(os.getenv("SECURE_HSTS_SECONDS", "120"))
-    SECURE_HSTS_PRELOAD = True
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
-else:
-    SESSION_COOKIE_SECURE = False
-    CSRF_COOKIE_SECURE = False
+LOGIN_URL = "/user/login/"
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/user/login/"
+
+SESSION_COOKIE_AGE = 60 * 60 * 12
+SESSION_SAVE_EVERY_REQUEST = True
+
+# -------------------------------------------------
+# Security production settings
+# -------------------------------------------------
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SECURE_SSL_REDIRECT = True
+SECURE_HSTS_SECONDS = 120
+SECURE_HSTS_PRELOAD = True
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+# -------------------------------------------------
+# Console debug prints for server logs
+# -------------------------------------------------
+print(
+    f"[settings] DEBUG={DEBUG} | DB=django.db.backends.sqlite3 | "
+    f"ALLOWED_HOSTS={ALLOWED_HOSTS}"
+)
+print(f"[settings] CSRF_TRUSTED_ORIGINS={CSRF_TRUSTED_ORIGINS}")
+print(
+    f"[settings] RECEIPT: char_count={RECEIPT_CHAR_COUNT} | "
+    f"store='{STORE_NAME}' | print={PRINT_RECEIPT}"
+)
