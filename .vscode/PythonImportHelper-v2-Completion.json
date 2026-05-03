@@ -377,23 +377,7 @@
         "documentation": {}
     },
     {
-        "label": "transaction",
-        "importPath": "django.db",
-        "description": "django.db",
-        "isExtraImport": true,
-        "detail": "django.db",
-        "documentation": {}
-    },
-    {
         "label": "connection",
-        "importPath": "django.db",
-        "description": "django.db",
-        "isExtraImport": true,
-        "detail": "django.db",
-        "documentation": {}
-    },
-    {
-        "label": "transaction",
         "importPath": "django.db",
         "description": "django.db",
         "isExtraImport": true,
@@ -719,134 +703,6 @@
         "description": "decimal",
         "isExtraImport": true,
         "detail": "decimal",
-        "documentation": {}
-    },
-    {
-        "label": "Decimal",
-        "importPath": "decimal",
-        "description": "decimal",
-        "isExtraImport": true,
-        "detail": "decimal",
-        "documentation": {}
-    },
-    {
-        "label": "ROUND_HALF_UP",
-        "importPath": "decimal",
-        "description": "decimal",
-        "isExtraImport": true,
-        "detail": "decimal",
-        "documentation": {}
-    },
-    {
-        "label": "InvalidOperation",
-        "importPath": "decimal",
-        "description": "decimal",
-        "isExtraImport": true,
-        "detail": "decimal",
-        "documentation": {}
-    },
-    {
-        "label": "Decimal",
-        "importPath": "decimal",
-        "description": "decimal",
-        "isExtraImport": true,
-        "detail": "decimal",
-        "documentation": {}
-    },
-    {
-        "label": "Decimal",
-        "importPath": "decimal",
-        "description": "decimal",
-        "isExtraImport": true,
-        "detail": "decimal",
-        "documentation": {}
-    },
-    {
-        "label": "ROUND_HALF_UP",
-        "importPath": "decimal",
-        "description": "decimal",
-        "isExtraImport": true,
-        "detail": "decimal",
-        "documentation": {}
-    },
-    {
-        "label": "InvalidOperation",
-        "importPath": "decimal",
-        "description": "decimal",
-        "isExtraImport": true,
-        "detail": "decimal",
-        "documentation": {}
-    },
-    {
-        "label": "Decimal",
-        "importPath": "decimal",
-        "description": "decimal",
-        "isExtraImport": true,
-        "detail": "decimal",
-        "documentation": {}
-    },
-    {
-        "label": "ROUND_HALF_UP",
-        "importPath": "decimal",
-        "description": "decimal",
-        "isExtraImport": true,
-        "detail": "decimal",
-        "documentation": {}
-    },
-    {
-        "label": "InvalidOperation",
-        "importPath": "decimal",
-        "description": "decimal",
-        "isExtraImport": true,
-        "detail": "decimal",
-        "documentation": {}
-    },
-    {
-        "label": "Decimal",
-        "importPath": "decimal",
-        "description": "decimal",
-        "isExtraImport": true,
-        "detail": "decimal",
-        "documentation": {}
-    },
-    {
-        "label": "Decimal",
-        "importPath": "decimal",
-        "description": "decimal",
-        "isExtraImport": true,
-        "detail": "decimal",
-        "documentation": {}
-    },
-    {
-        "label": "settings",
-        "importPath": "django.conf",
-        "description": "django.conf",
-        "isExtraImport": true,
-        "detail": "django.conf",
-        "documentation": {}
-    },
-    {
-        "label": "settings",
-        "importPath": "django.conf",
-        "description": "django.conf",
-        "isExtraImport": true,
-        "detail": "django.conf",
-        "documentation": {}
-    },
-    {
-        "label": "settings",
-        "importPath": "django.conf",
-        "description": "django.conf",
-        "isExtraImport": true,
-        "detail": "django.conf",
-        "documentation": {}
-    },
-    {
-        "label": "settings",
-        "importPath": "django.conf",
-        "description": "django.conf",
-        "isExtraImport": true,
-        "detail": "django.conf",
         "documentation": {}
     },
     {
@@ -1210,47 +1066,7 @@
         "documentation": {}
     },
     {
-        "label": "render",
-        "importPath": "django.shortcuts",
-        "description": "django.shortcuts",
-        "isExtraImport": true,
-        "detail": "django.shortcuts",
-        "documentation": {}
-    },
-    {
-        "label": "redirect",
-        "importPath": "django.shortcuts",
-        "description": "django.shortcuts",
-        "isExtraImport": true,
-        "detail": "django.shortcuts",
-        "documentation": {}
-    },
-    {
-        "label": "render",
-        "importPath": "django.shortcuts",
-        "description": "django.shortcuts",
-        "isExtraImport": true,
-        "detail": "django.shortcuts",
-        "documentation": {}
-    },
-    {
-        "label": "render",
-        "importPath": "django.shortcuts",
-        "description": "django.shortcuts",
-        "isExtraImport": true,
-        "detail": "django.shortcuts",
-        "documentation": {}
-    },
-    {
         "label": "get_object_or_404",
-        "importPath": "django.shortcuts",
-        "description": "django.shortcuts",
-        "isExtraImport": true,
-        "detail": "django.shortcuts",
-        "documentation": {}
-    },
-    {
-        "label": "redirect",
         "importPath": "django.shortcuts",
         "description": "django.shortcuts",
         "isExtraImport": true,
@@ -1362,30 +1178,6 @@
         "documentation": {}
     },
     {
-        "label": "login_required",
-        "importPath": "django.contrib.auth.decorators",
-        "description": "django.contrib.auth.decorators",
-        "isExtraImport": true,
-        "detail": "django.contrib.auth.decorators",
-        "documentation": {}
-    },
-    {
-        "label": "login_required",
-        "importPath": "django.contrib.auth.decorators",
-        "description": "django.contrib.auth.decorators",
-        "isExtraImport": true,
-        "detail": "django.contrib.auth.decorators",
-        "documentation": {}
-    },
-    {
-        "label": "login_required",
-        "importPath": "django.contrib.auth.decorators",
-        "description": "django.contrib.auth.decorators",
-        "isExtraImport": true,
-        "detail": "django.contrib.auth.decorators",
-        "documentation": {}
-    },
-    {
         "label": "JsonResponse",
         "importPath": "django.http",
         "description": "django.http",
@@ -1411,14 +1203,6 @@
     },
     {
         "label": "HttpResponse",
-        "importPath": "django.http",
-        "description": "django.http",
-        "isExtraImport": true,
-        "detail": "django.http",
-        "documentation": {}
-    },
-    {
-        "label": "JsonResponse",
         "importPath": "django.http",
         "description": "django.http",
         "isExtraImport": true,
@@ -1434,14 +1218,6 @@
         "documentation": {}
     },
     {
-        "label": "HttpResponse",
-        "importPath": "django.http",
-        "description": "django.http",
-        "isExtraImport": true,
-        "detail": "django.http",
-        "documentation": {}
-    },
-    {
         "label": "HttpResponseBadRequest",
         "importPath": "django.http",
         "description": "django.http",
@@ -1450,7 +1226,7 @@
         "documentation": {}
     },
     {
-        "label": "HttpResponseBadRequest",
+        "label": "JsonResponse",
         "importPath": "django.http",
         "description": "django.http",
         "isExtraImport": true,
@@ -1710,22 +1486,6 @@
         "documentation": {}
     },
     {
-        "label": "Sum",
-        "importPath": "django.db.models",
-        "description": "django.db.models",
-        "isExtraImport": true,
-        "detail": "django.db.models",
-        "documentation": {}
-    },
-    {
-        "label": "Sum",
-        "importPath": "django.db.models",
-        "description": "django.db.models",
-        "isExtraImport": true,
-        "detail": "django.db.models",
-        "documentation": {}
-    },
-    {
         "label": "Q",
         "importPath": "django.db.models",
         "description": "django.db.models",
@@ -1894,22 +1654,6 @@
         "importPath": "socket",
         "description": "socket",
         "detail": "socket",
-        "documentation": {}
-    },
-    {
-        "label": "load_dotenv",
-        "importPath": "dotenv",
-        "description": "dotenv",
-        "isExtraImport": true,
-        "detail": "dotenv",
-        "documentation": {}
-    },
-    {
-        "label": "load_dotenv",
-        "importPath": "dotenv",
-        "description": "dotenv",
-        "isExtraImport": true,
-        "detail": "dotenv",
         "documentation": {}
     },
     {
@@ -2098,22 +1842,6 @@
         "documentation": {}
     },
     {
-        "label": "timezone",
-        "importPath": "datetime",
-        "description": "datetime",
-        "isExtraImport": true,
-        "detail": "datetime",
-        "documentation": {}
-    },
-    {
-        "label": "datetime",
-        "importPath": "datetime",
-        "description": "datetime",
-        "isExtraImport": true,
-        "detail": "datetime",
-        "documentation": {}
-    },
-    {
         "label": "time",
         "importPath": "datetime",
         "description": "datetime",
@@ -2123,30 +1851,6 @@
     },
     {
         "label": "timezone",
-        "importPath": "datetime",
-        "description": "datetime",
-        "isExtraImport": true,
-        "detail": "datetime",
-        "documentation": {}
-    },
-    {
-        "label": "datetime",
-        "importPath": "datetime",
-        "description": "datetime",
-        "isExtraImport": true,
-        "detail": "datetime",
-        "documentation": {}
-    },
-    {
-        "label": "datetime",
-        "importPath": "datetime",
-        "description": "datetime",
-        "isExtraImport": true,
-        "detail": "datetime",
-        "documentation": {}
-    },
-    {
-        "label": "timedelta",
         "importPath": "datetime",
         "description": "datetime",
         "isExtraImport": true,
@@ -2184,22 +1888,6 @@
         "importPath": "pytz.",
         "description": "pytz.",
         "detail": "pytz.",
-        "documentation": {}
-    },
-    {
-        "label": "timezone",
-        "importPath": "django.utils",
-        "description": "django.utils",
-        "isExtraImport": true,
-        "detail": "django.utils",
-        "documentation": {}
-    },
-    {
-        "label": "timezone",
-        "importPath": "django.utils",
-        "description": "django.utils",
-        "isExtraImport": true,
-        "detail": "django.utils",
         "documentation": {}
     },
     {
@@ -2268,6 +1956,14 @@
         "documentation": {}
     },
     {
+        "label": "urlencode",
+        "importPath": "urllib.parse",
+        "description": "urllib.parse",
+        "isExtraImport": true,
+        "detail": "urllib.parse",
+        "documentation": {}
+    },
+    {
         "label": "traceback",
         "kind": 6,
         "isExtraImport": true,
@@ -2302,38 +1998,6 @@
         "documentation": {}
     },
     {
-        "label": "parse_datetime",
-        "importPath": "django.utils.dateparse",
-        "description": "django.utils.dateparse",
-        "isExtraImport": true,
-        "detail": "django.utils.dateparse",
-        "documentation": {}
-    },
-    {
-        "label": "Usb",
-        "importPath": "escpos.printer",
-        "description": "escpos.printer",
-        "isExtraImport": true,
-        "detail": "escpos.printer",
-        "documentation": {}
-    },
-    {
-        "label": "urlencode",
-        "importPath": "urllib.parse",
-        "description": "urllib.parse",
-        "isExtraImport": true,
-        "detail": "urllib.parse",
-        "documentation": {}
-    },
-    {
-        "label": "urlencode",
-        "importPath": "urllib.parse",
-        "description": "urllib.parse",
-        "isExtraImport": true,
-        "detail": "urllib.parse",
-        "documentation": {}
-    },
-    {
         "label": "DjangoJSONEncoder",
         "importPath": "django.core.serializers.json",
         "description": "django.core.serializers.json",
@@ -2347,6 +2011,14 @@
         "description": "django.utils.safestring",
         "isExtraImport": true,
         "detail": "django.utils.safestring",
+        "documentation": {}
+    },
+    {
+        "label": "Usb",
+        "importPath": "escpos.printer",
+        "description": "escpos.printer",
+        "isExtraImport": true,
+        "detail": "escpos.printer",
         "documentation": {}
     },
     {
@@ -2432,6 +2104,14 @@
         "importPath": "importlib",
         "description": "importlib",
         "detail": "importlib",
+        "documentation": {}
+    },
+    {
+        "label": "load_dotenv",
+        "importPath": "dotenv",
+        "description": "dotenv",
+        "isExtraImport": true,
+        "detail": "dotenv",
         "documentation": {}
     },
     {
@@ -2939,29 +2619,11 @@
         "documentation": {}
     },
     {
-        "label": "str_to_bool",
-        "kind": 2,
-        "importPath": "onlineretailpos.settings.settings",
-        "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "def str_to_bool(s: str) -> bool:\n    return str(s).strip().lower() in (\"1\", \"true\", \"yes\", \"on\")\ndef csv_to_list(s: str):\n    return [x.strip() for x in (s or \"\").split(\",\") if x.strip()]\n# -------------------------------------------------\n# ✅ Core Django settings (must always exist!)\n# -------------------------------------------------\nSECRET_KEY = os.getenv(\"SECRET_KEY\", \"django_dev_secret_key_online-retail-pos-1234\")\n# In EXE mode you can keep True while testing\nDEBUG = str_to_bool(os.getenv(\"DEBUG\", \"True\"))",
-        "detail": "onlineretailpos.settings.settings",
-        "documentation": {}
-    },
-    {
-        "label": "csv_to_list",
-        "kind": 2,
-        "importPath": "onlineretailpos.settings.settings",
-        "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "def csv_to_list(s: str):\n    return [x.strip() for x in (s or \"\").split(\",\") if x.strip()]\n# -------------------------------------------------\n# ✅ Core Django settings (must always exist!)\n# -------------------------------------------------\nSECRET_KEY = os.getenv(\"SECRET_KEY\", \"django_dev_secret_key_online-retail-pos-1234\")\n# In EXE mode you can keep True while testing\nDEBUG = str_to_bool(os.getenv(\"DEBUG\", \"True\"))\nROOT_URLCONF = \"onlineretailpos.urls\"\nWSGI_APPLICATION = \"onlineretailpos.wsgi.application\"",
-        "detail": "onlineretailpos.settings.settings",
-        "documentation": {}
-    },
-    {
         "label": "IS_FROZEN",
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "IS_FROZEN = getattr(sys, \"frozen\", False)\ndef _exe_base_dir() -> Path:\n    # In onefile EXE, this is the extracted temp dir\n    return Path(getattr(sys, \"_MEIPASS\", Path.cwd()))\ndef _exe_data_dir() -> Path:\n    # Persistent writable folder next to exe\n    if IS_FROZEN:\n        return Path(sys.executable).resolve().parent / \"app_data\"\n    return Path.cwd() / \"app_data\"\n# Project root (your repo folder)",
+        "peekOfCode": "IS_FROZEN = getattr(sys, \"frozen\", False)\ndef _exe_base_dir() -> Path:\n    return Path(getattr(sys, \"_MEIPASS\", Path.cwd()))\ndef _exe_data_dir() -> Path:\n    if IS_FROZEN:\n        return Path(sys.executable).resolve().parent / \"app_data\"\n    return Path.cwd() / \"app_data\"\nBASE_DIR = Path(__file__).resolve().parents[2]\nPROJECT_DIR = BASE_DIR / \"onlineretailpos\"\nEXE_BASE_DIR = _exe_base_dir()",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -2970,7 +2632,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "BASE_DIR = Path(__file__).resolve().parents[2]\nPROJECT_DIR = BASE_DIR / \"onlineretailpos\"\nEXE_BASE_DIR = _exe_base_dir()\nEXE_DATA_DIR = _exe_data_dir()\nEXE_DATA_DIR.mkdir(parents=True, exist_ok=True)\n# -------------------------------------------------\n# Helpers\n# -------------------------------------------------\ndef str_to_bool(s: str) -> bool:\n    return str(s).strip().lower() in (\"1\", \"true\", \"yes\", \"on\")",
+        "peekOfCode": "BASE_DIR = Path(__file__).resolve().parents[2]\nPROJECT_DIR = BASE_DIR / \"onlineretailpos\"\nEXE_BASE_DIR = _exe_base_dir()\nEXE_DATA_DIR = _exe_data_dir()\nEXE_DATA_DIR.mkdir(parents=True, exist_ok=True)\n# -------------------------------------------------\n# Core Django settings\n# -------------------------------------------------\nSECRET_KEY = \"django_live_secret_key_adamsmini_change_later_2026\"\nDEBUG = False",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -2979,7 +2641,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "PROJECT_DIR = BASE_DIR / \"onlineretailpos\"\nEXE_BASE_DIR = _exe_base_dir()\nEXE_DATA_DIR = _exe_data_dir()\nEXE_DATA_DIR.mkdir(parents=True, exist_ok=True)\n# -------------------------------------------------\n# Helpers\n# -------------------------------------------------\ndef str_to_bool(s: str) -> bool:\n    return str(s).strip().lower() in (\"1\", \"true\", \"yes\", \"on\")\ndef csv_to_list(s: str):",
+        "peekOfCode": "PROJECT_DIR = BASE_DIR / \"onlineretailpos\"\nEXE_BASE_DIR = _exe_base_dir()\nEXE_DATA_DIR = _exe_data_dir()\nEXE_DATA_DIR.mkdir(parents=True, exist_ok=True)\n# -------------------------------------------------\n# Core Django settings\n# -------------------------------------------------\nSECRET_KEY = \"django_live_secret_key_adamsmini_change_later_2026\"\nDEBUG = False\nROOT_URLCONF = \"onlineretailpos.urls\"",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -2988,7 +2650,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "EXE_BASE_DIR = _exe_base_dir()\nEXE_DATA_DIR = _exe_data_dir()\nEXE_DATA_DIR.mkdir(parents=True, exist_ok=True)\n# -------------------------------------------------\n# Helpers\n# -------------------------------------------------\ndef str_to_bool(s: str) -> bool:\n    return str(s).strip().lower() in (\"1\", \"true\", \"yes\", \"on\")\ndef csv_to_list(s: str):\n    return [x.strip() for x in (s or \"\").split(\",\") if x.strip()]",
+        "peekOfCode": "EXE_BASE_DIR = _exe_base_dir()\nEXE_DATA_DIR = _exe_data_dir()\nEXE_DATA_DIR.mkdir(parents=True, exist_ok=True)\n# -------------------------------------------------\n# Core Django settings\n# -------------------------------------------------\nSECRET_KEY = \"django_live_secret_key_adamsmini_change_later_2026\"\nDEBUG = False\nROOT_URLCONF = \"onlineretailpos.urls\"\nWSGI_APPLICATION = \"onlineretailpos.wsgi.application\"",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -2997,7 +2659,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "EXE_DATA_DIR = _exe_data_dir()\nEXE_DATA_DIR.mkdir(parents=True, exist_ok=True)\n# -------------------------------------------------\n# Helpers\n# -------------------------------------------------\ndef str_to_bool(s: str) -> bool:\n    return str(s).strip().lower() in (\"1\", \"true\", \"yes\", \"on\")\ndef csv_to_list(s: str):\n    return [x.strip() for x in (s or \"\").split(\",\") if x.strip()]\n# -------------------------------------------------",
+        "peekOfCode": "EXE_DATA_DIR = _exe_data_dir()\nEXE_DATA_DIR.mkdir(parents=True, exist_ok=True)\n# -------------------------------------------------\n# Core Django settings\n# -------------------------------------------------\nSECRET_KEY = \"django_live_secret_key_adamsmini_change_later_2026\"\nDEBUG = False\nROOT_URLCONF = \"onlineretailpos.urls\"\nWSGI_APPLICATION = \"onlineretailpos.wsgi.application\"\nASGI_APPLICATION = \"onlineretailpos.asgi.application\"",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3006,7 +2668,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "SECRET_KEY = os.getenv(\"SECRET_KEY\", \"django_dev_secret_key_online-retail-pos-1234\")\n# In EXE mode you can keep True while testing\nDEBUG = str_to_bool(os.getenv(\"DEBUG\", \"True\"))\nROOT_URLCONF = \"onlineretailpos.urls\"\nWSGI_APPLICATION = \"onlineretailpos.wsgi.application\"\nASGI_APPLICATION = \"onlineretailpos.asgi.application\"\n# -------------------------------------------------\n# ✅ Hosts & CSRF\n# -------------------------------------------------\n_default_hosts = [\"127.0.0.1\", \"localhost\", \"adamsmini.shop\", \"www.adamsmini.shop\"]",
+        "peekOfCode": "SECRET_KEY = \"django_live_secret_key_adamsmini_change_later_2026\"\nDEBUG = False\nROOT_URLCONF = \"onlineretailpos.urls\"\nWSGI_APPLICATION = \"onlineretailpos.wsgi.application\"\nASGI_APPLICATION = \"onlineretailpos.asgi.application\"\n# -------------------------------------------------\n# Hosts & CSRF\n# -------------------------------------------------\nALLOWED_HOSTS = [\n    \"127.0.0.1\",",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3015,7 +2677,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "DEBUG = str_to_bool(os.getenv(\"DEBUG\", \"True\"))\nROOT_URLCONF = \"onlineretailpos.urls\"\nWSGI_APPLICATION = \"onlineretailpos.wsgi.application\"\nASGI_APPLICATION = \"onlineretailpos.asgi.application\"\n# -------------------------------------------------\n# ✅ Hosts & CSRF\n# -------------------------------------------------\n_default_hosts = [\"127.0.0.1\", \"localhost\", \"adamsmini.shop\", \"www.adamsmini.shop\"]\nenv_allowed = os.getenv(\"ALLOWED_HOSTS\", \"\")\nif env_allowed:",
+        "peekOfCode": "DEBUG = False\nROOT_URLCONF = \"onlineretailpos.urls\"\nWSGI_APPLICATION = \"onlineretailpos.wsgi.application\"\nASGI_APPLICATION = \"onlineretailpos.asgi.application\"\n# -------------------------------------------------\n# Hosts & CSRF\n# -------------------------------------------------\nALLOWED_HOSTS = [\n    \"127.0.0.1\",\n    \"localhost\",",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3024,7 +2686,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "ROOT_URLCONF = \"onlineretailpos.urls\"\nWSGI_APPLICATION = \"onlineretailpos.wsgi.application\"\nASGI_APPLICATION = \"onlineretailpos.asgi.application\"\n# -------------------------------------------------\n# ✅ Hosts & CSRF\n# -------------------------------------------------\n_default_hosts = [\"127.0.0.1\", \"localhost\", \"adamsmini.shop\", \"www.adamsmini.shop\"]\nenv_allowed = os.getenv(\"ALLOWED_HOSTS\", \"\")\nif env_allowed:\n    ALLOWED_HOSTS = csv_to_list(env_allowed)",
+        "peekOfCode": "ROOT_URLCONF = \"onlineretailpos.urls\"\nWSGI_APPLICATION = \"onlineretailpos.wsgi.application\"\nASGI_APPLICATION = \"onlineretailpos.asgi.application\"\n# -------------------------------------------------\n# Hosts & CSRF\n# -------------------------------------------------\nALLOWED_HOSTS = [\n    \"127.0.0.1\",\n    \"localhost\",\n    \"adamsmini.shop\",",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3033,7 +2695,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "WSGI_APPLICATION = \"onlineretailpos.wsgi.application\"\nASGI_APPLICATION = \"onlineretailpos.asgi.application\"\n# -------------------------------------------------\n# ✅ Hosts & CSRF\n# -------------------------------------------------\n_default_hosts = [\"127.0.0.1\", \"localhost\", \"adamsmini.shop\", \"www.adamsmini.shop\"]\nenv_allowed = os.getenv(\"ALLOWED_HOSTS\", \"\")\nif env_allowed:\n    ALLOWED_HOSTS = csv_to_list(env_allowed)\n    for h in _default_hosts:",
+        "peekOfCode": "WSGI_APPLICATION = \"onlineretailpos.wsgi.application\"\nASGI_APPLICATION = \"onlineretailpos.asgi.application\"\n# -------------------------------------------------\n# Hosts & CSRF\n# -------------------------------------------------\nALLOWED_HOSTS = [\n    \"127.0.0.1\",\n    \"localhost\",\n    \"adamsmini.shop\",\n    \"www.adamsmini.shop\",",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3042,43 +2704,16 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "ASGI_APPLICATION = \"onlineretailpos.asgi.application\"\n# -------------------------------------------------\n# ✅ Hosts & CSRF\n# -------------------------------------------------\n_default_hosts = [\"127.0.0.1\", \"localhost\", \"adamsmini.shop\", \"www.adamsmini.shop\"]\nenv_allowed = os.getenv(\"ALLOWED_HOSTS\", \"\")\nif env_allowed:\n    ALLOWED_HOSTS = csv_to_list(env_allowed)\n    for h in _default_hosts:\n        if h not in ALLOWED_HOSTS:",
+        "peekOfCode": "ASGI_APPLICATION = \"onlineretailpos.asgi.application\"\n# -------------------------------------------------\n# Hosts & CSRF\n# -------------------------------------------------\nALLOWED_HOSTS = [\n    \"127.0.0.1\",\n    \"localhost\",\n    \"adamsmini.shop\",\n    \"www.adamsmini.shop\",\n    \"31.97.52.238\",",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
     {
-        "label": "_default_hosts",
+        "label": "ALLOWED_HOSTS",
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "_default_hosts = [\"127.0.0.1\", \"localhost\", \"adamsmini.shop\", \"www.adamsmini.shop\"]\nenv_allowed = os.getenv(\"ALLOWED_HOSTS\", \"\")\nif env_allowed:\n    ALLOWED_HOSTS = csv_to_list(env_allowed)\n    for h in _default_hosts:\n        if h not in ALLOWED_HOSTS:\n            ALLOWED_HOSTS.append(h)\nelse:\n    ALLOWED_HOSTS = _default_hosts.copy()\nenv_csrf = os.getenv(\"CSRF_TRUSTED_ORIGINS\", \"\")",
-        "detail": "onlineretailpos.settings.settings",
-        "documentation": {}
-    },
-    {
-        "label": "env_allowed",
-        "kind": 5,
-        "importPath": "onlineretailpos.settings.settings",
-        "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "env_allowed = os.getenv(\"ALLOWED_HOSTS\", \"\")\nif env_allowed:\n    ALLOWED_HOSTS = csv_to_list(env_allowed)\n    for h in _default_hosts:\n        if h not in ALLOWED_HOSTS:\n            ALLOWED_HOSTS.append(h)\nelse:\n    ALLOWED_HOSTS = _default_hosts.copy()\nenv_csrf = os.getenv(\"CSRF_TRUSTED_ORIGINS\", \"\")\ndefault_csrf = [\"https://adamsmini.shop\", \"https://www.adamsmini.shop\"]",
-        "detail": "onlineretailpos.settings.settings",
-        "documentation": {}
-    },
-    {
-        "label": "env_csrf",
-        "kind": 5,
-        "importPath": "onlineretailpos.settings.settings",
-        "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "env_csrf = os.getenv(\"CSRF_TRUSTED_ORIGINS\", \"\")\ndefault_csrf = [\"https://adamsmini.shop\", \"https://www.adamsmini.shop\"]\nCSRF_TRUSTED_ORIGINS = csv_to_list(env_csrf) if env_csrf else default_csrf.copy()\n# local dev origins\nfor origin in [\"http://127.0.0.1\", \"http://localhost\"]:\n    if origin not in CSRF_TRUSTED_ORIGINS:\n        CSRF_TRUSTED_ORIGINS.append(origin)\n# add LAN IP for testing in network\ntry:\n    local_ip = socket.gethostbyname(socket.gethostname())",
-        "detail": "onlineretailpos.settings.settings",
-        "documentation": {}
-    },
-    {
-        "label": "default_csrf",
-        "kind": 5,
-        "importPath": "onlineretailpos.settings.settings",
-        "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "default_csrf = [\"https://adamsmini.shop\", \"https://www.adamsmini.shop\"]\nCSRF_TRUSTED_ORIGINS = csv_to_list(env_csrf) if env_csrf else default_csrf.copy()\n# local dev origins\nfor origin in [\"http://127.0.0.1\", \"http://localhost\"]:\n    if origin not in CSRF_TRUSTED_ORIGINS:\n        CSRF_TRUSTED_ORIGINS.append(origin)\n# add LAN IP for testing in network\ntry:\n    local_ip = socket.gethostbyname(socket.gethostname())\n    if local_ip and local_ip not in ALLOWED_HOSTS:",
+        "peekOfCode": "ALLOWED_HOSTS = [\n    \"127.0.0.1\",\n    \"localhost\",\n    \"adamsmini.shop\",\n    \"www.adamsmini.shop\",\n    \"31.97.52.238\",\n]\nCSRF_TRUSTED_ORIGINS = [\n    \"https://adamsmini.shop\",\n    \"https://www.adamsmini.shop\",",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3087,7 +2722,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "CSRF_TRUSTED_ORIGINS = csv_to_list(env_csrf) if env_csrf else default_csrf.copy()\n# local dev origins\nfor origin in [\"http://127.0.0.1\", \"http://localhost\"]:\n    if origin not in CSRF_TRUSTED_ORIGINS:\n        CSRF_TRUSTED_ORIGINS.append(origin)\n# add LAN IP for testing in network\ntry:\n    local_ip = socket.gethostbyname(socket.gethostname())\n    if local_ip and local_ip not in ALLOWED_HOSTS:\n        ALLOWED_HOSTS.append(local_ip)",
+        "peekOfCode": "CSRF_TRUSTED_ORIGINS = [\n    \"https://adamsmini.shop\",\n    \"https://www.adamsmini.shop\",\n    \"http://127.0.0.1\",\n    \"http://localhost\",\n]\ntry:\n    local_ip = socket.gethostbyname(socket.gethostname())\n    if local_ip and local_ip not in ALLOWED_HOSTS:\n        ALLOWED_HOSTS.append(local_ip)",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3096,7 +2731,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "INSTALLED_APPS = [\n    \"colorfield\",\n    # ✅ custom admin config (replaces django.contrib.admin)\n    \"onlineretailpos.admin.MyAdminConfig\",\n    \"django.contrib.auth\",\n    \"django.contrib.contenttypes\",\n    \"django.contrib.sessions\",\n    \"django.contrib.messages\",\n    \"django.contrib.staticfiles\",\n    \"django.contrib.humanize\",",
+        "peekOfCode": "INSTALLED_APPS = [\n    \"colorfield\",\n    # custom admin config\n    \"onlineretailpos.admin.MyAdminConfig\",\n    \"django.contrib.auth\",\n    \"django.contrib.contenttypes\",\n    \"django.contrib.sessions\",\n    \"django.contrib.messages\",\n    \"django.contrib.staticfiles\",\n    \"django.contrib.humanize\",",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3123,7 +2758,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "DATABASES = {\n    \"default\": {\n        \"ENGINE\": \"django.db.backends.sqlite3\",\n        \"NAME\": str(DB_PATH),\n    }\n}\n# -------------------------------------------------\n# ✅ Static & media\n# -------------------------------------------------\nSTATIC_URL = \"/static/\"",
+        "peekOfCode": "DATABASES = {\n    \"default\": {\n        \"ENGINE\": \"django.db.backends.sqlite3\",\n        \"NAME\": str(DB_PATH),\n    }\n}\n# -------------------------------------------------\n# Static & media\n# -------------------------------------------------\nSTATIC_URL = \"/static/\"",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3132,7 +2767,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "STATIC_URL = \"/static/\"\nMEDIA_URL = \"/media/\"\nif IS_FROZEN:\n    # bundled via --add-data \"staticfiles;staticfiles\"\n    STATICFILES_DIRS = []\n    STATIC_ROOT = EXE_BASE_DIR / \"staticfiles\"\n    MEDIA_ROOT = EXE_DATA_DIR / \"media\"\n    MEDIA_ROOT.mkdir(parents=True, exist_ok=True)\nelse:\n    STATICFILES_DIRS = [BASE_DIR / \"onlineretailpos\" / \"static\"]",
+        "peekOfCode": "STATIC_URL = \"/static/\"\nMEDIA_URL = \"/media/\"\nif IS_FROZEN:\n    STATICFILES_DIRS = []\n    STATIC_ROOT = EXE_BASE_DIR / \"staticfiles\"\n    MEDIA_ROOT = EXE_DATA_DIR / \"media\"\n    MEDIA_ROOT.mkdir(parents=True, exist_ok=True)\nelse:\n    STATICFILES_DIRS = [BASE_DIR / \"onlineretailpos\" / \"static\"]\n    STATIC_ROOT = BASE_DIR / \"staticfiles\"",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3141,7 +2776,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "MEDIA_URL = \"/media/\"\nif IS_FROZEN:\n    # bundled via --add-data \"staticfiles;staticfiles\"\n    STATICFILES_DIRS = []\n    STATIC_ROOT = EXE_BASE_DIR / \"staticfiles\"\n    MEDIA_ROOT = EXE_DATA_DIR / \"media\"\n    MEDIA_ROOT.mkdir(parents=True, exist_ok=True)\nelse:\n    STATICFILES_DIRS = [BASE_DIR / \"onlineretailpos\" / \"static\"]\n    STATIC_ROOT = BASE_DIR / \"staticfiles\"",
+        "peekOfCode": "MEDIA_URL = \"/media/\"\nif IS_FROZEN:\n    STATICFILES_DIRS = []\n    STATIC_ROOT = EXE_BASE_DIR / \"staticfiles\"\n    MEDIA_ROOT = EXE_DATA_DIR / \"media\"\n    MEDIA_ROOT.mkdir(parents=True, exist_ok=True)\nelse:\n    STATICFILES_DIRS = [BASE_DIR / \"onlineretailpos\" / \"static\"]\n    STATIC_ROOT = BASE_DIR / \"staticfiles\"\n    MEDIA_ROOT = PROJECT_DIR / \"media\"",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3150,7 +2785,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "LANGUAGE_CODE = \"en-us\"\nTIME_ZONE = \"Africa/Dar_es_Salaam\"\nUSE_I18N = True\nUSE_TZ = True\nDEFAULT_AUTO_FIELD = \"django.db.models.BigAutoField\"\n# -------------------------------------------------\n# ✅ Your store/receipt settings (THIS FIXES STORE_NAME)\n# -------------------------------------------------\nRECEIPT_CHAR_COUNT = int(os.getenv(\"RECEIPT_CHAR_COUNT\", \"32\"))\nSTORE_NAME = os.getenv(\"STORE_NAME\", \"ADAMS MINI SUPERMARKET\")",
+        "peekOfCode": "LANGUAGE_CODE = \"en-us\"\nTIME_ZONE = \"Africa/Dar_es_Salaam\"\nUSE_I18N = True\nUSE_TZ = True\nDEFAULT_AUTO_FIELD = \"django.db.models.BigAutoField\"\n# -------------------------------------------------\n# Receipt/store settings\n# -------------------------------------------------\nRECEIPT_CHAR_COUNT = 42\nSTORE_NAME = \"ADAMS MINI SUPERMARKET\"",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3159,7 +2794,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "TIME_ZONE = \"Africa/Dar_es_Salaam\"\nUSE_I18N = True\nUSE_TZ = True\nDEFAULT_AUTO_FIELD = \"django.db.models.BigAutoField\"\n# -------------------------------------------------\n# ✅ Your store/receipt settings (THIS FIXES STORE_NAME)\n# -------------------------------------------------\nRECEIPT_CHAR_COUNT = int(os.getenv(\"RECEIPT_CHAR_COUNT\", \"32\"))\nSTORE_NAME = os.getenv(\"STORE_NAME\", \"ADAMS MINI SUPERMARKET\")\nSTORE_ADDRESS = os.getenv(\"STORE_ADDRESS\", \"PO BOX 942 MOSHI\\nJ.K. Nyerere Street\")",
+        "peekOfCode": "TIME_ZONE = \"Africa/Dar_es_Salaam\"\nUSE_I18N = True\nUSE_TZ = True\nDEFAULT_AUTO_FIELD = \"django.db.models.BigAutoField\"\n# -------------------------------------------------\n# Receipt/store settings\n# -------------------------------------------------\nRECEIPT_CHAR_COUNT = 42\nSTORE_NAME = \"ADAMS MINI SUPERMARKET\"\nSTORE_ADDRESS = \"PO BOX 942 MOSHI\\nJ.K. Nyerere Street\"",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3168,7 +2803,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "USE_I18N = True\nUSE_TZ = True\nDEFAULT_AUTO_FIELD = \"django.db.models.BigAutoField\"\n# -------------------------------------------------\n# ✅ Your store/receipt settings (THIS FIXES STORE_NAME)\n# -------------------------------------------------\nRECEIPT_CHAR_COUNT = int(os.getenv(\"RECEIPT_CHAR_COUNT\", \"32\"))\nSTORE_NAME = os.getenv(\"STORE_NAME\", \"ADAMS MINI SUPERMARKET\")\nSTORE_ADDRESS = os.getenv(\"STORE_ADDRESS\", \"PO BOX 942 MOSHI\\nJ.K. Nyerere Street\")\nSTORE_PHONE = os.getenv(\"STORE_PHONE\", \"+255744844699\")",
+        "peekOfCode": "USE_I18N = True\nUSE_TZ = True\nDEFAULT_AUTO_FIELD = \"django.db.models.BigAutoField\"\n# -------------------------------------------------\n# Receipt/store settings\n# -------------------------------------------------\nRECEIPT_CHAR_COUNT = 42\nSTORE_NAME = \"ADAMS MINI SUPERMARKET\"\nSTORE_ADDRESS = \"PO BOX 942 MOSHI\\nJ.K. Nyerere Street\"\nSTORE_PHONE = \"+255744844699\"",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3177,7 +2812,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "USE_TZ = True\nDEFAULT_AUTO_FIELD = \"django.db.models.BigAutoField\"\n# -------------------------------------------------\n# ✅ Your store/receipt settings (THIS FIXES STORE_NAME)\n# -------------------------------------------------\nRECEIPT_CHAR_COUNT = int(os.getenv(\"RECEIPT_CHAR_COUNT\", \"32\"))\nSTORE_NAME = os.getenv(\"STORE_NAME\", \"ADAMS MINI SUPERMARKET\")\nSTORE_ADDRESS = os.getenv(\"STORE_ADDRESS\", \"PO BOX 942 MOSHI\\nJ.K. Nyerere Street\")\nSTORE_PHONE = os.getenv(\"STORE_PHONE\", \"+255744844699\")\nSTORE_EMAIL = os.getenv(\"STORE_EMAIL\", \"adamssupermarket@gmail.com\")",
+        "peekOfCode": "USE_TZ = True\nDEFAULT_AUTO_FIELD = \"django.db.models.BigAutoField\"\n# -------------------------------------------------\n# Receipt/store settings\n# -------------------------------------------------\nRECEIPT_CHAR_COUNT = 42\nSTORE_NAME = \"ADAMS MINI SUPERMARKET\"\nSTORE_ADDRESS = \"PO BOX 942 MOSHI\\nJ.K. Nyerere Street\"\nSTORE_PHONE = \"+255744844699\"\nSTORE_EMAIL = \"adamssupermarket@gmail.com\"",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3186,7 +2821,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "DEFAULT_AUTO_FIELD = \"django.db.models.BigAutoField\"\n# -------------------------------------------------\n# ✅ Your store/receipt settings (THIS FIXES STORE_NAME)\n# -------------------------------------------------\nRECEIPT_CHAR_COUNT = int(os.getenv(\"RECEIPT_CHAR_COUNT\", \"32\"))\nSTORE_NAME = os.getenv(\"STORE_NAME\", \"ADAMS MINI SUPERMARKET\")\nSTORE_ADDRESS = os.getenv(\"STORE_ADDRESS\", \"PO BOX 942 MOSHI\\nJ.K. Nyerere Street\")\nSTORE_PHONE = os.getenv(\"STORE_PHONE\", \"+255744844699\")\nSTORE_EMAIL = os.getenv(\"STORE_EMAIL\", \"adamssupermarket@gmail.com\")\nSTORE_TIN = os.getenv(\"STORE_TIN\", \"102-188-357\")",
+        "peekOfCode": "DEFAULT_AUTO_FIELD = \"django.db.models.BigAutoField\"\n# -------------------------------------------------\n# Receipt/store settings\n# -------------------------------------------------\nRECEIPT_CHAR_COUNT = 42\nSTORE_NAME = \"ADAMS MINI SUPERMARKET\"\nSTORE_ADDRESS = \"PO BOX 942 MOSHI\\nJ.K. Nyerere Street\"\nSTORE_PHONE = \"+255744844699\"\nSTORE_EMAIL = \"adamssupermarket@gmail.com\"\nSTORE_TIN = \"102-188-357\"",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3195,7 +2830,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "RECEIPT_CHAR_COUNT = int(os.getenv(\"RECEIPT_CHAR_COUNT\", \"32\"))\nSTORE_NAME = os.getenv(\"STORE_NAME\", \"ADAMS MINI SUPERMARKET\")\nSTORE_ADDRESS = os.getenv(\"STORE_ADDRESS\", \"PO BOX 942 MOSHI\\nJ.K. Nyerere Street\")\nSTORE_PHONE = os.getenv(\"STORE_PHONE\", \"+255744844699\")\nSTORE_EMAIL = os.getenv(\"STORE_EMAIL\", \"adamssupermarket@gmail.com\")\nSTORE_TIN = os.getenv(\"STORE_TIN\", \"102-188-357\")\nSTORE_VRN = os.getenv(\"STORE_VRN\", \"\")\nRECEIPT_ADDITIONAL_HEADING = os.getenv(\"RECEIPT_ADDITIONAL_HEADING\", \"\")\nINCLUDE_PHONE_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_PHONE_IN_HEADING\", \"True\"))\nINCLUDE_EMAIL_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_EMAIL_IN_HEADING\", \"True\"))",
+        "peekOfCode": "RECEIPT_CHAR_COUNT = 42\nSTORE_NAME = \"ADAMS MINI SUPERMARKET\"\nSTORE_ADDRESS = \"PO BOX 942 MOSHI\\nJ.K. Nyerere Street\"\nSTORE_PHONE = \"+255744844699\"\nSTORE_EMAIL = \"adamssupermarket@gmail.com\"\nSTORE_TIN = \"102-188-357\"\nSTORE_VRN = \"\"\nRECEIPT_ADDITIONAL_HEADING = \"\"\nINCLUDE_PHONE_IN_HEADING = True\nINCLUDE_EMAIL_IN_HEADING = True",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3204,7 +2839,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "STORE_NAME = os.getenv(\"STORE_NAME\", \"ADAMS MINI SUPERMARKET\")\nSTORE_ADDRESS = os.getenv(\"STORE_ADDRESS\", \"PO BOX 942 MOSHI\\nJ.K. Nyerere Street\")\nSTORE_PHONE = os.getenv(\"STORE_PHONE\", \"+255744844699\")\nSTORE_EMAIL = os.getenv(\"STORE_EMAIL\", \"adamssupermarket@gmail.com\")\nSTORE_TIN = os.getenv(\"STORE_TIN\", \"102-188-357\")\nSTORE_VRN = os.getenv(\"STORE_VRN\", \"\")\nRECEIPT_ADDITIONAL_HEADING = os.getenv(\"RECEIPT_ADDITIONAL_HEADING\", \"\")\nINCLUDE_PHONE_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_PHONE_IN_HEADING\", \"True\"))\nINCLUDE_EMAIL_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_EMAIL_IN_HEADING\", \"True\"))\nRECEIPT_FOOTER = os.getenv(\"RECEIPT_FOOTER\", \"You are Welcomed !\")",
+        "peekOfCode": "STORE_NAME = \"ADAMS MINI SUPERMARKET\"\nSTORE_ADDRESS = \"PO BOX 942 MOSHI\\nJ.K. Nyerere Street\"\nSTORE_PHONE = \"+255744844699\"\nSTORE_EMAIL = \"adamssupermarket@gmail.com\"\nSTORE_TIN = \"102-188-357\"\nSTORE_VRN = \"\"\nRECEIPT_ADDITIONAL_HEADING = \"\"\nINCLUDE_PHONE_IN_HEADING = True\nINCLUDE_EMAIL_IN_HEADING = True\nRECEIPT_FOOTER = \"You are Welcomed !\"",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3213,7 +2848,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "STORE_ADDRESS = os.getenv(\"STORE_ADDRESS\", \"PO BOX 942 MOSHI\\nJ.K. Nyerere Street\")\nSTORE_PHONE = os.getenv(\"STORE_PHONE\", \"+255744844699\")\nSTORE_EMAIL = os.getenv(\"STORE_EMAIL\", \"adamssupermarket@gmail.com\")\nSTORE_TIN = os.getenv(\"STORE_TIN\", \"102-188-357\")\nSTORE_VRN = os.getenv(\"STORE_VRN\", \"\")\nRECEIPT_ADDITIONAL_HEADING = os.getenv(\"RECEIPT_ADDITIONAL_HEADING\", \"\")\nINCLUDE_PHONE_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_PHONE_IN_HEADING\", \"True\"))\nINCLUDE_EMAIL_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_EMAIL_IN_HEADING\", \"True\"))\nRECEIPT_FOOTER = os.getenv(\"RECEIPT_FOOTER\", \"You are Welcomed !\")\nRECEIPT_SALES_TITLE = os.getenv(\"RECEIPT_SALES_TITLE\", \"*** Sales Receipt ***\")",
+        "peekOfCode": "STORE_ADDRESS = \"PO BOX 942 MOSHI\\nJ.K. Nyerere Street\"\nSTORE_PHONE = \"+255744844699\"\nSTORE_EMAIL = \"adamssupermarket@gmail.com\"\nSTORE_TIN = \"102-188-357\"\nSTORE_VRN = \"\"\nRECEIPT_ADDITIONAL_HEADING = \"\"\nINCLUDE_PHONE_IN_HEADING = True\nINCLUDE_EMAIL_IN_HEADING = True\nRECEIPT_FOOTER = \"You are Welcomed !\"\nRECEIPT_SALES_TITLE = \"*** Sales Receipt ***\"",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3222,7 +2857,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "STORE_PHONE = os.getenv(\"STORE_PHONE\", \"+255744844699\")\nSTORE_EMAIL = os.getenv(\"STORE_EMAIL\", \"adamssupermarket@gmail.com\")\nSTORE_TIN = os.getenv(\"STORE_TIN\", \"102-188-357\")\nSTORE_VRN = os.getenv(\"STORE_VRN\", \"\")\nRECEIPT_ADDITIONAL_HEADING = os.getenv(\"RECEIPT_ADDITIONAL_HEADING\", \"\")\nINCLUDE_PHONE_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_PHONE_IN_HEADING\", \"True\"))\nINCLUDE_EMAIL_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_EMAIL_IN_HEADING\", \"True\"))\nRECEIPT_FOOTER = os.getenv(\"RECEIPT_FOOTER\", \"You are Welcomed !\")\nRECEIPT_SALES_TITLE = os.getenv(\"RECEIPT_SALES_TITLE\", \"*** Sales Receipt ***\")\nRECEIPT_NONFISCAL_TEXT = os.getenv(\"RECEIPT_NONFISCAL_TEXT\", \"*** NON-FISCAL RECEIPT ***\")",
+        "peekOfCode": "STORE_PHONE = \"+255744844699\"\nSTORE_EMAIL = \"adamssupermarket@gmail.com\"\nSTORE_TIN = \"102-188-357\"\nSTORE_VRN = \"\"\nRECEIPT_ADDITIONAL_HEADING = \"\"\nINCLUDE_PHONE_IN_HEADING = True\nINCLUDE_EMAIL_IN_HEADING = True\nRECEIPT_FOOTER = \"You are Welcomed !\"\nRECEIPT_SALES_TITLE = \"*** Sales Receipt ***\"\nRECEIPT_NONFISCAL_TEXT = \"*** NON-FISCAL RECEIPT ***\"",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3231,7 +2866,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "STORE_EMAIL = os.getenv(\"STORE_EMAIL\", \"adamssupermarket@gmail.com\")\nSTORE_TIN = os.getenv(\"STORE_TIN\", \"102-188-357\")\nSTORE_VRN = os.getenv(\"STORE_VRN\", \"\")\nRECEIPT_ADDITIONAL_HEADING = os.getenv(\"RECEIPT_ADDITIONAL_HEADING\", \"\")\nINCLUDE_PHONE_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_PHONE_IN_HEADING\", \"True\"))\nINCLUDE_EMAIL_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_EMAIL_IN_HEADING\", \"True\"))\nRECEIPT_FOOTER = os.getenv(\"RECEIPT_FOOTER\", \"You are Welcomed !\")\nRECEIPT_SALES_TITLE = os.getenv(\"RECEIPT_SALES_TITLE\", \"*** Sales Receipt ***\")\nRECEIPT_NONFISCAL_TEXT = os.getenv(\"RECEIPT_NONFISCAL_TEXT\", \"*** NON-FISCAL RECEIPT ***\")\nPRINTER_VENDOR_ID = os.getenv(\"PRINTER_VENDOR_ID\", \"\")",
+        "peekOfCode": "STORE_EMAIL = \"adamssupermarket@gmail.com\"\nSTORE_TIN = \"102-188-357\"\nSTORE_VRN = \"\"\nRECEIPT_ADDITIONAL_HEADING = \"\"\nINCLUDE_PHONE_IN_HEADING = True\nINCLUDE_EMAIL_IN_HEADING = True\nRECEIPT_FOOTER = \"You are Welcomed !\"\nRECEIPT_SALES_TITLE = \"*** Sales Receipt ***\"\nRECEIPT_NONFISCAL_TEXT = \"*** NON-FISCAL RECEIPT ***\"\nPRINTER_VENDOR_ID = \"\"",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3240,7 +2875,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "STORE_TIN = os.getenv(\"STORE_TIN\", \"102-188-357\")\nSTORE_VRN = os.getenv(\"STORE_VRN\", \"\")\nRECEIPT_ADDITIONAL_HEADING = os.getenv(\"RECEIPT_ADDITIONAL_HEADING\", \"\")\nINCLUDE_PHONE_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_PHONE_IN_HEADING\", \"True\"))\nINCLUDE_EMAIL_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_EMAIL_IN_HEADING\", \"True\"))\nRECEIPT_FOOTER = os.getenv(\"RECEIPT_FOOTER\", \"You are Welcomed !\")\nRECEIPT_SALES_TITLE = os.getenv(\"RECEIPT_SALES_TITLE\", \"*** Sales Receipt ***\")\nRECEIPT_NONFISCAL_TEXT = os.getenv(\"RECEIPT_NONFISCAL_TEXT\", \"*** NON-FISCAL RECEIPT ***\")\nPRINTER_VENDOR_ID = os.getenv(\"PRINTER_VENDOR_ID\", \"\")\nPRINTER_PRODUCT_ID = os.getenv(\"PRINTER_PRODUCT_ID\", \"\")",
+        "peekOfCode": "STORE_TIN = \"102-188-357\"\nSTORE_VRN = \"\"\nRECEIPT_ADDITIONAL_HEADING = \"\"\nINCLUDE_PHONE_IN_HEADING = True\nINCLUDE_EMAIL_IN_HEADING = True\nRECEIPT_FOOTER = \"You are Welcomed !\"\nRECEIPT_SALES_TITLE = \"*** Sales Receipt ***\"\nRECEIPT_NONFISCAL_TEXT = \"*** NON-FISCAL RECEIPT ***\"\nPRINTER_VENDOR_ID = \"\"\nPRINTER_PRODUCT_ID = \"\"",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3249,7 +2884,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "STORE_VRN = os.getenv(\"STORE_VRN\", \"\")\nRECEIPT_ADDITIONAL_HEADING = os.getenv(\"RECEIPT_ADDITIONAL_HEADING\", \"\")\nINCLUDE_PHONE_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_PHONE_IN_HEADING\", \"True\"))\nINCLUDE_EMAIL_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_EMAIL_IN_HEADING\", \"True\"))\nRECEIPT_FOOTER = os.getenv(\"RECEIPT_FOOTER\", \"You are Welcomed !\")\nRECEIPT_SALES_TITLE = os.getenv(\"RECEIPT_SALES_TITLE\", \"*** Sales Receipt ***\")\nRECEIPT_NONFISCAL_TEXT = os.getenv(\"RECEIPT_NONFISCAL_TEXT\", \"*** NON-FISCAL RECEIPT ***\")\nPRINTER_VENDOR_ID = os.getenv(\"PRINTER_VENDOR_ID\", \"\")\nPRINTER_PRODUCT_ID = os.getenv(\"PRINTER_PRODUCT_ID\", \"\")\nPRINT_RECEIPT = str_to_bool(os.getenv(\"PRINT_RECEIPT\", \"True\"))",
+        "peekOfCode": "STORE_VRN = \"\"\nRECEIPT_ADDITIONAL_HEADING = \"\"\nINCLUDE_PHONE_IN_HEADING = True\nINCLUDE_EMAIL_IN_HEADING = True\nRECEIPT_FOOTER = \"You are Welcomed !\"\nRECEIPT_SALES_TITLE = \"*** Sales Receipt ***\"\nRECEIPT_NONFISCAL_TEXT = \"*** NON-FISCAL RECEIPT ***\"\nPRINTER_VENDOR_ID = \"\"\nPRINTER_PRODUCT_ID = \"\"\nPRINT_RECEIPT = True",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3258,7 +2893,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "RECEIPT_ADDITIONAL_HEADING = os.getenv(\"RECEIPT_ADDITIONAL_HEADING\", \"\")\nINCLUDE_PHONE_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_PHONE_IN_HEADING\", \"True\"))\nINCLUDE_EMAIL_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_EMAIL_IN_HEADING\", \"True\"))\nRECEIPT_FOOTER = os.getenv(\"RECEIPT_FOOTER\", \"You are Welcomed !\")\nRECEIPT_SALES_TITLE = os.getenv(\"RECEIPT_SALES_TITLE\", \"*** Sales Receipt ***\")\nRECEIPT_NONFISCAL_TEXT = os.getenv(\"RECEIPT_NONFISCAL_TEXT\", \"*** NON-FISCAL RECEIPT ***\")\nPRINTER_VENDOR_ID = os.getenv(\"PRINTER_VENDOR_ID\", \"\")\nPRINTER_PRODUCT_ID = os.getenv(\"PRINTER_PRODUCT_ID\", \"\")\nPRINT_RECEIPT = str_to_bool(os.getenv(\"PRINT_RECEIPT\", \"True\"))\nCASH_DRAWER = str_to_bool(os.getenv(\"CASH_DRAWER\", \"False\"))",
+        "peekOfCode": "RECEIPT_ADDITIONAL_HEADING = \"\"\nINCLUDE_PHONE_IN_HEADING = True\nINCLUDE_EMAIL_IN_HEADING = True\nRECEIPT_FOOTER = \"You are Welcomed !\"\nRECEIPT_SALES_TITLE = \"*** Sales Receipt ***\"\nRECEIPT_NONFISCAL_TEXT = \"*** NON-FISCAL RECEIPT ***\"\nPRINTER_VENDOR_ID = \"\"\nPRINTER_PRODUCT_ID = \"\"\nPRINT_RECEIPT = True\nCASH_DRAWER = False",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3267,7 +2902,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "INCLUDE_PHONE_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_PHONE_IN_HEADING\", \"True\"))\nINCLUDE_EMAIL_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_EMAIL_IN_HEADING\", \"True\"))\nRECEIPT_FOOTER = os.getenv(\"RECEIPT_FOOTER\", \"You are Welcomed !\")\nRECEIPT_SALES_TITLE = os.getenv(\"RECEIPT_SALES_TITLE\", \"*** Sales Receipt ***\")\nRECEIPT_NONFISCAL_TEXT = os.getenv(\"RECEIPT_NONFISCAL_TEXT\", \"*** NON-FISCAL RECEIPT ***\")\nPRINTER_VENDOR_ID = os.getenv(\"PRINTER_VENDOR_ID\", \"\")\nPRINTER_PRODUCT_ID = os.getenv(\"PRINTER_PRODUCT_ID\", \"\")\nPRINT_RECEIPT = str_to_bool(os.getenv(\"PRINT_RECEIPT\", \"True\"))\nCASH_DRAWER = str_to_bool(os.getenv(\"CASH_DRAWER\", \"False\"))\n_receipt_header_lines = [STORE_NAME]",
+        "peekOfCode": "INCLUDE_PHONE_IN_HEADING = True\nINCLUDE_EMAIL_IN_HEADING = True\nRECEIPT_FOOTER = \"You are Welcomed !\"\nRECEIPT_SALES_TITLE = \"*** Sales Receipt ***\"\nRECEIPT_NONFISCAL_TEXT = \"*** NON-FISCAL RECEIPT ***\"\nPRINTER_VENDOR_ID = \"\"\nPRINTER_PRODUCT_ID = \"\"\nPRINT_RECEIPT = True\nCASH_DRAWER = False\n_receipt_header_lines = [STORE_NAME]",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3276,7 +2911,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "INCLUDE_EMAIL_IN_HEADING = str_to_bool(os.getenv(\"INCLUDE_EMAIL_IN_HEADING\", \"True\"))\nRECEIPT_FOOTER = os.getenv(\"RECEIPT_FOOTER\", \"You are Welcomed !\")\nRECEIPT_SALES_TITLE = os.getenv(\"RECEIPT_SALES_TITLE\", \"*** Sales Receipt ***\")\nRECEIPT_NONFISCAL_TEXT = os.getenv(\"RECEIPT_NONFISCAL_TEXT\", \"*** NON-FISCAL RECEIPT ***\")\nPRINTER_VENDOR_ID = os.getenv(\"PRINTER_VENDOR_ID\", \"\")\nPRINTER_PRODUCT_ID = os.getenv(\"PRINTER_PRODUCT_ID\", \"\")\nPRINT_RECEIPT = str_to_bool(os.getenv(\"PRINT_RECEIPT\", \"True\"))\nCASH_DRAWER = str_to_bool(os.getenv(\"CASH_DRAWER\", \"False\"))\n_receipt_header_lines = [STORE_NAME]\nif STORE_ADDRESS:",
+        "peekOfCode": "INCLUDE_EMAIL_IN_HEADING = True\nRECEIPT_FOOTER = \"You are Welcomed !\"\nRECEIPT_SALES_TITLE = \"*** Sales Receipt ***\"\nRECEIPT_NONFISCAL_TEXT = \"*** NON-FISCAL RECEIPT ***\"\nPRINTER_VENDOR_ID = \"\"\nPRINTER_PRODUCT_ID = \"\"\nPRINT_RECEIPT = True\nCASH_DRAWER = False\n_receipt_header_lines = [STORE_NAME]\nif STORE_ADDRESS:",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3285,7 +2920,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "RECEIPT_FOOTER = os.getenv(\"RECEIPT_FOOTER\", \"You are Welcomed !\")\nRECEIPT_SALES_TITLE = os.getenv(\"RECEIPT_SALES_TITLE\", \"*** Sales Receipt ***\")\nRECEIPT_NONFISCAL_TEXT = os.getenv(\"RECEIPT_NONFISCAL_TEXT\", \"*** NON-FISCAL RECEIPT ***\")\nPRINTER_VENDOR_ID = os.getenv(\"PRINTER_VENDOR_ID\", \"\")\nPRINTER_PRODUCT_ID = os.getenv(\"PRINTER_PRODUCT_ID\", \"\")\nPRINT_RECEIPT = str_to_bool(os.getenv(\"PRINT_RECEIPT\", \"True\"))\nCASH_DRAWER = str_to_bool(os.getenv(\"CASH_DRAWER\", \"False\"))\n_receipt_header_lines = [STORE_NAME]\nif STORE_ADDRESS:\n    _receipt_header_lines.extend([line for line in STORE_ADDRESS.splitlines() if line.strip()])",
+        "peekOfCode": "RECEIPT_FOOTER = \"You are Welcomed !\"\nRECEIPT_SALES_TITLE = \"*** Sales Receipt ***\"\nRECEIPT_NONFISCAL_TEXT = \"*** NON-FISCAL RECEIPT ***\"\nPRINTER_VENDOR_ID = \"\"\nPRINTER_PRODUCT_ID = \"\"\nPRINT_RECEIPT = True\nCASH_DRAWER = False\n_receipt_header_lines = [STORE_NAME]\nif STORE_ADDRESS:\n    _receipt_header_lines.extend(",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3294,7 +2929,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "RECEIPT_SALES_TITLE = os.getenv(\"RECEIPT_SALES_TITLE\", \"*** Sales Receipt ***\")\nRECEIPT_NONFISCAL_TEXT = os.getenv(\"RECEIPT_NONFISCAL_TEXT\", \"*** NON-FISCAL RECEIPT ***\")\nPRINTER_VENDOR_ID = os.getenv(\"PRINTER_VENDOR_ID\", \"\")\nPRINTER_PRODUCT_ID = os.getenv(\"PRINTER_PRODUCT_ID\", \"\")\nPRINT_RECEIPT = str_to_bool(os.getenv(\"PRINT_RECEIPT\", \"True\"))\nCASH_DRAWER = str_to_bool(os.getenv(\"CASH_DRAWER\", \"False\"))\n_receipt_header_lines = [STORE_NAME]\nif STORE_ADDRESS:\n    _receipt_header_lines.extend([line for line in STORE_ADDRESS.splitlines() if line.strip()])\nif INCLUDE_PHONE_IN_HEADING and STORE_PHONE:",
+        "peekOfCode": "RECEIPT_SALES_TITLE = \"*** Sales Receipt ***\"\nRECEIPT_NONFISCAL_TEXT = \"*** NON-FISCAL RECEIPT ***\"\nPRINTER_VENDOR_ID = \"\"\nPRINTER_PRODUCT_ID = \"\"\nPRINT_RECEIPT = True\nCASH_DRAWER = False\n_receipt_header_lines = [STORE_NAME]\nif STORE_ADDRESS:\n    _receipt_header_lines.extend(\n        [line for line in STORE_ADDRESS.splitlines() if line.strip()]",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3303,7 +2938,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "RECEIPT_NONFISCAL_TEXT = os.getenv(\"RECEIPT_NONFISCAL_TEXT\", \"*** NON-FISCAL RECEIPT ***\")\nPRINTER_VENDOR_ID = os.getenv(\"PRINTER_VENDOR_ID\", \"\")\nPRINTER_PRODUCT_ID = os.getenv(\"PRINTER_PRODUCT_ID\", \"\")\nPRINT_RECEIPT = str_to_bool(os.getenv(\"PRINT_RECEIPT\", \"True\"))\nCASH_DRAWER = str_to_bool(os.getenv(\"CASH_DRAWER\", \"False\"))\n_receipt_header_lines = [STORE_NAME]\nif STORE_ADDRESS:\n    _receipt_header_lines.extend([line for line in STORE_ADDRESS.splitlines() if line.strip()])\nif INCLUDE_PHONE_IN_HEADING and STORE_PHONE:\n    _receipt_header_lines.append(STORE_PHONE)",
+        "peekOfCode": "RECEIPT_NONFISCAL_TEXT = \"*** NON-FISCAL RECEIPT ***\"\nPRINTER_VENDOR_ID = \"\"\nPRINTER_PRODUCT_ID = \"\"\nPRINT_RECEIPT = True\nCASH_DRAWER = False\n_receipt_header_lines = [STORE_NAME]\nif STORE_ADDRESS:\n    _receipt_header_lines.extend(\n        [line for line in STORE_ADDRESS.splitlines() if line.strip()]\n    )",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3312,7 +2947,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "PRINTER_VENDOR_ID = os.getenv(\"PRINTER_VENDOR_ID\", \"\")\nPRINTER_PRODUCT_ID = os.getenv(\"PRINTER_PRODUCT_ID\", \"\")\nPRINT_RECEIPT = str_to_bool(os.getenv(\"PRINT_RECEIPT\", \"True\"))\nCASH_DRAWER = str_to_bool(os.getenv(\"CASH_DRAWER\", \"False\"))\n_receipt_header_lines = [STORE_NAME]\nif STORE_ADDRESS:\n    _receipt_header_lines.extend([line for line in STORE_ADDRESS.splitlines() if line.strip()])\nif INCLUDE_PHONE_IN_HEADING and STORE_PHONE:\n    _receipt_header_lines.append(STORE_PHONE)\nif INCLUDE_EMAIL_IN_HEADING and STORE_EMAIL:",
+        "peekOfCode": "PRINTER_VENDOR_ID = \"\"\nPRINTER_PRODUCT_ID = \"\"\nPRINT_RECEIPT = True\nCASH_DRAWER = False\n_receipt_header_lines = [STORE_NAME]\nif STORE_ADDRESS:\n    _receipt_header_lines.extend(\n        [line for line in STORE_ADDRESS.splitlines() if line.strip()]\n    )\nif INCLUDE_PHONE_IN_HEADING and STORE_PHONE:",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3321,7 +2956,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "PRINTER_PRODUCT_ID = os.getenv(\"PRINTER_PRODUCT_ID\", \"\")\nPRINT_RECEIPT = str_to_bool(os.getenv(\"PRINT_RECEIPT\", \"True\"))\nCASH_DRAWER = str_to_bool(os.getenv(\"CASH_DRAWER\", \"False\"))\n_receipt_header_lines = [STORE_NAME]\nif STORE_ADDRESS:\n    _receipt_header_lines.extend([line for line in STORE_ADDRESS.splitlines() if line.strip()])\nif INCLUDE_PHONE_IN_HEADING and STORE_PHONE:\n    _receipt_header_lines.append(STORE_PHONE)\nif INCLUDE_EMAIL_IN_HEADING and STORE_EMAIL:\n    _receipt_header_lines.append(STORE_EMAIL)",
+        "peekOfCode": "PRINTER_PRODUCT_ID = \"\"\nPRINT_RECEIPT = True\nCASH_DRAWER = False\n_receipt_header_lines = [STORE_NAME]\nif STORE_ADDRESS:\n    _receipt_header_lines.extend(\n        [line for line in STORE_ADDRESS.splitlines() if line.strip()]\n    )\nif INCLUDE_PHONE_IN_HEADING and STORE_PHONE:\n    _receipt_header_lines.append(STORE_PHONE)",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3330,7 +2965,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "PRINT_RECEIPT = str_to_bool(os.getenv(\"PRINT_RECEIPT\", \"True\"))\nCASH_DRAWER = str_to_bool(os.getenv(\"CASH_DRAWER\", \"False\"))\n_receipt_header_lines = [STORE_NAME]\nif STORE_ADDRESS:\n    _receipt_header_lines.extend([line for line in STORE_ADDRESS.splitlines() if line.strip()])\nif INCLUDE_PHONE_IN_HEADING and STORE_PHONE:\n    _receipt_header_lines.append(STORE_PHONE)\nif INCLUDE_EMAIL_IN_HEADING and STORE_EMAIL:\n    _receipt_header_lines.append(STORE_EMAIL)\nif RECEIPT_ADDITIONAL_HEADING:",
+        "peekOfCode": "PRINT_RECEIPT = True\nCASH_DRAWER = False\n_receipt_header_lines = [STORE_NAME]\nif STORE_ADDRESS:\n    _receipt_header_lines.extend(\n        [line for line in STORE_ADDRESS.splitlines() if line.strip()]\n    )\nif INCLUDE_PHONE_IN_HEADING and STORE_PHONE:\n    _receipt_header_lines.append(STORE_PHONE)\nif INCLUDE_EMAIL_IN_HEADING and STORE_EMAIL:",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3339,7 +2974,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "CASH_DRAWER = str_to_bool(os.getenv(\"CASH_DRAWER\", \"False\"))\n_receipt_header_lines = [STORE_NAME]\nif STORE_ADDRESS:\n    _receipt_header_lines.extend([line for line in STORE_ADDRESS.splitlines() if line.strip()])\nif INCLUDE_PHONE_IN_HEADING and STORE_PHONE:\n    _receipt_header_lines.append(STORE_PHONE)\nif INCLUDE_EMAIL_IN_HEADING and STORE_EMAIL:\n    _receipt_header_lines.append(STORE_EMAIL)\nif RECEIPT_ADDITIONAL_HEADING:\n    _receipt_header_lines.append(RECEIPT_ADDITIONAL_HEADING)",
+        "peekOfCode": "CASH_DRAWER = False\n_receipt_header_lines = [STORE_NAME]\nif STORE_ADDRESS:\n    _receipt_header_lines.extend(\n        [line for line in STORE_ADDRESS.splitlines() if line.strip()]\n    )\nif INCLUDE_PHONE_IN_HEADING and STORE_PHONE:\n    _receipt_header_lines.append(STORE_PHONE)\nif INCLUDE_EMAIL_IN_HEADING and STORE_EMAIL:\n    _receipt_header_lines.append(STORE_EMAIL)",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3348,7 +2983,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "_receipt_header_lines = [STORE_NAME]\nif STORE_ADDRESS:\n    _receipt_header_lines.extend([line for line in STORE_ADDRESS.splitlines() if line.strip()])\nif INCLUDE_PHONE_IN_HEADING and STORE_PHONE:\n    _receipt_header_lines.append(STORE_PHONE)\nif INCLUDE_EMAIL_IN_HEADING and STORE_EMAIL:\n    _receipt_header_lines.append(STORE_EMAIL)\nif RECEIPT_ADDITIONAL_HEADING:\n    _receipt_header_lines.append(RECEIPT_ADDITIONAL_HEADING)\n_receipt_header_lines += [\"\", RECEIPT_SALES_TITLE]",
+        "peekOfCode": "_receipt_header_lines = [STORE_NAME]\nif STORE_ADDRESS:\n    _receipt_header_lines.extend(\n        [line for line in STORE_ADDRESS.splitlines() if line.strip()]\n    )\nif INCLUDE_PHONE_IN_HEADING and STORE_PHONE:\n    _receipt_header_lines.append(STORE_PHONE)\nif INCLUDE_EMAIL_IN_HEADING and STORE_EMAIL:\n    _receipt_header_lines.append(STORE_EMAIL)\nif RECEIPT_ADDITIONAL_HEADING:",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3357,7 +2992,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "RECEIPT_HEADER = \"\\n\".join(_receipt_header_lines)\nRECEIPT_SEPARATOR = \"-\" * RECEIPT_CHAR_COUNT\nRECEIPT_COLUMN_HEADER = \"DESCRIPTION\\nQTY   PRICE     AMOUNT\"\n# -------------------------------------------------\n# ✅ Security production toggles\n# -------------------------------------------------\nif not DEBUG:\n    SESSION_COOKIE_SECURE = True\n    CSRF_COOKIE_SECURE = True\n    SECURE_SSL_REDIRECT = True",
+        "peekOfCode": "RECEIPT_HEADER = \"\\n\".join(_receipt_header_lines)\nRECEIPT_SEPARATOR = \"-\" * RECEIPT_CHAR_COUNT\nRECEIPT_COLUMN_HEADER = \"DESCRIPTION\\nQTY   PRICE      AMOUNT\"\n# -------------------------------------------------\n# Login/session settings\n# -------------------------------------------------\nLOGIN_URL = \"/user/login/\"\nLOGIN_REDIRECT_URL = \"/\"\nLOGOUT_REDIRECT_URL = \"/user/login/\"\nSESSION_COOKIE_AGE = 60 * 60 * 12",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3366,7 +3001,7 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "RECEIPT_SEPARATOR = \"-\" * RECEIPT_CHAR_COUNT\nRECEIPT_COLUMN_HEADER = \"DESCRIPTION\\nQTY   PRICE     AMOUNT\"\n# -------------------------------------------------\n# ✅ Security production toggles\n# -------------------------------------------------\nif not DEBUG:\n    SESSION_COOKIE_SECURE = True\n    CSRF_COOKIE_SECURE = True\n    SECURE_SSL_REDIRECT = True\n    SECURE_HSTS_SECONDS = int(os.getenv(\"SECURE_HSTS_SECONDS\", \"120\"))",
+        "peekOfCode": "RECEIPT_SEPARATOR = \"-\" * RECEIPT_CHAR_COUNT\nRECEIPT_COLUMN_HEADER = \"DESCRIPTION\\nQTY   PRICE      AMOUNT\"\n# -------------------------------------------------\n# Login/session settings\n# -------------------------------------------------\nLOGIN_URL = \"/user/login/\"\nLOGIN_REDIRECT_URL = \"/\"\nLOGOUT_REDIRECT_URL = \"/user/login/\"\nSESSION_COOKIE_AGE = 60 * 60 * 12\nSESSION_SAVE_EVERY_REQUEST = True",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3375,7 +3010,115 @@
         "kind": 5,
         "importPath": "onlineretailpos.settings.settings",
         "description": "onlineretailpos.settings.settings",
-        "peekOfCode": "RECEIPT_COLUMN_HEADER = \"DESCRIPTION\\nQTY   PRICE     AMOUNT\"\n# -------------------------------------------------\n# ✅ Security production toggles\n# -------------------------------------------------\nif not DEBUG:\n    SESSION_COOKIE_SECURE = True\n    CSRF_COOKIE_SECURE = True\n    SECURE_SSL_REDIRECT = True\n    SECURE_HSTS_SECONDS = int(os.getenv(\"SECURE_HSTS_SECONDS\", \"120\"))\n    SECURE_HSTS_PRELOAD = True",
+        "peekOfCode": "RECEIPT_COLUMN_HEADER = \"DESCRIPTION\\nQTY   PRICE      AMOUNT\"\n# -------------------------------------------------\n# Login/session settings\n# -------------------------------------------------\nLOGIN_URL = \"/user/login/\"\nLOGIN_REDIRECT_URL = \"/\"\nLOGOUT_REDIRECT_URL = \"/user/login/\"\nSESSION_COOKIE_AGE = 60 * 60 * 12\nSESSION_SAVE_EVERY_REQUEST = True\n# -------------------------------------------------",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "LOGIN_URL",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "LOGIN_URL = \"/user/login/\"\nLOGIN_REDIRECT_URL = \"/\"\nLOGOUT_REDIRECT_URL = \"/user/login/\"\nSESSION_COOKIE_AGE = 60 * 60 * 12\nSESSION_SAVE_EVERY_REQUEST = True\n# -------------------------------------------------\n# Security production settings\n# -------------------------------------------------\nSESSION_COOKIE_SECURE = True\nCSRF_COOKIE_SECURE = True",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "LOGIN_REDIRECT_URL",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "LOGIN_REDIRECT_URL = \"/\"\nLOGOUT_REDIRECT_URL = \"/user/login/\"\nSESSION_COOKIE_AGE = 60 * 60 * 12\nSESSION_SAVE_EVERY_REQUEST = True\n# -------------------------------------------------\n# Security production settings\n# -------------------------------------------------\nSESSION_COOKIE_SECURE = True\nCSRF_COOKIE_SECURE = True\nSECURE_SSL_REDIRECT = True",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "LOGOUT_REDIRECT_URL",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "LOGOUT_REDIRECT_URL = \"/user/login/\"\nSESSION_COOKIE_AGE = 60 * 60 * 12\nSESSION_SAVE_EVERY_REQUEST = True\n# -------------------------------------------------\n# Security production settings\n# -------------------------------------------------\nSESSION_COOKIE_SECURE = True\nCSRF_COOKIE_SECURE = True\nSECURE_SSL_REDIRECT = True\nSECURE_HSTS_SECONDS = 120",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "SESSION_COOKIE_AGE",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "SESSION_COOKIE_AGE = 60 * 60 * 12\nSESSION_SAVE_EVERY_REQUEST = True\n# -------------------------------------------------\n# Security production settings\n# -------------------------------------------------\nSESSION_COOKIE_SECURE = True\nCSRF_COOKIE_SECURE = True\nSECURE_SSL_REDIRECT = True\nSECURE_HSTS_SECONDS = 120\nSECURE_HSTS_PRELOAD = True",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "SESSION_SAVE_EVERY_REQUEST",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "SESSION_SAVE_EVERY_REQUEST = True\n# -------------------------------------------------\n# Security production settings\n# -------------------------------------------------\nSESSION_COOKIE_SECURE = True\nCSRF_COOKIE_SECURE = True\nSECURE_SSL_REDIRECT = True\nSECURE_HSTS_SECONDS = 120\nSECURE_HSTS_PRELOAD = True\nSECURE_HSTS_INCLUDE_SUBDOMAINS = True",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "SESSION_COOKIE_SECURE",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "SESSION_COOKIE_SECURE = True\nCSRF_COOKIE_SECURE = True\nSECURE_SSL_REDIRECT = True\nSECURE_HSTS_SECONDS = 120\nSECURE_HSTS_PRELOAD = True\nSECURE_HSTS_INCLUDE_SUBDOMAINS = True\nSECURE_PROXY_SSL_HEADER = (\"HTTP_X_FORWARDED_PROTO\", \"https\")\n# -------------------------------------------------\n# Console debug prints for server logs\n# -------------------------------------------------",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "CSRF_COOKIE_SECURE",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "CSRF_COOKIE_SECURE = True\nSECURE_SSL_REDIRECT = True\nSECURE_HSTS_SECONDS = 120\nSECURE_HSTS_PRELOAD = True\nSECURE_HSTS_INCLUDE_SUBDOMAINS = True\nSECURE_PROXY_SSL_HEADER = (\"HTTP_X_FORWARDED_PROTO\", \"https\")\n# -------------------------------------------------\n# Console debug prints for server logs\n# -------------------------------------------------\nprint(",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "SECURE_SSL_REDIRECT",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "SECURE_SSL_REDIRECT = True\nSECURE_HSTS_SECONDS = 120\nSECURE_HSTS_PRELOAD = True\nSECURE_HSTS_INCLUDE_SUBDOMAINS = True\nSECURE_PROXY_SSL_HEADER = (\"HTTP_X_FORWARDED_PROTO\", \"https\")\n# -------------------------------------------------\n# Console debug prints for server logs\n# -------------------------------------------------\nprint(\n    f\"[settings] DEBUG={DEBUG} | DB=django.db.backends.sqlite3 | \"",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "SECURE_HSTS_SECONDS",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "SECURE_HSTS_SECONDS = 120\nSECURE_HSTS_PRELOAD = True\nSECURE_HSTS_INCLUDE_SUBDOMAINS = True\nSECURE_PROXY_SSL_HEADER = (\"HTTP_X_FORWARDED_PROTO\", \"https\")\n# -------------------------------------------------\n# Console debug prints for server logs\n# -------------------------------------------------\nprint(\n    f\"[settings] DEBUG={DEBUG} | DB=django.db.backends.sqlite3 | \"\n    f\"ALLOWED_HOSTS={ALLOWED_HOSTS}\"",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "SECURE_HSTS_PRELOAD",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "SECURE_HSTS_PRELOAD = True\nSECURE_HSTS_INCLUDE_SUBDOMAINS = True\nSECURE_PROXY_SSL_HEADER = (\"HTTP_X_FORWARDED_PROTO\", \"https\")\n# -------------------------------------------------\n# Console debug prints for server logs\n# -------------------------------------------------\nprint(\n    f\"[settings] DEBUG={DEBUG} | DB=django.db.backends.sqlite3 | \"\n    f\"ALLOWED_HOSTS={ALLOWED_HOSTS}\"\n)",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "SECURE_HSTS_INCLUDE_SUBDOMAINS",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "SECURE_HSTS_INCLUDE_SUBDOMAINS = True\nSECURE_PROXY_SSL_HEADER = (\"HTTP_X_FORWARDED_PROTO\", \"https\")\n# -------------------------------------------------\n# Console debug prints for server logs\n# -------------------------------------------------\nprint(\n    f\"[settings] DEBUG={DEBUG} | DB=django.db.backends.sqlite3 | \"\n    f\"ALLOWED_HOSTS={ALLOWED_HOSTS}\"\n)\nprint(f\"[settings] CSRF_TRUSTED_ORIGINS={CSRF_TRUSTED_ORIGINS}\")",
+        "detail": "onlineretailpos.settings.settings",
+        "documentation": {}
+    },
+    {
+        "label": "SECURE_PROXY_SSL_HEADER",
+        "kind": 5,
+        "importPath": "onlineretailpos.settings.settings",
+        "description": "onlineretailpos.settings.settings",
+        "peekOfCode": "SECURE_PROXY_SSL_HEADER = (\"HTTP_X_FORWARDED_PROTO\", \"https\")\n# -------------------------------------------------\n# Console debug prints for server logs\n# -------------------------------------------------\nprint(\n    f\"[settings] DEBUG={DEBUG} | DB=django.db.backends.sqlite3 | \"\n    f\"ALLOWED_HOSTS={ALLOWED_HOSTS}\"\n)\nprint(f\"[settings] CSRF_TRUSTED_ORIGINS={CSRF_TRUSTED_ORIGINS}\")\nprint(",
         "detail": "onlineretailpos.settings.settings",
         "documentation": {}
     },
@@ -3798,7 +3541,7 @@
         "kind": 6,
         "importPath": "transaction.views",
         "description": "transaction.views",
-        "peekOfCode": "class DateSelector(forms.Form):\n    start_date = forms.DateField(widget=forms.SelectDateWidget())\n    end_date = forms.DateField(widget=forms.SelectDateWidget())\nclass printer:\n    \"\"\"\n    Simple wrapper for escpos. Use settings.PRINTER_VENDOR_ID and PRINTER_PRODUCT_ID.\n    Note: environment values may be strings like '0x1234' or integers; original code used eval().\n    \"\"\"\n    printer = None\n    @staticmethod",
+        "peekOfCode": "class DateSelector(forms.Form):\n    start_date = forms.DateField(widget=forms.SelectDateWidget(), required=False)\n    end_date = forms.DateField(widget=forms.SelectDateWidget(), required=False)\nclass printer:\n    printer = None\n    @staticmethod\n    def printReceipt(printText, times=0, *args, **kwargs):\n        try:\n            if printer.printer:\n                printer.printer.text(printText)",
         "detail": "transaction.views",
         "documentation": {}
     },
@@ -3807,7 +3550,7 @@
         "kind": 6,
         "importPath": "transaction.views",
         "description": "transaction.views",
-        "peekOfCode": "class printer:\n    \"\"\"\n    Simple wrapper for escpos. Use settings.PRINTER_VENDOR_ID and PRINTER_PRODUCT_ID.\n    Note: environment values may be strings like '0x1234' or integers; original code used eval().\n    \"\"\"\n    printer = None\n    @staticmethod\n    def printReceipt(printText, times=0, *args, **kwargs):\n        try:\n            if printer.printer:",
+        "peekOfCode": "class printer:\n    printer = None\n    @staticmethod\n    def printReceipt(printText, times=0, *args, **kwargs):\n        try:\n            if printer.printer:\n                printer.printer.text(printText)\n                printer.printer.text(f\"\\nPrint Time: {datetime.now():%Y-%m-%d %H:%M}\\n\\n\\n\\n\\n\")\n        except Exception:\n            try:",
         "detail": "transaction.views",
         "documentation": {}
     },
@@ -3816,7 +3559,7 @@
         "kind": 2,
         "importPath": "transaction.views",
         "description": "transaction.views",
-        "peekOfCode": "def currency_symbol():\n    return getattr(settings, \"CURRENCY_SYMBOL\", \"TZS\")\ndef safe_decimal(value, default=Decimal(\"0.00\")):\n    \"\"\"\n    Convert value to Decimal safely. Accepts Decimal, int, float, str.\n    Returns a Decimal quantized to 2 places, or default on error.\n    \"\"\"\n    if value is None or value == \"\":\n        return default\n    if isinstance(value, Decimal):",
+        "peekOfCode": "def currency_symbol():\n    return getattr(settings, \"CURRENCY_SYMBOL\", \"TZS\")\ndef safe_decimal(value, default=Decimal(\"0.00\")):\n    if value is None or value == \"\":\n        return default\n    if isinstance(value, Decimal):\n        try:\n            return value.quantize(Decimal(\"0.01\"), rounding=ROUND_HALF_UP)\n        except Exception:\n            return default",
         "detail": "transaction.views",
         "documentation": {}
     },
@@ -3825,7 +3568,7 @@
         "kind": 2,
         "importPath": "transaction.views",
         "description": "transaction.views",
-        "peekOfCode": "def safe_decimal(value, default=Decimal(\"0.00\")):\n    \"\"\"\n    Convert value to Decimal safely. Accepts Decimal, int, float, str.\n    Returns a Decimal quantized to 2 places, or default on error.\n    \"\"\"\n    if value is None or value == \"\":\n        return default\n    if isinstance(value, Decimal):\n        try:\n            return value.quantize(Decimal(\"0.01\"), rounding=ROUND_HALF_UP)",
+        "peekOfCode": "def safe_decimal(value, default=Decimal(\"0.00\")):\n    if value is None or value == \"\":\n        return default\n    if isinstance(value, Decimal):\n        try:\n            return value.quantize(Decimal(\"0.01\"), rounding=ROUND_HALF_UP)\n        except Exception:\n            return default\n    try:\n        d = Decimal(str(value))",
         "detail": "transaction.views",
         "documentation": {}
     },
@@ -3834,7 +3577,7 @@
         "kind": 2,
         "importPath": "transaction.views",
         "description": "transaction.views",
-        "peekOfCode": "def fmt(amount, decimals=2):\n    \"\"\"\n    Format a numeric amount with commas and currency symbol.\n    Example: fmt(123456.5) -> \"TZS 123,456.50\"\n    Always returns a string.\n    \"\"\"\n    try:\n        dec = safe_decimal(amount)\n        formatted = f\"{dec:,.{decimals}f}\"\n    except Exception:",
+        "peekOfCode": "def fmt(amount, decimals=2):\n    try:\n        dec = safe_decimal(amount)\n        formatted = f\"{dec:,.{decimals}f}\"\n    except Exception:\n        formatted = f\"{Decimal('0.00'):,.{decimals}f}\"\n    return f\"{currency_symbol()} {formatted}\"\ndef fmt_no_sym(amount, decimals=2):\n    try:\n        dec = safe_decimal(amount)",
         "detail": "transaction.views",
         "documentation": {}
     },
@@ -3843,7 +3586,70 @@
         "kind": 2,
         "importPath": "transaction.views",
         "description": "transaction.views",
-        "peekOfCode": "def fmt_no_sym(amount, decimals=2):\n    \"\"\"Return just the number with commas (no currency symbol).\"\"\"\n    try:\n        dec = safe_decimal(amount)\n        return f\"{dec:,.{decimals}f}\"\n    except Exception:\n        return f\"{Decimal('0.00'):,.{decimals}f}\"\ndef sum_cart_field(cart, field_name):\n    \"\"\"\n    Sum a numeric field from the session cart safely using Decimal arithmetic.",
+        "peekOfCode": "def fmt_no_sym(amount, decimals=2):\n    try:\n        dec = safe_decimal(amount)\n        return f\"{dec:,.{decimals}f}\"\n    except Exception:\n        return f\"{Decimal('0.00'):,.{decimals}f}\"\ndef get_cart_from_session(request):\n    \"\"\"\n    Get cart from session safely.\n    \"\"\"",
+        "detail": "transaction.views",
+        "documentation": {}
+    },
+    {
+        "label": "get_cart_from_session",
+        "kind": 2,
+        "importPath": "transaction.views",
+        "description": "transaction.views",
+        "peekOfCode": "def get_cart_from_session(request):\n    \"\"\"\n    Get cart from session safely.\n    \"\"\"\n    cart_key = getattr(settings, \"CART_SESSION_ID\", \"cart\")\n    return request.session.get(cart_key, {})\ndef cart_is_empty(cart):\n    if not cart:\n        return True\n    if isinstance(cart, dict) and len(cart.keys()) == 0:",
+        "detail": "transaction.views",
+        "documentation": {}
+    },
+    {
+        "label": "cart_is_empty",
+        "kind": 2,
+        "importPath": "transaction.views",
+        "description": "transaction.views",
+        "peekOfCode": "def cart_is_empty(cart):\n    if not cart:\n        return True\n    if isinstance(cart, dict) and len(cart.keys()) == 0:\n        return True\n    if isinstance(cart, list) and len(cart) == 0:\n        return True\n    return False\ndef get_cart_items(cart):\n    \"\"\"",
+        "detail": "transaction.views",
+        "documentation": {}
+    },
+    {
+        "label": "get_cart_items",
+        "kind": 2,
+        "importPath": "transaction.views",
+        "description": "transaction.views",
+        "peekOfCode": "def get_cart_items(cart):\n    \"\"\"\n    Convert session cart to list of item dicts.\n    Supports dict cart and list cart.\n    \"\"\"\n    if cart is None:\n        return []\n    if isinstance(cart, dict):\n        return [v for v in cart.values() if isinstance(v, dict)]\n    if isinstance(cart, list):",
+        "detail": "transaction.views",
+        "documentation": {}
+    },
+    {
+        "label": "get_item_name",
+        "kind": 2,
+        "importPath": "transaction.views",
+        "description": "transaction.views",
+        "peekOfCode": "def get_item_name(item):\n    return (\n        item.get(\"name\")\n        or item.get(\"product_name\")\n        or item.get(\"description\")\n        or item.get(\"title\")\n        or item.get(\"product\")\n        or \"ITEM\"\n    )\ndef get_item_qty(item):",
+        "detail": "transaction.views",
+        "documentation": {}
+    },
+    {
+        "label": "get_item_qty",
+        "kind": 2,
+        "importPath": "transaction.views",
+        "description": "transaction.views",
+        "peekOfCode": "def get_item_qty(item):\n    raw = (\n        item.get(\"quantity\")\n        or item.get(\"qty\")\n        or item.get(\"count\")\n        or item.get(\"Quantity\")\n        or 1\n    )\n    try:\n        qty_dec = Decimal(str(raw))",
+        "detail": "transaction.views",
+        "documentation": {}
+    },
+    {
+        "label": "get_item_price",
+        "kind": 2,
+        "importPath": "transaction.views",
+        "description": "transaction.views",
+        "peekOfCode": "def get_item_price(item):\n    raw = (\n        item.get(\"price\")\n        or item.get(\"selling_price\")\n        or item.get(\"unit_price\")\n        or item.get(\"rate\")\n        or item.get(\"Price\")\n        or 0\n    )\n    return safe_decimal(raw)",
+        "detail": "transaction.views",
+        "documentation": {}
+    },
+    {
+        "label": "get_item_line_total",
+        "kind": 2,
+        "importPath": "transaction.views",
+        "description": "transaction.views",
+        "peekOfCode": "def get_item_line_total(item):\n    raw_total = (\n        item.get(\"line_total\")\n        or item.get(\"total\")\n        or item.get(\"amount\")\n        or item.get(\"subtotal\")\n        or item.get(\"sub_total\")\n        or item.get(\"lineTotal\")\n    )\n    if raw_total not in (None, \"\"):",
         "detail": "transaction.views",
         "documentation": {}
     },
@@ -3852,7 +3658,43 @@
         "kind": 2,
         "importPath": "transaction.views",
         "description": "transaction.views",
-        "peekOfCode": "def sum_cart_field(cart, field_name):\n    \"\"\"\n    Sum a numeric field from the session cart safely using Decimal arithmetic.\n    cart is expected to be a dict mapping key -> {field_name: value, ...}\n    \"\"\"\n    total = Decimal(\"0.00\")\n    if not cart or not isinstance(cart, dict):\n        return total\n    for val in cart.values():\n        try:",
+        "peekOfCode": "def sum_cart_field(cart, field_name=\"line_total\"):\n    \"\"\"\n    Robust total calculator.\n    Fixes issue where transaction returns to barcode/register\n    because total becomes 0 due to wrong cart key.\n    \"\"\"\n    total = Decimal(\"0.00\")\n    for item in get_cart_items(cart):\n        try:\n            total += get_item_line_total(item)",
+        "detail": "transaction.views",
+        "documentation": {}
+    },
+    {
+        "label": "format_qty",
+        "kind": 2,
+        "importPath": "transaction.views",
+        "description": "transaction.views",
+        "peekOfCode": "def format_qty(qty):\n    try:\n        q = Decimal(str(qty))\n        if q == q.to_integral():\n            return str(int(q))\n        return str(q.normalize())\n    except Exception:\n        return str(qty)\ndef split_product_name(name, width=42):\n    name = str(name or \"\").strip().upper()",
+        "detail": "transaction.views",
+        "documentation": {}
+    },
+    {
+        "label": "split_product_name",
+        "kind": 2,
+        "importPath": "transaction.views",
+        "description": "transaction.views",
+        "peekOfCode": "def split_product_name(name, width=42):\n    name = str(name or \"\").strip().upper()\n    if not name:\n        return [\"ITEM\"]\n    words = name.split()\n    lines = []\n    current = \"\"\n    for word in words:\n        if len(word) > width:\n            if current:",
+        "detail": "transaction.views",
+        "documentation": {}
+    },
+    {
+        "label": "money_line",
+        "kind": 2,
+        "importPath": "transaction.views",
+        "description": "transaction.views",
+        "peekOfCode": "def money_line(label, amount, width=42):\n    left = str(label)\n    right = fmt_no_sym(amount)\n    spaces = width - len(left) - len(right)\n    if spaces < 1:\n        spaces = 1\n    return left + (\" \" * spaces) + right\ndef build_receipt_text(\n    transaction_id,\n    user,",
+        "detail": "transaction.views",
+        "documentation": {}
+    },
+    {
+        "label": "build_receipt_text",
+        "kind": 2,
+        "importPath": "transaction.views",
+        "description": "transaction.views",
+        "peekOfCode": "def build_receipt_text(\n    transaction_id,\n    user,\n    payment_type,\n    enhanced_rows,\n    total_dec,\n    tax_total,\n    paid_amount=Decimal(\"0.00\"),\n    debtor_name=None,\n    phone_number=None,",
         "detail": "transaction.views",
         "documentation": {}
     },
@@ -3861,7 +3703,7 @@
         "kind": 2,
         "importPath": "transaction.views",
         "description": "transaction.views",
-        "peekOfCode": "def transactionReceipt(request, transNo):\n    \"\"\"\n    Show receipt for a transaction. Defensive against DB decimal issues.\n    \"\"\"\n    try:\n        obj = transaction.objects.get(transaction_id=transNo)\n        receipt = getattr(obj, \"receipt\", \"\")\n        return render(request, 'receiptView.html', context={'receipt': receipt, 'transNo': transNo})\n    except transaction.DoesNotExist:\n        raise Http404(\"No Transactions Found!!!\")",
+        "peekOfCode": "def transactionReceipt(request, transNo):\n    try:\n        obj = transaction.objects.get(transaction_id=transNo)\n        receipt = getattr(obj, \"receipt\", \"\")\n        return render(request, \"receiptView.html\", {\"receipt\": receipt, \"transNo\": transNo})\n    except transaction.DoesNotExist:\n        raise Http404(\"No Transactions Found!!!\")\n    except InvalidOperation as inv:\n        print(\"transactionReceipt InvalidOperation:\", inv)\n        traceback.print_exc()",
         "detail": "transaction.views",
         "documentation": {}
     },
@@ -3870,7 +3712,7 @@
         "kind": 2,
         "importPath": "transaction.views",
         "description": "transaction.views",
-        "peekOfCode": "def transactionPrintReceipt(request, transNo):\n    \"\"\"\n    Send stored receipt text to the physical printer (if available).\n    \"\"\"\n    try:\n        try:\n            receipt = transaction.objects.get(transaction_id=transNo).receipt\n        except InvalidOperation as inv:\n            print(\"transactionPrintReceipt: InvalidOperation, raw fallback\", inv)\n            traceback.print_exc()",
+        "peekOfCode": "def transactionPrintReceipt(request, transNo):\n    try:\n        try:\n            receipt = transaction.objects.get(transaction_id=transNo).receipt\n        except InvalidOperation:\n            table = transaction._meta.db_table\n            sql = \"SELECT receipt FROM %s WHERE transaction_id = ? LIMIT 1\" % table\n            with connection.cursor() as cursor:\n                cursor.execute(sql, [transNo])\n                row = cursor.fetchone()",
         "detail": "transaction.views",
         "documentation": {}
     },
@@ -3879,7 +3721,7 @@
         "kind": 2,
         "importPath": "transaction.views",
         "description": "transaction.views",
-        "peekOfCode": "def transactionView(request):\n    \"\"\"\n    Transaction list with date filter (GET).\n    - User selects local dates -> convert to aware local datetimes -> convert to UTC for DB query.\n    - Results' datetimes are converted back to local for display.\n    \"\"\"\n    # local timezone (server/user)\n    local_tz = dj_timezone.get_current_timezone()\n    now_local = dj_timezone.localtime(dj_timezone.now(), local_tz)\n    # Default local start/end for \"today\"",
+        "peekOfCode": "def transactionView(request):\n    local_tz = dj_timezone.get_current_timezone()\n    now_local = dj_timezone.localtime(dj_timezone.now(), local_tz)\n    default_start_local = now_local.replace(hour=0, minute=0, second=0, microsecond=0)\n    default_end_local = now_local.replace(hour=23, minute=59, second=59, microsecond=999999)\n    form = DateSelector(request.GET or None)\n    start_local = default_start_local\n    end_local = default_end_local\n    start_date_val = None\n    end_date_val = None",
         "detail": "transaction.views",
         "documentation": {}
     },
@@ -3888,7 +3730,7 @@
         "kind": 2,
         "importPath": "transaction.views",
         "description": "transaction.views",
-        "peekOfCode": "def returnsTransaction(request):\n    Cart(request).returns()\n    return redirect('register')\n@login_required(login_url=\"/user/login/\")\ndef suspendTransaction(request):\n    \"\"\"\n    Save current session cart under a timestamp key for later recall.\n    \"\"\"\n    if Cart(request).isNotEmpty():\n        key = datetime.now().strftime('%Y%m%d%H%M%S%f')",
+        "peekOfCode": "def returnsTransaction(request):\n    Cart(request).returns()\n    return redirect(\"register\")\n@login_required(login_url=\"/user/login/\")\ndef suspendTransaction(request):\n    if Cart(request).isNotEmpty():\n        key = datetime.now().strftime(\"%Y%m%d%H%M%S%f\")\n        cart_key = getattr(settings, \"CART_SESSION_ID\", \"cart\")\n        if \"Cart_Sessions\" not in request.session:\n            request.session[\"Cart_Sessions\"] = {}",
         "detail": "transaction.views",
         "documentation": {}
     },
@@ -3897,7 +3739,7 @@
         "kind": 2,
         "importPath": "transaction.views",
         "description": "transaction.views",
-        "peekOfCode": "def suspendTransaction(request):\n    \"\"\"\n    Save current session cart under a timestamp key for later recall.\n    \"\"\"\n    if Cart(request).isNotEmpty():\n        key = datetime.now().strftime('%Y%m%d%H%M%S%f')\n        if \"Cart_Sessions\" in request.session.keys():\n            request.session[\"Cart_Sessions\"][key] = request.session[settings.CART_SESSION_ID]\n            request.session.modified = True\n        else:",
+        "peekOfCode": "def suspendTransaction(request):\n    if Cart(request).isNotEmpty():\n        key = datetime.now().strftime(\"%Y%m%d%H%M%S%f\")\n        cart_key = getattr(settings, \"CART_SESSION_ID\", \"cart\")\n        if \"Cart_Sessions\" not in request.session:\n            request.session[\"Cart_Sessions\"] = {}\n        request.session[\"Cart_Sessions\"][key] = request.session.get(cart_key, {})\n        request.session.modified = True\n    return redirect(\"cart_clear\")\n@login_required(login_url=\"/user/login/\")",
         "detail": "transaction.views",
         "documentation": {}
     },
@@ -3906,7 +3748,7 @@
         "kind": 2,
         "importPath": "transaction.views",
         "description": "transaction.views",
-        "peekOfCode": "def recallTransaction(request, recallTransNo=None):\n    \"\"\"\n    Restore a suspended cart back to the session.\n    \"\"\"\n    if Cart(request).isNotEmpty():\n        return redirect(\"suspend_transaction\")\n    if recallTransNo:\n        request.session[settings.CART_SESSION_ID] = request.session[\"Cart_Sessions\"][recallTransNo]\n        del request.session[\"Cart_Sessions\"][recallTransNo]\n        request.session.modified = True",
+        "peekOfCode": "def recallTransaction(request, recallTransNo=None):\n    cart_key = getattr(settings, \"CART_SESSION_ID\", \"cart\")\n    if Cart(request).isNotEmpty():\n        return redirect(\"suspend_transaction\")\n    if recallTransNo:\n        request.session[cart_key] = request.session[\"Cart_Sessions\"][recallTransNo]\n        del request.session[\"Cart_Sessions\"][recallTransNo]\n        request.session.modified = True\n    elif \"Cart_Sessions\" in request.session and len(request.session[\"Cart_Sessions\"]):\n        return render(request, \"recallTransaction.html\", {",
         "detail": "transaction.views",
         "documentation": {}
     },
@@ -3915,7 +3757,7 @@
         "kind": 2,
         "importPath": "transaction.views",
         "description": "transaction.views",
-        "peekOfCode": "def endTransactionReceipt(request, transNo):\n    \"\"\"\n    Show final receipt page after completing transaction (with cash/card details in a small table).\n    \"\"\"\n    try:\n        change = \"\"\n        if request.GET.get(\"type\") == \"cash\":\n            # compute change properly and format TZS\n            total = float(request.GET.get(\"total\", 0))\n            value = float(request.GET.get(\"value\", 0))",
+        "peekOfCode": "def endTransactionReceipt(request, transNo):\n    try:\n        change = \"\"\n        if request.GET.get(\"type\") == \"cash\":\n            total = safe_decimal(request.GET.get(\"total\", 0))\n            value = safe_decimal(request.GET.get(\"value\", 0))\n            change_val = value - total\n            change = f\"\"\"\n                <table class=\"table text-white h3 p-0 m-0\">\n                    <tr>",
         "detail": "transaction.views",
         "documentation": {}
     },
@@ -3924,7 +3766,7 @@
         "kind": 2,
         "importPath": "transaction.views",
         "description": "transaction.views",
-        "peekOfCode": "def endTransaction(request, type, value):\n    \"\"\"\n    Complete a sale. Prevent duplicate transactions by using a session-based\n    fingerprint/pending guard. If a request with the same fingerprint is received\n    while another request is processing (or very recently processed), the second\n    request will return/redirect to the already-created transaction instead of\n    creating a new one.\n    \"\"\"\n    try:\n        # Get session cart",
+        "peekOfCode": "def endTransaction(request, type, value):\n    \"\"\"\n    Complete sale.\n    FIXED:\n    - No fingerprint blocking.\n    - No pending session loop.\n    - Robust cart total.\n    - Cash/EBT/Card all complete sale.\n    \"\"\"\n    try:",
         "detail": "transaction.views",
         "documentation": {}
     },
@@ -3951,7 +3793,7 @@
         "kind": 2,
         "importPath": "transaction.views",
         "description": "transaction.views",
-        "peekOfCode": "def expenses_list(request):\n    qs = Expense.objects.all()\n    return render(request, \"transaction/expenses_list.html\", {\"expenses\": qs})\n@login_required(login_url=\"/user/login/\")\ndef profit_loss(request):\n    \"\"\"\n    Profit & loss between two dates (inclusive).\n    \"\"\"\n    # date range handling\n    now = timezone.now()",
+        "peekOfCode": "def expenses_list(request):\n    qs = Expense.objects.all().order_by(\"-id\")\n    return render(request, \"transaction/expenses_list.html\", {\"expenses\": qs})\n@login_required(login_url=\"/user/login/\")\ndef profit_loss(request):\n    now = dj_timezone.now()\n    start_str = request.GET.get(\"start_date\", \"\")\n    end_str = request.GET.get(\"end_date\", \"\")\n    try:\n        if start_str:",
         "detail": "transaction.views",
         "documentation": {}
     },
@@ -3960,7 +3802,7 @@
         "kind": 2,
         "importPath": "transaction.views",
         "description": "transaction.views",
-        "peekOfCode": "def profit_loss(request):\n    \"\"\"\n    Profit & loss between two dates (inclusive).\n    \"\"\"\n    # date range handling\n    now = timezone.now()\n    start_str = request.GET.get(\"start_date\", \"\")\n    end_str = request.GET.get(\"end_date\", \"\")\n    try:\n        if start_str:",
+        "peekOfCode": "def profit_loss(request):\n    now = dj_timezone.now()\n    start_str = request.GET.get(\"start_date\", \"\")\n    end_str = request.GET.get(\"end_date\", \"\")\n    try:\n        if start_str:\n            start_date = dj_timezone.make_aware(datetime.strptime(start_str, \"%Y-%m-%d\"))\n        else:\n            start_date = dj_timezone.make_aware(datetime(now.year, now.month, 1))\n    except Exception:",
         "detail": "transaction.views",
         "documentation": {}
     },
@@ -3969,7 +3811,7 @@
         "kind": 2,
         "importPath": "transaction.views",
         "description": "transaction.views",
-        "peekOfCode": "def endDebtTransaction(request):\n    \"\"\"\n    Complete a sale that is recorded as DEBT (credit).\n    POST params expected:\n      - paid_amount (optional)\n      - debtor_name (optional)\n      - due_date (YYYY-MM-DD) optional\n      - phone_number (optional)   <-- NEW\n    Adds a short idempotency check to avoid duplicate transactions on double-submit.\n    \"\"\"",
+        "peekOfCode": "def endDebtTransaction(request):\n    try:\n        if request.method != \"POST\":\n            return HttpResponseBadRequest(\"POST required\")\n        cart = get_cart_from_session(request)\n        if cart_is_empty(cart):\n            return redirect(\"register\")\n        total_dec = sum_cart_field(cart, \"line_total\")\n        if total_dec <= Decimal(\"0.00\"):\n            print(\"endDebtTransaction: total zero. cart =\", cart)",
         "detail": "transaction.views",
         "documentation": {}
     },
@@ -3978,7 +3820,7 @@
         "kind": 2,
         "importPath": "transaction.views",
         "description": "transaction.views",
-        "peekOfCode": "def debts_list(request):\n    \"\"\"\n    Server-side searchable, paginated debts list.\n    GET params:\n      - q: search query (debtor name or phone)\n      - page: pagination\n    \"\"\"\n    qs = Debt.objects.select_related('transaction', 'created_by').order_by('-created_at')\n    # server-side search term\n    q = (request.GET.get(\"q\") or \"\").strip()",
+        "peekOfCode": "def debts_list(request):\n    qs = Debt.objects.select_related(\"transaction\", \"created_by\").order_by(\"-created_at\")\n    q = (request.GET.get(\"q\") or \"\").strip()\n    if q:\n        qs = qs.filter(\n            Q(debtor_name__icontains=q) |\n            Q(phone_number__icontains=q)\n        )\n    paginator = Paginator(qs, 25)\n    page_number = request.GET.get(\"page\", 1)",
         "detail": "transaction.views",
         "documentation": {}
     },
@@ -3987,7 +3829,7 @@
         "kind": 2,
         "importPath": "transaction.views",
         "description": "transaction.views",
-        "peekOfCode": "def debt_detail(request, debt_id):\n    \"\"\"\n    Show debt detail including payments history.\n    \"\"\"\n    try:\n        debt = Debt.objects.select_related('transaction', 'created_by').get(pk=debt_id)\n    except Debt.DoesNotExist:\n        raise Http404(\"Debt not found\")\n    payments = debt.payments.select_related('paid_by').order_by(\"-created_at\")\n    return render(request, \"debt_detail.html\", {\"debt\": debt, \"payments\": payments})",
+        "peekOfCode": "def debt_detail(request, debt_id):\n    debt = get_object_or_404(\n        Debt.objects.select_related(\"transaction\", \"created_by\"),\n        pk=debt_id\n    )\n    payments = debt.payments.select_related(\"paid_by\").order_by(\"-created_at\")\n    return render(request, \"debt_detail.html\", {\"debt\": debt, \"payments\": payments})\n@require_POST\n@login_required(login_url=\"/user/login/\")\ndef pay_debt(request, debt_id):",
         "detail": "transaction.views",
         "documentation": {}
     },
@@ -3996,7 +3838,7 @@
         "kind": 2,
         "importPath": "transaction.views",
         "description": "transaction.views",
-        "peekOfCode": "def pay_debt(request, debt_id):\n    \"\"\"\n    AJAX endpoint to record a payment for a debt.\n    POST params:\n      - amount (required)\n      - method (one of CASH, DEBIT/CREDIT, EBT) optional default CASH\n      - note (optional)\n    Returns JSON: {'status':'ok','new_balance': '123.45','debt_status':'PARTIAL'} or error\n    \"\"\"\n    try:",
+        "peekOfCode": "def pay_debt(request, debt_id):\n    try:\n        debt = Debt.objects.get(pk=debt_id)\n    except Debt.DoesNotExist:\n        return JsonResponse({\"status\": \"error\", \"msg\": \"Debt not found\"}, status=404)\n    amount_raw = request.POST.get(\"amount\", \"\").strip()\n    method = request.POST.get(\"method\", \"CASH\").upper()\n    note = request.POST.get(\"note\", \"\")\n    amount = safe_decimal(amount_raw)\n    if amount <= Decimal(\"0.00\"):",
         "detail": "transaction.views",
         "documentation": {}
     },
@@ -4005,7 +3847,7 @@
         "kind": 2,
         "importPath": "transaction.views",
         "description": "transaction.views",
-        "peekOfCode": "def debt_payment(request, debt_id):\n    \"\"\"\n    Render a small page/form to accept a payment for a debt (non-AJAX).\n    POST -> records DebtPayment and updates Debt balance/status, then redirects to debt_detail.\n    \"\"\"\n    debt = get_object_or_404(Debt, pk=debt_id)\n    if request.method == \"POST\":\n        try:\n            amount = safe_decimal(request.POST.get(\"amount\", \"0\"))\n        except Exception:",
+        "peekOfCode": "def debt_payment(request, debt_id):\n    debt = get_object_or_404(Debt, pk=debt_id)\n    if request.method == \"POST\":\n        amount = safe_decimal(request.POST.get(\"amount\", \"0\"))\n        method = request.POST.get(\"method\", \"CASH\").upper()\n        note = request.POST.get(\"note\", \"\")\n        if amount <= Decimal(\"0.00\"):\n            messages.error(request, \"Payment amount must be greater than 0.\")\n            return redirect(\"debt_payment\", debt_id=debt_id)\n        try:",
         "detail": "transaction.views",
         "documentation": {}
     },
@@ -4014,7 +3856,7 @@
         "kind": 2,
         "importPath": "transaction.views",
         "description": "transaction.views",
-        "peekOfCode": "def debt_payments_history(request, debt_id):\n    \"\"\"\n    Show list of payments for a debt (simple page).\n    \"\"\"\n    debt = get_object_or_404(Debt, pk=debt_id)\n    payments = debt.payments.select_related('paid_by').order_by(\"-created_at\")\n    return render(request, \"debt_payments_history.html\", {\"debt\": debt, \"payments\": payments})",
+        "peekOfCode": "def debt_payments_history(request, debt_id):\n    debt = get_object_or_404(Debt, pk=debt_id)\n    payments = debt.payments.select_related(\"paid_by\").order_by(\"-created_at\")\n    return render(request, \"debt_payments_history.html\", {\"debt\": debt, \"payments\": payments})",
         "detail": "transaction.views",
         "documentation": {}
     },
@@ -4023,7 +3865,7 @@
         "kind": 5,
         "importPath": "transaction.views",
         "description": "transaction.views",
-        "peekOfCode": "getcontext().prec = 28\n# -----------------------------\n# Helpers\n# -----------------------------\ndef currency_symbol():\n    return getattr(settings, \"CURRENCY_SYMBOL\", \"TZS\")\ndef safe_decimal(value, default=Decimal(\"0.00\")):\n    \"\"\"\n    Convert value to Decimal safely. Accepts Decimal, int, float, str.\n    Returns a Decimal quantized to 2 places, or default on error.",
+        "peekOfCode": "getcontext().prec = 28\n# ============================================================\n# Helpers\n# ============================================================\ndef currency_symbol():\n    return getattr(settings, \"CURRENCY_SYMBOL\", \"TZS\")\ndef safe_decimal(value, default=Decimal(\"0.00\")):\n    if value is None or value == \"\":\n        return default\n    if isinstance(value, Decimal):",
         "detail": "transaction.views",
         "documentation": {}
     },
