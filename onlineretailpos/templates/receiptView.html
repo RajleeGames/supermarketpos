@@ -1,67 +1,301 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    Transaction Receipt | Online Retail POS
+Transaction Receipt | Online Retail POS
 {% endblock %}
 
-{% block nav-item %}  
-    Receipt - {{ transNo }}  
+{% block nav-item %}
+Receipt - {{ transNo }}
 {% endblock %}
 
 {% block content %}
 
-<button id="qzPrintBtn" class="btn-lg btn-success" style="width: 20%; margin-top: 10px; margin-left: 10px;">
-    Print Receipt
-</button>
+<style>
+    .receipt-page {
+        min-height: 100vh;
+        background: #f6f8fb;
+        padding: 18px;
+        font-family: Arial, sans-serif;
+    }
 
-<div style="text-align: center; padding-top: 30px;">
-    <pre id="receiptContent">{{ receipt }}</pre>
+    .receipt-toolbar {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 18px;
+        flex-wrap: wrap;
+    }
+
+    .print-btn {
+        border: 0;
+        background: #16a34a;
+        color: #fff;
+        padding: 10px 18px;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 0 8px 18px rgba(22, 163, 74, 0.22);
+    }
+
+    .print-btn:hover {
+        background: #15803d;
+    }
+
+    .test-btn {
+        border: 1px solid #d0d7de;
+        background: #fff;
+        color: #111827;
+        padding: 10px 18px;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+    .printer-status {
+        font-size: 13px;
+        color: #475569;
+    }
+
+    .receipt-preview-wrap {
+        display: flex;
+        justify-content: center;
+    }
+
+    .receipt-preview {
+        background: #fff;
+        color: #111;
+        width: 380px;
+        max-width: 100%;
+        padding: 18px 14px;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+        border: 1px solid #e5e7eb;
+    }
+
+    #receiptContent {
+        margin: 0;
+        white-space: pre-wrap;
+        word-break: break-word;
+        font-family: "Courier New", monospace;
+        font-size: 12px;
+        line-height: 1.32;
+    }
+
+    @media print {
+        body * {
+            visibility: hidden;
+        }
+
+        .receipt-preview,
+        .receipt-preview * {
+            visibility: visible;
+        }
+
+        .receipt-preview {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 80mm;
+            box-shadow: none;
+            border: 0;
+            padding: 0;
+        }
+
+        #receiptContent {
+            font-size: 11px;
+            line-height: 1.25;
+        }
+    }
+</style>
+
+<div class="receipt-page">
+    <div class="receipt-toolbar">
+        <button id="qzPrintBtn" class="print-btn" type="button">
+            Print Receipt
+        </button>
+
+        <button id="qzTestBtn" class="test-btn" type="button">
+            Test Printer
+        </button>
+
+        <span id="printerStatus" class="printer-status">
+            Connecting to QZ Tray...
+        </span>
+    </div>
+
+    <div class="receipt-preview-wrap">
+        <div class="receipt-preview">
+            <pre id="receiptContent">{{ receipt }}</pre>
+        </div>
+    </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qz-tray/2.1.0/qz-tray.js"></script>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const printBtn = document.getElementById('qzPrintBtn');
-    const receiptText = document.getElementById('receiptContent').innerText || "";
+document.addEventListener("DOMContentLoaded", function () {
+    const printBtn = document.getElementById("qzPrintBtn");
+    const testBtn = document.getElementById("qzTestBtn");
+    const statusEl = document.getElementById("printerStatus");
+    const receiptEl = document.getElementById("receiptContent");
 
-    function utf8ToBase64(str) {
-        return btoa(unescape(encodeURIComponent(str)));
+    /*
+        IMPORTANT:
+        Put the exact Windows printer name here.
+
+        Go to:
+        Control Panel > Devices and Printers
+        Copy the printer name exactly.
+
+        Examples:
+        "ZKP8008"
+        "ZKP8008 Printer"
+        "ZKPrinter"
+        "POS-80"
+    */
+    const PRINTER_NAME = "ZKP8008";
+
+    const receiptText = (receiptEl.innerText || "").replace(/\r\n/g, "\n");
+
+    function setStatus(message, isError = false) {
+        statusEl.textContent = message;
+        statusEl.style.color = isError ? "#dc2626" : "#475569";
     }
 
-    function buildPayload(text) {
-        return text + "\n\n\n";
+    function connectQz() {
+        if (qz.websocket.isActive()) {
+            setStatus("QZ Tray connected.");
+            return Promise.resolve();
+        }
+
+        return qz.websocket.connect()
+            .then(function () {
+                setStatus("QZ Tray connected.");
+            })
+            .catch(function (err) {
+                console.error(err);
+                setStatus("QZ Tray not connected. Open QZ Tray first.", true);
+                alert("QZ Tray is not connected. Make sure QZ Tray is running.");
+                throw err;
+            });
     }
 
-    qz.websocket.connect().then(() => {
-        console.log("QZ Tray connected!");
-    }).catch(err => {
-        console.error("QZ Tray connection error:", err);
-        alert("QZ Tray is not connected. Make sure QZ Tray is running.");
-    });
+    function textToBase64(text) {
+        return btoa(unescape(encodeURIComponent(text)));
+    }
 
-    function autoPrint() {
-        const printerName = "Q108-V-Printer";   // change to exact printer name from QZ Tray
-        const config = qz.configs.create(printerName);
+    function buildReceiptText(text) {
+        /*
+            Extra blank lines are VERY important.
+            They push the last receipt text above the cutter.
+            Without enough feed, the cutter can cut the last lines.
+        */
+        return text.trimEnd() + "\n\n\n\n\n\n\n";
+    }
 
-        const payload = buildPayload(receiptText);
-        const base64 = utf8ToBase64(payload);
+    function printReceipt() {
+        connectQz().then(function () {
+            const config = qz.configs.create(PRINTER_NAME, {
+                encoding: "UTF-8",
+                copies: 1,
+                margins: 0
+            });
 
-        const data = [{
-            type: 'raw',
-            format: 'base64',
-            data: base64
-        }];
+            const finalText = buildReceiptText(receiptText);
 
-        qz.print(config, data).then(() => {
-            console.log("Printed successfully!");
-        }).catch(err => {
+            const data = [
+                /*
+                    Initialize printer
+                    ESC @
+                */
+                {
+                    type: "raw",
+                    format: "hex",
+                    data: "1B40"
+                },
+
+                /*
+                    Print receipt body
+                */
+                {
+                    type: "raw",
+                    format: "base64",
+                    data: textToBase64(finalText)
+                },
+
+                /*
+                    Feed paper before cut
+                    ESC d 6
+                    This prevents last part being cut.
+                */
+                {
+                    type: "raw",
+                    format: "hex",
+                    data: "1B6406"
+                },
+
+                /*
+                    Full cut
+                    GS V 0
+                    If your printer does not cut, try: 1D5642
+                */
+                {
+                    type: "raw",
+                    format: "hex",
+                    data: "1D5600"
+                }
+            ];
+
+            return qz.print(config, data);
+        }).then(function () {
+            setStatus("Receipt printed successfully.");
+        }).catch(function (err) {
             console.error("Printing error:", err);
+            setStatus("Printing failed.", true);
             alert("Error printing: " + err);
         });
     }
 
-    printBtn.addEventListener('click', autoPrint);
+    function testPrinter() {
+        connectQz().then(function () {
+            const config = qz.configs.create(PRINTER_NAME, {
+                encoding: "UTF-8",
+                copies: 1,
+                margins: 0
+            });
+
+            const testText =
+                "ADAMS MINI SUPERMARKET\n" +
+                "ZKP8008 TEST PRINT\n" +
+                "------------------------------------------\n" +
+                "If this prints fully and cuts below here,\n" +
+                "then printer feed and cut is working.\n" +
+                "------------------------------------------\n" +
+                "Thank you!\n\n\n\n\n\n\n";
+
+            const data = [
+                { type: "raw", format: "hex", data: "1B40" },
+                { type: "raw", format: "base64", data: textToBase64(testText) },
+                { type: "raw", format: "hex", data: "1B6406" },
+                { type: "raw", format: "hex", data: "1D5600" }
+            ];
+
+            return qz.print(config, data);
+        }).then(function () {
+            setStatus("Test print sent successfully.");
+        }).catch(function (err) {
+            console.error("Test print error:", err);
+            setStatus("Test print failed.", true);
+            alert("Test print error: " + err);
+        });
+    }
+
+    printBtn.addEventListener("click", printReceipt);
+    testBtn.addEventListener("click", testPrinter);
+
+    connectQz();
 });
 </script>
 
