@@ -155,7 +155,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function buildPayload(text) {
-        return String(text || "").trimEnd() + "\n\n\n\n\n\n";
+        return String(text || "").trimEnd() + "\n";
     }
 
     function setupQzSecurity() {
@@ -263,7 +263,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     { type: 'raw', format: 'hex', data: '1B7410' },
                     { type: 'raw', format: 'hex', data: '1B2100' },
                     { type: 'raw', format: 'base64', data: base64 },
-                    { type: 'raw', format: 'hex', data: '1B6408' },
+
+                    /* Small feed only: 1 line before cut */
+                    { type: 'raw', format: 'hex', data: '1B6401' },
+
                     { type: 'raw', format: 'hex', data: '1D5600' }
                 ];
 
