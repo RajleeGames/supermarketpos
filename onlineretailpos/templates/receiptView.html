@@ -154,8 +154,15 @@ document.addEventListener('DOMContentLoaded', function () {
         return btoa(unescape(encodeURIComponent(str)));
     }
 
+    /*
+        ZKP8008 spacing fix:
+        - trim old extra empty lines from receipt text
+        - add only 2 new lines
+        - feed 3 lines before cut
+        This prevents cutting "Sale Datetime" / "Served by" while avoiding huge blank paper.
+    */
     function buildPayload(text) {
-        return String(text || "").trimEnd() + "\n";
+        return String(text || "").trimEnd() + "\n\n";
     }
 
     function setupQzSecurity() {
@@ -259,14 +266,22 @@ document.addEventListener('DOMContentLoaded', function () {
                 const base64 = utf8ToBase64(payload);
 
                 const data = [
+                    // Initialize printer
                     { type: 'raw', format: 'hex', data: '1B40' },
+
+                    // Code page
                     { type: 'raw', format: 'hex', data: '1B7410' },
+
+                    // Normal font
                     { type: 'raw', format: 'hex', data: '1B2100' },
+
+                    // Print receipt text
                     { type: 'raw', format: 'base64', data: base64 },
 
-                    /* Small feed only: 1 line before cut */
-                    { type: 'raw', format: 'hex', data: '1B6401' },
+                    // Feed 3 lines before cut
+                    { type: 'raw', format: 'hex', data: '1B6403' },
 
+                    // Full cut
                     { type: 'raw', format: 'hex', data: '1D5600' }
                 ];
 
