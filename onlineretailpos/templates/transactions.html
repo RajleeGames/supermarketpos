@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
 
 {% block title %}
 Transactions | Online Retail POS
@@ -11,72 +13,186 @@ Transactions | Online Retail POS
 {% endblock %}
 
 {% block content %}
+<style>
+  .tx-card {
+    border: 1px solid rgba(17, 24, 39, .08);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .tx-filter-title {
+    font-size: 16px;
+    font-weight: 800;
+    color: #1f2937;
+  }
+
+  .tx-muted {
+    font-size: 13px;
+    color: #6b7280;
+  }
+
+  .tx-date-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #374151;
+    margin-bottom: 5px;
+  }
+
+  .tx-date-input {
+    height: 39px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 13px;
+    color: #111827;
+    width: 100%;
+    outline: none;
+    background: #fff;
+  }
+
+  .tx-date-input:focus {
+    border-color: #4e73df;
+    box-shadow: 0 0 0 3px rgba(78, 115, 223, .12);
+  }
+
+  .tx-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 6px;
+  }
+
+  .tx-actions .btn {
+    font-size: 12px;
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .tx-filter-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 130px;
+    gap: 14px;
+    align-items: end;
+    max-width: 760px;
+  }
+
+  .tx-table th {
+    font-size: 13px;
+    color: #fff;
+    background: #5d6170;
+    border-color: rgba(255,255,255,.08);
+    padding: 15px 16px;
+    white-space: nowrap;
+  }
+
+  .tx-table td {
+    font-size: 13px;
+    vertical-align: middle;
+    padding: 13px 16px;
+    color: #6b7280;
+  }
+
+  .tx-table td:first-child {
+    font-weight: 600;
+    color: #6b7280;
+  }
+
+  @media (max-width: 900px) {
+    .tx-filter-grid {
+      grid-template-columns: 1fr;
+      max-width: 100%;
+    }
+
+    .tx-actions {
+      justify-content: flex-start;
+      margin-top: 12px;
+    }
+  }
+</style>
+
 <div class="container-fluid">
 
-  <!-- Filter Card -->
-  <div class="card shadow-sm mb-4">
-    <div class="card-header bg-light">
-      <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
-        <div>
-          <strong class="text-dark">Filter transactions</strong>
+  <div class="card shadow-sm mb-4 tx-card">
+    <div class="card-header bg-light" style="padding:18px 20px;">
+      <div class="d-flex flex-column flex-lg-row justify-content-between align-items-start">
+
+        <div style="width:100%;">
+          <div class="tx-filter-title">Filter transactions</div>
+
           {% if is_filtered %}
-            <div class="small text-muted mt-1">
+            <div class="tx-muted mt-1">
               Active:
-              {% if start_date %}<span class="badge badge-info mr-1">From {{ start_date }}</span>{% endif %}
-              {% if end_date %}<span class="badge badge-info">To {{ end_date }}</span>{% endif %}
+              {% if start_date %}
+                <span class="badge badge-info mr-1">From {{ start_date }}</span>
+              {% endif %}
+              {% if end_date %}
+                <span class="badge badge-info">To {{ end_date }}</span>
+              {% endif %}
             </div>
           {% else %}
-            <div class="small text-muted mt-1">Showing: <span class="font-weight-medium">All</span></div>
+            <div class="tx-muted mt-1">Showing: <span class="font-weight-medium">All</span></div>
           {% endif %}
         </div>
 
-        <!-- Controls -->
-        <div class="mt-2 mt-md-0 d-flex gap-2">
-          <div class="btn-group" role="group" aria-label="presets">
-            <button type="button" class="btn btn-sm btn-outline-secondary" id="preset-today">Today</button>
-            <button type="button" class="btn btn-sm btn-outline-secondary" id="preset-yesterday">Yesterday</button>
-            <button type="button" class="btn btn-sm btn-outline-secondary" id="preset-week">This Week</button>
-            <button type="button" class="btn btn-sm btn-outline-secondary" id="preset-month">This Month</button>
-          </div>
+        <div class="tx-actions mt-2 mt-lg-0">
+          <button type="button" class="btn btn-sm btn-outline-secondary" id="preset-today">Today</button>
+          <button type="button" class="btn btn-sm btn-outline-secondary" id="preset-yesterday">Yesterday</button>
+          <button type="button" class="btn btn-sm btn-outline-secondary" id="preset-week">This Week</button>
+          <button type="button" class="btn btn-sm btn-outline-secondary" id="preset-month">This Month</button>
 
-          <div class="btn-group ms-2" role="group" aria-label="export">
-            <button type="button" class="btn btn-sm btn-outline-success" id="export-csv" title="Export CSV">
-              <i class="fas fa-file-csv"></i> CSV
-            </button>
-            <button type="button" class="btn btn-sm btn-outline-success" id="export-xlsx" title="Export Excel">
-              <i class="fas fa-file-excel"></i> XLSX
-            </button>
-          </div>
+          <button type="button" class="btn btn-sm btn-outline-success" id="export-csv">
+            <i class="fas fa-file-csv"></i> CSV
+          </button>
 
-          <a href="{{ request.path }}" class="btn btn-sm btn-outline-secondary ms-2" title="Clear filters">
+          <button type="button" class="btn btn-sm btn-outline-success" id="export-xlsx">
+            <i class="fas fa-file-excel"></i> XLSX
+          </button>
+
+          <a href="{{ request.path }}" class="btn btn-sm btn-outline-secondary">
             <i class="fas fa-undo"></i> Reset
           </a>
         </div>
       </div>
 
-      <!-- Form (GET so values persist in URL) -->
-      <form method="get" class="row gx-2 gy-2 align-items-end mt-3" id="trans-filter-form">
-        {% comment %} Render form fields (DateSelector etc.) {% endcomment %}
-        {% for field in form %}
-          <div class="col-12 col-sm-6 col-md-3">
-            <label class="form-label small fw-bold text-dark mb-1">{{ field.label }}</label>
-            {{ field }}
+      <form method="get" class="mt-4" id="trans-filter-form">
+        <div class="tx-filter-grid">
+          <div>
+            <label class="tx-date-label" for="start_date">Start date</label>
+            <input
+              class="tx-date-input"
+              type="date"
+              name="start_date"
+              id="start_date"
+              value="{% if start_date %}{{ start_date|date:'Y-m-d' }}{% endif %}"
+            >
           </div>
-        {% endfor %}
 
-        <div class="col-6 col-md-2 d-grid">
-          <button class="btn btn-primary" style="height:40px;">
-            <i class="fas fa-filter"></i> Filter
-          </button>
+          <div>
+            <label class="tx-date-label" for="end_date">End date</label>
+            <input
+              class="tx-date-input"
+              type="date"
+              name="end_date"
+              id="end_date"
+              value="{% if end_date %}{{ end_date|date:'Y-m-d' }}{% endif %}"
+            >
+          </div>
+
+          <div>
+            <button class="btn btn-primary btn-block" style="height:39px;">
+              <i class="fas fa-filter"></i> Filter
+            </button>
+          </div>
         </div>
       </form>
     </div>
 
-    <!-- Table -->
-    <div class="card-body">
+    <div class="card-body" style="padding:22px 20px;">
       <div class="table-responsive">
-        <table class="table table-bordered table-hover align-middle">
-          <thead class="table-dark">
+        <table class="table table-bordered table-hover align-middle tx-table">
+          <thead>
             <tr>
               <th>Transaction ID</th>
               <th>Total Sale</th>
@@ -85,6 +201,7 @@ Transactions | Online Retail POS
               <th>Receipt</th>
             </tr>
           </thead>
+
           <tbody>
             {% for t in transactions %}
             <tr>
@@ -93,15 +210,16 @@ Transactions | Online Retail POS
               <td>{{ t.payment_type }}</td>
               <td>{{ t.transaction_dt|date:"D, M d Y h:i A" }}</td>
               <td>
-                <a class="btn btn-sm btn-outline-primary"
-                   href="{% url 'transactionReceipt' transNo=t.transaction_id %}">
+                <a
+                  class="btn btn-sm btn-outline-primary"
+                  href="{% url 'transactionReceipt' transNo=t.transaction_id %}">
                   View Receipt
                 </a>
               </td>
             </tr>
             {% empty %}
             <tr>
-              <td colspan="5" class="text-center text-muted">
+              <td colspan="5" class="text-center text-muted" style="padding:30px;">
                 No transactions found for selected date range
               </td>
             </tr>
@@ -113,106 +231,81 @@ Transactions | Online Retail POS
 
   </div>
 </div>
-{% endblock %}
 
-{% block script %}
-  {# flatpickr CSS/JS (optional but gives a nicer date UX). Remove if you prefer native pickers. #}
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+(function () {
+  const form = document.getElementById('trans-filter-form');
+  const startInput = document.getElementById('start_date');
+  const endInput = document.getElementById('end_date');
 
-  <script>
-    (function () {
-      // Helper: safely get query param value (server may have prefilled inputs already)
-      function qs(name) {
-        const urlp = new URLSearchParams(window.location.search);
-        return urlp.has(name) ? urlp.get(name) : '';
-      }
+  function formatYMD(d) {
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return y + '-' + m + '-' + day;
+  }
 
-      // Attach flatpickr to date inputs (keep value format Y-m-d for server)
-      const dateInputs = document.querySelectorAll('input[type="date"], input[name*="date"], input[id*="date"]');
-      dateInputs.forEach(el => {
-        if (el._flatpickr) return;
-        flatpickr(el, {
-          altInput: true,
-          altFormat: "F j, Y",
-          dateFormat: "Y-m-d",
-          allowInput: true,
-          clickOpens: true,
-        });
-      });
+  function setRangeAndSubmit(startDate, endDate) {
+    startInput.value = formatYMD(startDate);
+    endInput.value = formatYMD(endDate);
+    form.submit();
+  }
 
-      // Preset button helpers (set start_date/end_date and submit)
-      function formatYMD(d) {
-        const y = d.getFullYear();
-        const m = String(d.getMonth() + 1).padStart(2, '0');
-        const day = String(d.getDate()).padStart(2, '0');
-        return `${y}-${m}-${day}`;
-      }
+  document.getElementById('preset-today').addEventListener('click', function () {
+    const today = new Date();
+    setRangeAndSubmit(today, today);
+  });
 
-      document.getElementById('preset-today').addEventListener('click', function () {
-        const today = new Date();
-        document.querySelector('input[name="start_date"]').value = formatYMD(today);
-        document.querySelector('input[name="end_date"]').value = formatYMD(today);
-        document.getElementById('trans-filter-form').submit();
-      });
+  document.getElementById('preset-yesterday').addEventListener('click', function () {
+    const d = new Date();
+    d.setDate(d.getDate() - 1);
+    setRangeAndSubmit(d, d);
+  });
 
-      document.getElementById('preset-yesterday').addEventListener('click', function () {
-        const d = new Date();
-        d.setDate(d.getDate() - 1);
-        document.querySelector('input[name="start_date"]').value = formatYMD(d);
-        document.querySelector('input[name="end_date"]').value = formatYMD(d);
-        document.getElementById('trans-filter-form').submit();
-      });
+  document.getElementById('preset-week').addEventListener('click', function () {
+    const now = new Date();
+    const start = new Date(now);
+    start.setDate(now.getDate() - (now.getDay() || 7) + 1);
 
-      document.getElementById('preset-week').addEventListener('click', function () {
-        const now = new Date();
-        const start = new Date(now);
-        start.setDate(now.getDate() - (now.getDay() || 7) + 1); // Monday as start
-        const end = new Date(start);
-        end.setDate(start.getDate() + 6);
-        document.querySelector('input[name="start_date"]').value = formatYMD(start);
-        document.querySelector('input[name="end_date"]').value = formatYMD(end);
-        document.getElementById('trans-filter-form').submit();
-      });
+    const end = new Date(start);
+    end.setDate(start.getDate() + 6);
 
-      document.getElementById('preset-month').addEventListener('click', function () {
-        const now = new Date();
-        const start = new Date(now.getFullYear(), now.getMonth(), 1);
-        const end = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-        document.querySelector('input[name="start_date"]').value = formatYMD(start);
-        document.querySelector('input[name="end_date"]').value = formatYMD(end);
-        document.getElementById('trans-filter-form').submit();
-      });
+    setRangeAndSubmit(start, end);
+  });
 
-      // Export buttons: build url preserving start_date/end_date, add export param
-      function buildExportUrl(format) {
-        const params = new URLSearchParams();
-        const start = document.querySelector('input[name="start_date"]').value;
-        const end = document.querySelector('input[name="end_date"]').value;
-        if (start) params.set('start_date', start);
-        if (end) params.set('end_date', end);
-        params.set('export', format); // your view should detect request.GET.get('export')
-        return window.location.pathname + '?' + params.toString();
-      }
+  document.getElementById('preset-month').addEventListener('click', function () {
+    const now = new Date();
+    const start = new Date(now.getFullYear(), now.getMonth(), 1);
+    const end = new Date(now.getFullYear(), now.getMonth() + 1, 0);
 
-      document.getElementById('export-csv').addEventListener('click', function () {
-        window.location.href = buildExportUrl('csv');
-      });
-      document.getElementById('export-xlsx').addEventListener('click', function () {
-        window.location.href = buildExportUrl('xlsx');
-      });
+    setRangeAndSubmit(start, end);
+  });
 
-      // Accessibility: Enter submits the form
-      document.getElementById('trans-filter-form').addEventListener('keydown', function (e) {
-        if (e.key === 'Enter') {
-          const tag = e.target.tagName.toLowerCase();
-          if (tag !== 'textarea') {
-            e.preventDefault();
-            this.submit();
-          }
-        }
-      });
+  function buildExportUrl(format) {
+    const params = new URLSearchParams();
 
-    })();
-  </script>
+    if (startInput.value) params.set('start_date', startInput.value);
+    if (endInput.value) params.set('end_date', endInput.value);
+
+    params.set('export', format);
+
+    return window.location.pathname + '?' + params.toString();
+  }
+
+  document.getElementById('export-csv').addEventListener('click', function () {
+    window.location.href = buildExportUrl('csv');
+  });
+
+  document.getElementById('export-xlsx').addEventListener('click', function () {
+    window.location.href = buildExportUrl('xlsx');
+  });
+
+  form.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      form.submit();
+    }
+  });
+})();
+</script>
 {% endblock %}

@@ -9,136 +9,260 @@
 
 {% block content %}
 <style>
-/* Table layout improvements */
-.dashboard-wrapper .table-responsive table {
-  table-layout: fixed;
-  width: 100%;
-  min-width: 720px; /* keep reasonable minimum for wide tables */
-}
+  .dept-dashboard {
+    font-size: 13px;
+  }
 
-.dashboard-wrapper .table-responsive th,
-.dashboard-wrapper .table-responsive td {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  vertical-align: middle;
-}
+  .dept-card {
+    border: 1px solid rgba(17, 24, 39, .08);
+    border-radius: 10px;
+    overflow: hidden;
+    background: #fff;
+  }
 
-/* Column width hints (applies to tables inside .dashboard-wrapper) */
-.dashboard-wrapper .table-responsive table thead th:nth-child(1),
-.dashboard-wrapper .table-responsive table tbody td:nth-child(1) { width: 35%; } /* name / long text */
-.dashboard-wrapper .table-responsive table thead th:nth-child(2),
-.dashboard-wrapper .table-responsive table tbody td:nth-child(2) { width: 18%; } /* amount */
-.dashboard-wrapper .table-responsive table thead th:nth-child(3),
-.dashboard-wrapper .table-responsive table tbody td:nth-child(3) { width: 18%; } /* other */
-.dashboard-wrapper .table-responsive table thead th:nth-child(4),
-.dashboard-wrapper .table-responsive table tbody td:nth-child(4) { width: 18%; } /* date */
-.dashboard-wrapper .table-responsive table thead th:nth-child(5),
-.dashboard-wrapper .table-responsive table tbody td:nth-child(5) { width: 11%; } /* actions */
+  .dept-title {
+    font-size: 16px;
+    font-weight: 800;
+    color: #1f2937;
+  }
 
-/* Truncated text style for cells we want to ellipsize */
-.truncate-col {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: inline-block;
-  max-width: 100%;
-}
+  .dept-muted {
+    font-size: 12px;
+    color: #6b7280;
+  }
 
-/* Make numeric cells right-aligned */
-.table-number {
-  text-align: right;
-  white-space: nowrap;
-}
+  .dept-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 6px;
+  }
 
-/* Small responsive tweak: allow horizontal scroll on very small screens */
-@media (max-width: 768px) {
-  .dashboard-wrapper .table-responsive { overflow-x: auto; }
-}
+  .dept-actions .btn {
+    height: 34px;
+    font-size: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
 
-/* Make the dashboard figures area look neat */
-.dashboard-fig-card .card-body { min-height: 150px; }
+  .dept-filter-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 180px 150px;
+    gap: 12px;
+    align-items: end;
+    max-width: 900px;
+  }
+
+  .dept-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #374151;
+    margin-bottom: 5px;
+  }
+
+  .dept-date-input {
+    height: 39px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 13px;
+    color: #111827;
+    width: 100%;
+    outline: none;
+    background: #fff;
+  }
+
+  .dept-date-input:focus {
+    border-color: #4e73df;
+    box-shadow: 0 0 0 3px rgba(78, 115, 223, .12);
+  }
+
+  .dashboard-wrapper .table-responsive table {
+    table-layout: fixed;
+    width: 100%;
+    min-width: 720px;
+  }
+
+  .dashboard-wrapper .table-responsive th,
+  .dashboard-wrapper .table-responsive td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: middle;
+    font-size: 12px;
+  }
+
+  .dashboard-wrapper .table-responsive table thead th:nth-child(1),
+  .dashboard-wrapper .table-responsive table tbody td:nth-child(1) {
+    width: 35%;
+  }
+
+  .dashboard-wrapper .table-responsive table thead th:nth-child(2),
+  .dashboard-wrapper .table-responsive table tbody td:nth-child(2) {
+    width: 18%;
+  }
+
+  .dashboard-wrapper .table-responsive table thead th:nth-child(3),
+  .dashboard-wrapper .table-responsive table tbody td:nth-child(3) {
+    width: 18%;
+  }
+
+  .dashboard-wrapper .table-responsive table thead th:nth-child(4),
+  .dashboard-wrapper .table-responsive table tbody td:nth-child(4) {
+    width: 18%;
+  }
+
+  .dashboard-wrapper .table-responsive table thead th:nth-child(5),
+  .dashboard-wrapper .table-responsive table tbody td:nth-child(5) {
+    width: 11%;
+  }
+
+  .truncate-col {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    max-width: 100%;
+  }
+
+  .table-number {
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .dashboard-fig-card .card-body {
+    min-height: 150px;
+  }
+
+  .dept-note {
+    font-size: 12px;
+    color: #6b7280;
+    text-align: right;
+  }
+
+  @media (max-width: 992px) {
+    .dept-filter-grid {
+      grid-template-columns: 1fr 1fr;
+      max-width: 100%;
+    }
+
+    .dept-actions {
+      justify-content: flex-start;
+      margin-top: 12px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .dept-filter-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .dashboard-wrapper .table-responsive {
+      overflow-x: auto;
+    }
+
+    .dept-note {
+      text-align: left;
+    }
+  }
 </style>
 
-<div class="container-fluid dashboard-wrapper">
+<div class="container-fluid dashboard-wrapper dept-dashboard">
 
   <div class="row mb-2">
-    <div class="col-12 text-end small text-muted">*Note: you must generate dashboard first to create/print the report</div>
+    <div class="col-12 dept-note">
+      *Note: you must generate dashboard first to create/print the report
+    </div>
   </div>
 
-  <!-- Filters & Actions -->
-  <div class="card mb-3">
-    <div class="card-body">
-      <div class="row gy-2 align-items-center">
-        <div class="col-md-6">
-          <strong class="text-dark">Filters</strong>
+  <div class="card shadow-sm mb-3 dept-card">
+    <div class="card-body" style="padding:18px 20px;">
+
+      <div class="d-flex flex-column flex-lg-row justify-content-between align-items-start">
+        <div>
+          <div class="dept-title">Filters</div>
+
           {% if request.GET %}
-            <div class="small text-muted mt-1">
+            <div class="dept-muted mt-1">
               Active:
-              {% for k, v in request.GET.items %}
-                {% if v %}
-                  <span class="badge bg-info text-dark me-1">{{ k|capfirst }}: {{ v }}</span>
-                {% endif %}
-              {% endfor %}
+              {% if request.GET.start_date %}
+                <span class="badge badge-info mr-1">From {{ request.GET.start_date }}</span>
+              {% endif %}
+              {% if request.GET.end_date %}
+                <span class="badge badge-info mr-1">To {{ request.GET.end_date }}</span>
+              {% endif %}
             </div>
           {% else %}
-            <div class="small text-muted mt-1">No active filters — showing defaults</div>
+            <div class="dept-muted mt-1">No active filters — showing defaults</div>
           {% endif %}
         </div>
 
-        <div class="col-md-6 text-md-end mt-2 mt-md-0">
-          <div class="btn-group btn-group-sm" role="group" aria-label="presets">
-            <button type="button" class="btn btn-outline-secondary" id="preset-today">Today</button>
-            <button type="button" class="btn btn-outline-secondary" id="preset-yesterday">Yesterday</button>
-            <button type="button" class="btn btn-outline-secondary" id="preset-week">This Week</button>
-            <button type="button" class="btn btn-outline-secondary" id="preset-month">This Month</button>
-          </div>
+        <div class="dept-actions mt-2 mt-lg-0">
+          <button type="button" class="btn btn-sm btn-outline-secondary" id="preset-today">Today</button>
+          <button type="button" class="btn btn-sm btn-outline-secondary" id="preset-yesterday">Yesterday</button>
+          <button type="button" class="btn btn-sm btn-outline-secondary" id="preset-week">This Week</button>
+          <button type="button" class="btn btn-sm btn-outline-secondary" id="preset-month">This Month</button>
 
-          <a href="{{ report_link|default:'#' }}" target="_blank" class="btn btn-dark btn-sm ms-2">
+          <a href="{{ report_link|default:'#' }}" target="_blank" class="btn btn-sm btn-dark">
             <i class="fas fa-file-alt"></i> View / Print Report
           </a>
 
-          <a href="{{ request.path }}" class="btn btn-outline-secondary btn-sm ms-2" id="reset-btn">
+          <a href="{{ request.path }}" class="btn btn-sm btn-outline-secondary" id="reset-btn">
             <i class="fas fa-undo"></i> Reset
           </a>
         </div>
       </div>
 
-      <!-- Filter form: GET so filters persist in URL -->
-      <form id="dashboard-filters" method="get" class="row mt-3 g-2 align-items-end">
-        {% for field in form %}
-          <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-            <label class="form-label small text-muted mb-1">{{ field.label }}</label>
-            {{ field }}
-            {% if field.errors %}
-              <div class="invalid-feedback d-block">{{ field.errors|striptags }}</div>
-            {% endif %}
+      <form id="dashboard-filters" method="get" class="mt-4">
+        <div class="dept-filter-grid">
+
+          <div>
+            <label class="dept-label" for="start_date">Start date</label>
+            <input
+              class="dept-date-input"
+              type="date"
+              name="start_date"
+              id="start_date"
+              value="{{ request.GET.start_date|default:'' }}"
+            >
           </div>
-        {% endfor %}
 
-        <div class="col-6 col-md-3 d-grid">
-          <button type="submit" class="btn btn-primary" id="generate-btn" style="height:44px;">
-            <i class="fas fa-chart-line me-1"></i> Generate Dashboard
-          </button>
-        </div>
+          <div>
+            <label class="dept-label" for="end_date">End date</label>
+            <input
+              class="dept-date-input"
+              type="date"
+              name="end_date"
+              id="end_date"
+              value="{{ request.GET.end_date|default:'' }}"
+            >
+          </div>
 
-        <div class="col-6 col-md-3 d-grid">
-          <a href="{{ request.path }}" class="btn btn-outline-secondary" style="height:44px;" id="quick-reset">
-            <i class="fas fa-eraser me-1"></i> Reset Filters
-          </a>
+          <div>
+            <button type="submit" class="btn btn-primary btn-block" id="generate-btn" style="height:39px;">
+              <i class="fas fa-chart-line mr-1"></i> Generate
+            </button>
+          </div>
+
+          <div>
+            <a href="{{ request.path }}" class="btn btn-outline-secondary btn-block" style="height:39px;line-height:25px;" id="quick-reset">
+              <i class="fas fa-eraser mr-1"></i> Reset
+            </a>
+          </div>
+
         </div>
       </form>
+
     </div>
   </div>
 
-  <!-- Dashboard content -->
   <div class="row">
     <div class="col-lg-4 mb-3">
-      <div class="card dashboard-fig-card mb-3">
+      <div class="card dashboard-fig-card mb-3 dept-card">
         <div class="card-body">
           <h6 class="small text-muted">Table</h6>
           <div class="table-responsive">
-            {# Wrap server table in a container so table CSS applies #}
             <div class="server-table-wrap">
               {{ table_fig|safe }}
             </div>
@@ -146,7 +270,7 @@
         </div>
       </div>
 
-      <div class="card dashboard-fig-card">
+      <div class="card dashboard-fig-card dept-card">
         <div class="card-body">
           <h6 class="small text-muted">Department Share</h6>
           <div class="overflow-auto" style="min-height:220px;">
@@ -157,7 +281,7 @@
     </div>
 
     <div class="col-lg-8 mb-3">
-      <div class="card h-100">
+      <div class="card h-100 dept-card">
         <div class="card-body">
           <h6 class="small text-muted">Sales by Department</h6>
           <div style="min-height:420px;">
@@ -168,28 +292,33 @@
     </div>
   </div>
 
-</div> <!-- /.dashboard-wrapper -->
+</div>
 
-{# Money formatting and table polishing JS #}
 <script>
 (function(){
   const currency = "{{ currency|default:'TZS' }}";
 
   function parseNumberFromString(s){
     if (s === null || s === undefined) return NaN;
-    let cleaned = String(s).replace(/[^0-9.\-]/g,'');
+
+    let cleaned = String(s).replace(/[^0-9.\-]/g, '');
     const firstDot = cleaned.indexOf('.');
+
     if (firstDot !== -1){
-      cleaned = cleaned.slice(0, firstDot+1) + cleaned.slice(firstDot+1).replace(/\./g,'');
+      cleaned = cleaned.slice(0, firstDot + 1) + cleaned.slice(firstDot + 1).replace(/\./g, '');
     }
+
     return cleaned === '' ? NaN : Number(cleaned);
   }
 
   function numberWithCommasFixed(n, decimals){
     if (isNaN(n)) return null;
+
     const fixed = Number(n).toFixed(decimals);
     const parts = fixed.split('.');
+
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
     return parts.join('.');
   }
 
@@ -199,56 +328,59 @@
     return /^[\d\.,\-\s]+$/.test(text);
   }
 
-  // Format numeric-like cells and set class .table-number (right align)
   document.querySelectorAll('.dashboard-wrapper .table-responsive table').forEach(function(tbl){
     try {
-      // Make header and body fixed layout applied already via CSS.
       const cells = tbl.querySelectorAll('td, th');
+
       cells.forEach(function(cell){
         const txt = (cell.innerText || '').trim();
+
         if (!txt) return;
 
-        // If numeric-like, format and align
         if (looksLikeNumericOnly(txt) && txt.replace(/[, ]/g, '').length <= 20) {
           const num = parseNumberFromString(txt);
+
           if (!isNaN(num)){
             const decimals = (Math.abs(num) % 1 === 0) ? 0 : 2;
             const formatted = numberWithCommasFixed(num, decimals);
+
             if (formatted !== null) {
               cell.innerText = currency + ' ' + formatted;
               cell.classList.add('table-number');
             }
           }
+
           return;
         }
 
-        // For long textual cells: add truncation class and a tooltip (title)
         if (txt.length > 30) {
-          // Wrap text inside a span.truncate-col (helps with ellipsis)
           if (!cell.querySelector('.truncate-col')) {
             const span = document.createElement('span');
             span.className = 'truncate-col';
             span.innerText = txt;
-            // move children/content into span
+
             cell.innerHTML = '';
             cell.appendChild(span);
           }
-          // add title attribute so full text is shown on hover
+
           const inner = cell.innerText || '';
           cell.setAttribute('title', inner.trim());
         }
       });
 
-      // Also ensure first column (likely long names) gets truncation if not already
       const rows = tbl.querySelectorAll('tbody tr');
-      rows.forEach(function(r){
-        const firstCell = r.querySelector('td:nth-child(1)');
+
+      rows.forEach(function(row){
+        const firstCell = row.querySelector('td:nth-child(1)');
+
         if (firstCell){
           const t = (firstCell.innerText || '').trim();
+
           if (t.length > 25 && !firstCell.querySelector('.truncate-col')) {
             const span = document.createElement('span');
             span.className = 'truncate-col';
             span.innerText = t;
+
             firstCell.innerHTML = '';
             firstCell.appendChild(span);
             firstCell.setAttribute('title', t);
@@ -261,86 +393,92 @@
     }
   });
 
-  // Format elements explicitly tagged .money-raw (data-raw attr or innerText)
   document.querySelectorAll('.money-raw').forEach(function(el){
     try {
-      var raw = el.getAttribute('data-raw') || el.innerText || '';
-      var num = parseNumberFromString(raw);
+      const raw = el.getAttribute('data-raw') || el.innerText || '';
+      const num = parseNumberFromString(raw);
+
       if (!isNaN(num)){
-        var formatted = numberWithCommasFixed(num, 2);
+        const formatted = numberWithCommasFixed(num, 2);
         el.innerText = currency + ' ' + formatted;
       }
-    } catch(e){ console.warn('money-raw format error', e); }
+    } catch(e){
+      console.warn('money-raw format error', e);
+    }
   });
-
-  // Tooltips: simple hover mobile fallback (title already set)
-  // If you prefer fancier tooltips, integrate tippy.js or bootstrap tooltips.
-
 })();
 </script>
 
-{% endblock %}
+<script>
+(function(){
+  const form = document.getElementById('dashboard-filters');
+  const startInput = document.getElementById('start_date');
+  const endInput = document.getElementById('end_date');
 
-{% block script %}
-  {# flatpickr for nicer date pickers; optional but recommended #}
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  function formatYMD(d){
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return y + '-' + m + '-' + day;
+  }
 
-  <script>
-  (function(){
-    // Initialize flatpickr for inputs that look like dates
-    var dateInputs = document.querySelectorAll('input[type="date"], input[name*="date"], input[id*="date"]');
-    dateInputs.forEach(function(el){
-      if (el._flatpickr) return;
-      flatpickr(el, {
-        altInput: true,
-        altFormat: "F j, Y",
-        dateFormat: "Y-m-d",
-        allowInput: true,
-        clickOpens: true
-      });
+  function setAndSubmit(startDate, endDate){
+    if (startInput) startInput.value = formatYMD(startDate);
+    if (endInput) endInput.value = formatYMD(endDate);
+    if (form) form.submit();
+  }
+
+  document.getElementById('preset-today')?.addEventListener('click', function(){
+    const today = new Date();
+    setAndSubmit(today, today);
+  });
+
+  document.getElementById('preset-yesterday')?.addEventListener('click', function(){
+    const d = new Date();
+    d.setDate(d.getDate() - 1);
+    setAndSubmit(d, d);
+  });
+
+  document.getElementById('preset-week')?.addEventListener('click', function(){
+    const now = new Date();
+
+    const start = new Date(now);
+    start.setDate(now.getDate() - (now.getDay() || 7) + 1);
+
+    const end = new Date(start);
+    end.setDate(start.getDate() + 6);
+
+    setAndSubmit(start, end);
+  });
+
+  document.getElementById('preset-month')?.addEventListener('click', function(){
+    const now = new Date();
+
+    const start = new Date(now.getFullYear(), now.getMonth(), 1);
+    const end = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+
+    setAndSubmit(start, end);
+  });
+
+  document.getElementById('reset-btn')?.addEventListener('click', function(e){
+    e.preventDefault();
+    window.location.href = window.location.pathname;
+  });
+
+  document.getElementById('quick-reset')?.addEventListener('click', function(e){
+    e.preventDefault();
+    window.location.href = window.location.pathname;
+  });
+
+  if (form) {
+    form.addEventListener('keydown', function(e){
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        form.submit();
+      }
     });
+  }
+})();
+</script>
 
-    // Presets helpers (set start_date / end_date then submit)
-    function ymd(d){ return d.toISOString().slice(0,10); }
-
-    document.getElementById('preset-today')?.addEventListener('click', function(){
-      var t = new Date();
-      setAndSubmit(ymd(t), ymd(t));
-    });
-    document.getElementById('preset-yesterday')?.addEventListener('click', function(){
-      var d = new Date(); d.setDate(d.getDate()-1);
-      setAndSubmit(ymd(d), ymd(d));
-    });
-    document.getElementById('preset-week')?.addEventListener('click', function(){
-      var now = new Date();
-      var day = now.getDay() || 7; // sunday=0 -> 7
-      var monday = new Date(now); monday.setDate(now.getDate() - day + 1);
-      var sunday = new Date(monday); sunday.setDate(monday.getDate() + 6);
-      setAndSubmit(ymd(monday), ymd(sunday));
-    });
-    document.getElementById('preset-month')?.addEventListener('click', function(){
-      var now = new Date();
-      var start = new Date(now.getFullYear(), now.getMonth(), 1);
-      var end = new Date(now.getFullYear(), now.getMonth()+1, 0);
-      setAndSubmit(ymd(start), ymd(end));
-    });
-
-    function setAndSubmit(start, end){
-      var startEl = document.querySelector('input[name="start_date"]');
-      var endEl = document.querySelector('input[name="end_date"]');
-      if (startEl) startEl.value = start;
-      if (endEl) endEl.value = end;
-      var form = document.getElementById('dashboard-filters');
-      if (form) form.submit();
-    }
-
-    // Reset button clears querystring and reloads
-    document.getElementById('reset-btn')?.addEventListener('click', function(e){
-      e.preventDefault();
-      window.location.href = window.location.pathname;
-    });
-
-  })();
-  </script>
 {% endblock %}

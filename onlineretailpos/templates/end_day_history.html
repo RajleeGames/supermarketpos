@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block title %}
+End Day History | Online Retail POS
+{% endblock %}
+
+{% block nav-item %}
+<div class="mb-0 font-weight-bold h5 text-gray-600 text-uppercase p-3">
+    End Day History
+</div>
+{% endblock %}
+
+{% block content %}
+<style>
+    .history-card {
+        border: 1px solid rgba(17, 24, 39, .08);
+        border-radius: 12px;
+        overflow: hidden;
+        background: #fff;
+    }
+
+    .history-table th {
+        background: #5d6170;
+        color: #fff;
+        font-size: 12px;
+        white-space: nowrap;
+    }
+
+    .history-table td {
+        font-size: 12px;
+        vertical-align: middle;
+    }
+</style>
+
+<div class="container-fluid">
+
+    <div class="card shadow-sm history-card">
+        <div class="card-header bg-light d-flex justify-content-between align-items-center">
+            <strong class="text-dark">Closed Day History</strong>
+
+            <a href="{% url 'end_day_home' %}" class="btn btn-sm btn-outline-primary">
+                <i class="fas fa-arrow-left"></i> Back to End Day
+            </a>
+        </div>
+
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover history-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Cash</th>
+                            <th>EBT</th>
+                            <th>Bank/Card</th>
+                            <th>Debt</th>
+                            <th>Total</th>
+                            <th>Transactions</th>
+                            <th>Closed By</th>
+                            <th>Closed At</th>
+                            <th>Note</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for d in closes %}
+                        <tr>
+                            <td>{{ d.close_date }}</td>
+                            <td>{{ currency }} {{ d.cash_total|floatformat:2|intcomma }}</td>
+                            <td>{{ currency }} {{ d.ebt_total|floatformat:2|intcomma }}</td>
+                            <td>{{ currency }} {{ d.card_total|floatformat:2|intcomma }}</td>
+                            <td>{{ currency }} {{ d.debt_total|floatformat:2|intcomma }}</td>
+                            <td><strong>{{ currency }} {{ d.total_sales|floatformat:2|intcomma }}</strong></td>
+                            <td>{{ d.transaction_count }}</td>
+                            <td>
+                                {% if d.closed_by %}
+                                    {{ d.closed_by.username }}
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                            <td>{{ d.closed_at|date:"D, M d Y h:i A" }}</td>
+                            <td>{{ d.note|default:"-" }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="10" class="text-center text-muted" style="padding:25px;">
+                                No closed days yet.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

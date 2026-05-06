@@ -577,3 +577,34 @@ class Expense(models.Model):
         ordering = ["-created_at"]
         verbose_name = "Expense"
         verbose_name_plural = "Expenses"
+
+
+class DayClose(models.Model):
+    close_date = models.DateField(unique=True)
+
+    cash_total = models.DecimalField(max_digits=15, decimal_places=2, default=Decimal("0.00"))
+    ebt_total = models.DecimalField(max_digits=15, decimal_places=2, default=Decimal("0.00"))
+    card_total = models.DecimalField(max_digits=15, decimal_places=2, default=Decimal("0.00"))
+    debt_total = models.DecimalField(max_digits=15, decimal_places=2, default=Decimal("0.00"))
+    total_sales = models.DecimalField(max_digits=15, decimal_places=2, default=Decimal("0.00"))
+
+    transaction_count = models.PositiveIntegerField(default=0)
+
+    closed_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="closed_days"
+    )
+
+    closed_at = models.DateTimeField(auto_now_add=True)
+    note = models.TextField(blank=True, default="")
+
+    class Meta:
+        ordering = ["-close_date"]
+        verbose_name = "Day Close"
+        verbose_name_plural = "Day Closes"
+
+    def __str__(self):
+        return f"Closed day {self.close_date} - {self.total_sales}"

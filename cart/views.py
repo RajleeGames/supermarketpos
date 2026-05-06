@@ -1,120 +1,263 @@
 # cart/views.py
+import json
+import re
 from decimal import Decimal, ROUND_HALF_UP, InvalidOperation
-from django.shortcuts import redirect, render
-from django.urls import reverse
+
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse, HttpResponseBadRequest, HttpResponse
+from django.http import JsonResponse, HttpResponseBadRequest
+from django.shortcuts import redirect, render
+from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.http import require_GET, require_POST
 
-from inventory.models import Product as Product
-from .models import Cart  # adjust import path if your Cart lives elsewhere
+from inventory.models import Product
+from .models import Cart, displayed_items
 
 
-# ---------- Helpers ----------
+# ============================================================
+# Money helpers
+# ============================================================
+
 def safe_decimal(value, default=Decimal("0.00")):
-    """
-    Convert value to Decimal safely and quantize to 2 decimals.
-    Accepts Decimal, int, float, str. Returns default on failure.
-    """
     if value is None or value == "":
         return default
+
     if isinstance(value, Decimal):
         try:
             return value.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
         except Exception:
             return default
+
     try:
         return Decimal(str(value)).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
     except (InvalidOperation, ValueError, TypeError):
         return default
 
 
-def get_unit_tax(product_obj):
-    """
-    Calculate per-unit tax for a Product object.
-    Returns Decimal(0.00) if product is not taxable or on error.
-    """
-    try:
-        if getattr(product_obj, "is_taxable", True) and getattr(product_obj, "tax_category", None):
-            pct = safe_decimal(getattr(product_obj.tax_category, "tax_percentage", 0)) / Decimal("100")
-            unit_tax = (safe_decimal(getattr(product_obj, "sales_price", 0)) * pct).quantize(
-                Decimal("0.01"), rounding=ROUND_HALF_UP
-            )
-            return unit_tax
-        return Decimal("0.00")
-    except Exception:
-        return Decimal("0.00")
+def fmt_amount(value):
+    return f"{safe_decimal(value):,.2f}"
 
+
+# ============================================================
+# Barcode helpers
+# ============================================================
+
+def clean_barcode(value):
+    """
+    Scanner-safe barcode cleaner.
+
+    Fixes:
+    - barcode with spaces
+    - barcode with tabs/newlines
+    - hidden control characters
+    - Excel-style 12345.0
+    """
+    raw = str(value or "")
+
+    raw = raw.strip()
+    raw = raw.replace("\r", "")
+    raw = raw.replace("\n", "")
+    raw = raw.replace("\t", "")
+    raw = raw.replace(" ", "")
+
+    # Remove non-printable scanner/control characters
+    raw = "".join(ch for ch in raw if ch.isprintable())
+
+    # Remove common scanner separators
+    raw = raw.replace("\ufeff", "")
+    raw = raw.replace("\u200b", "")
+    raw = raw.replace("\u200c", "")
+    raw = raw.replace("\u200d", "")
+
+    # Excel issue: 123456.0
+    if raw.endswith(".0") and raw[:-2].isdigit():
+        raw = raw[:-2]
+
+    return raw
+
+
+def clean_barcode_for_compare(value):
+    """
+    More aggressive version for comparing DB barcode vs scanned barcode.
+    Keeps letters and numbers only.
+    """
+    raw = clean_barcode(value)
+    return re.sub(r"[^A-Za-z0-9]", "", raw).upper()
+
+
+def find_product_by_barcode(barcode):
+    """
+    Forgiving barcode lookup.
+
+    Steps:
+    1. Clean scanner input.
+    2. Exact match.
+    3. Case-insensitive match.
+    4. Compare normalized stored barcodes.
+    """
+    barcode = clean_barcode(barcode)
+
+    if not barcode:
+        return None
+
+    product = Product.objects.filter(barcode=barcode).first()
+    if product:
+        return product
+
+    product = Product.objects.filter(barcode__iexact=barcode).first()
+    if product:
+        return product
+
+    # If barcode is numeric, sometimes leading zero may be removed by scanner/Excel.
+    # Try both normal and zero-stripped comparison carefully.
+    normalized_scanned = clean_barcode_for_compare(barcode)
+    normalized_no_leading_zero = normalized_scanned.lstrip("0")
+
+    candidates = Product.objects.filter(barcode__icontains=barcode[:6])[:50] if len(barcode) >= 6 else Product.objects.all()[:200]
+
+    for p in candidates:
+        db_norm = clean_barcode_for_compare(getattr(p, "barcode", ""))
+
+        if db_norm == normalized_scanned:
+            return p
+
+        if normalized_no_leading_zero and db_norm.lstrip("0") == normalized_no_leading_zero:
+            return p
+
+    return None
+
+
+# ============================================================
+# Cart totals
+# ============================================================
 
 def _build_cart_totals(cart_obj):
     """
-    Returns (subtotal, tax_total, deposit_total, grand_total, count)
-    All are Decimal (except count).
+    Correct total calculation.
+
+    Important:
+    - line_total is already the real amount customer pays.
+    - tax_value is only extracted tax for display/reporting.
+    - Do not add tax_value again.
     """
-    subtotal = Decimal("0.00")
+    total = Decimal("0.00")
     tax_total = Decimal("0.00")
     deposit_total = Decimal("0.00")
     count = 0
 
-    for entry in cart_obj:
-        qty = int(entry.get("quantity", entry.get("qty", 0)) or 0)
-        line_total = safe_decimal(entry.get("line_total", entry.get("total_price", 0)))
-        tax_val = safe_decimal(entry.get("tax_value", 0))
-        deposit_val = safe_decimal(entry.get("deposit_value", 0))
+    for item in cart_obj:
+        qty = int(item.get("quantity", 0) or 0)
+        line_total = safe_decimal(item.get("line_total", 0))
+        tax_value = safe_decimal(item.get("tax_value", 0))
+        deposit_value = safe_decimal(item.get("deposit_value", 0))
 
-        subtotal += line_total
-        # tax_value might already be a total for the line or per-item depending on your cart;
-        # attempt to treat provided tax_value as total for the line if it looks right.
-        # If your cart stores per-item tax, update accordingly.
-        tax_total += tax_val
-        deposit_total += deposit_val
-
+        total += line_total
+        tax_total += tax_value
+        deposit_total += deposit_value
         count += qty
 
-    grand_total = (subtotal + tax_total + deposit_total).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
-    return (
-        subtotal.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP),
-        tax_total.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP),
-        deposit_total.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP),
-        grand_total,
-        count,
-    )
+    total = total.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+    tax_total = tax_total.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+    deposit_total = deposit_total.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+
+    subtotal = (total - tax_total).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+    if subtotal < Decimal("0.00"):
+        subtotal = Decimal("0.00")
+
+    return {
+        "subtotal": subtotal,
+        "tax_total": tax_total,
+        "deposit_total": deposit_total,
+        "grand_total": total,
+        "count": count,
+        "subtotal_formatted": fmt_amount(subtotal),
+        "tax_total_formatted": fmt_amount(tax_total),
+        "deposit_total_formatted": fmt_amount(deposit_total),
+        "grand_total_formatted": fmt_amount(total),
+    }
 
 
-# ---------- Views ----------
+def _get_json_payload(request):
+    try:
+        return json.loads(request.body.decode("utf-8") or "{}")
+    except Exception:
+        return {}
+
+
+def _cart_response_payload(cart, barcode=None, item=None, removed=False):
+    totals = _build_cart_totals(cart)
+
+    data = {
+        "success": True,
+        "removed": bool(removed),
+        "barcode": barcode or "",
+
+        "cart_subtotal": str(totals["subtotal"]),
+        "cart_tax": str(totals["tax_total"]),
+        "cart_deposit": str(totals["deposit_total"]),
+        "cart_total": str(totals["grand_total"]),
+
+        "cart_subtotal_formatted": totals["subtotal_formatted"],
+        "cart_tax_formatted": totals["tax_total_formatted"],
+        "cart_deposit_formatted": totals["deposit_total_formatted"],
+        "cart_total_formatted": totals["grand_total_formatted"],
+
+        "count": totals["count"],
+        "cart_is_empty": totals["count"] <= 0,
+    }
+
+    if item:
+        data.update({
+            "name": item.get("name", ""),
+            "new_quantity": int(item.get("quantity", 0) or 0),
+            "price": str(safe_decimal(item.get("price", 0))),
+
+            "line_total": str(safe_decimal(item.get("line_total", 0))),
+            "line_tax": str(safe_decimal(item.get("tax_value", 0))),
+            "line_deposit": str(safe_decimal(item.get("deposit_value", 0))),
+
+            "line_total_formatted": fmt_amount(item.get("line_total", 0)),
+            "line_tax_formatted": fmt_amount(item.get("tax_value", 0)),
+            "line_deposit_formatted": fmt_amount(item.get("deposit_value", 0)),
+        })
+
+    return data
+
+
+# ============================================================
+# Views
+# ============================================================
+
 @login_required(login_url="/user/login")
 def cart_add(request, id, qty):
     """
-    Add a product to the session cart.
-    - id: barcode
-    - qty: integer quantity
-    Optional `price` GET param can override unit price (variable_price).
+    Add product to cart using barcode.
+    Scanner-safe lookup.
     """
     cart = Cart(request)
-    try:
-        product = Product.objects.filter(barcode=id).first()
-    except Exception:
-        product = None
+
+    scanned_barcode = clean_barcode(id)
+    product = find_product_by_barcode(scanned_barcode)
 
     if not product:
-        # set session message for template to show & play alert
-        request.session["stock_error"] = "Product not found"
+        request.session["stock_error"] = f"Product not found for barcode: {scanned_barcode}"
+        request.session.modified = True
         return redirect("register")
 
-    # parse quantity defensively
     try:
-        q = int(qty)
+        quantity = int(qty)
     except Exception:
-        q = 1
-    # allow only positive adds (if you want to support negative for returns, use returns endpoint)
-    if q <= 0:
+        quantity = 1
+
+    if quantity <= 0:
         return redirect("register")
 
-    final_price = request.GET.get("price")  # optional price override
-    result = cart.add(product=product, quantity=q, variable_price=final_price)
+    final_price = request.GET.get("price")
 
-    if result.get("status") == "error":
-        # store error in session so template can show + trigger alert sound
+    result = cart.add(product=product, quantity=quantity, variable_price=final_price)
+
+    if isinstance(result, dict) and result.get("status") == "error":
         request.session["stock_error"] = result.get("message", "Insufficient stock")
+        request.session.modified = True
         return redirect("register")
 
     return redirect("register")
@@ -122,67 +265,61 @@ def cart_add(request, id, qty):
 
 @login_required(login_url="/user/login")
 def item_clear(request, id):
-    """
-    Remove an item from the cart completely.
-    `id` is the product barcode.
-    """
     cart = Cart(request)
-    try:
-        product = Product.objects.get(barcode=id)
-    except Product.DoesNotExist:
-        # nothing to remove
-        return redirect("register")
 
-    cart.remove(product)
+    barcode = clean_barcode(id)
+    product = find_product_by_barcode(barcode)
+
+    if product:
+        cart.remove(product)
+    else:
+        cart.remove(barcode)
+
     return redirect("register")
 
 
 @login_required(login_url="/user/login")
 def item_increment(request, id):
-    """
-    Increment product quantity by 1. Returns redirect to register page.
-    If stock insufficient, sets session stock_error to trigger UI alert.
-    """
     cart = Cart(request)
-    try:
-        product = Product.objects.get(barcode=id)
-    except Product.DoesNotExist:
-        request.session["stock_error"] = "Product not found"
+
+    barcode = clean_barcode(id)
+    product = find_product_by_barcode(barcode)
+
+    if not product:
+        request.session["stock_error"] = f"Product not found for barcode: {barcode}"
+        request.session.modified = True
         return redirect("register")
 
     result = cart.add(product=product, quantity=1)
 
-    if result.get("status") == "error":
+    if isinstance(result, dict) and result.get("status") == "error":
         request.session["stock_error"] = result.get("message", "Insufficient stock")
-        return redirect("register")
+        request.session.modified = True
 
     return redirect("register")
 
 
 @login_required(login_url="/user/login")
 def item_decrement(request, id):
-    """
-    Decrement product quantity by 1. If count reaches 0, remove from cart.
-    """
     cart = Cart(request)
-    try:
-        product = Product.objects.get(barcode=id)
-    except Product.DoesNotExist:
-        request.session["stock_error"] = "Product not found"
-        return redirect("register")
 
-    # our Cart.decrement returns dicts (or earlier version may not). handle both.
-    result = cart.decrement(product)
+    barcode = clean_barcode(id)
+    product = find_product_by_barcode(barcode)
+
+    if product:
+        result = cart.decrement(product, amount=1)
+    else:
+        result = cart.decrement(barcode, amount=1)
+
     if isinstance(result, dict) and result.get("status") == "error":
         request.session["stock_error"] = result.get("message", "Failed to decrement")
+        request.session.modified = True
+
     return redirect("register")
 
 
 @login_required(login_url="/user/login")
 def cart_clear(request):
-    """
-    Clear the entire session cart.
-    """
     cart = Cart(request)
     cart.clear()
     return redirect("register")
@@ -190,173 +327,185 @@ def cart_clear(request):
 
 @login_required(login_url="/user/login")
 def cart_detail(request):
-    """
-    Render the cart detail page. Compute totals using cart items.
-    """
     cart = Cart(request)
 
     items = []
-    for entry in cart:
-        # ensure keys exist and are typed
-        qty = int(entry.get("quantity", entry.get("qty", 0)) or 0)
-        price = safe_decimal(entry.get("price", entry.get("sales_price", 0)))
-        line_total = safe_decimal(entry.get("line_total", price * qty))
-        tax_val = safe_decimal(entry.get("tax_value", 0))
-        deposit_val = safe_decimal(entry.get("deposit_value", 0))
+    for item in cart:
+        items.append({
+            "barcode": item.get("barcode", ""),
+            "name": item.get("name", ""),
+            "quantity": int(item.get("quantity", 0) or 0),
+            "price": safe_decimal(item.get("price", 0)),
+            "line_total": safe_decimal(item.get("line_total", 0)),
+            "tax_value": safe_decimal(item.get("tax_value", 0)),
+            "deposit_value": safe_decimal(item.get("deposit_value", 0)),
+            "low_stock": bool(item.get("low_stock", False)),
+            "stock_left": int(item.get("stock_left", 0) or 0),
+        })
 
-        items.append(
-            {
-                "barcode": entry.get("barcode", ""),
-                "name": entry.get("name", ""),
-                "quantity": qty,
-                "price": price,
-                "line_total": line_total,
-                "tax_value": tax_val,
-                "deposit_value": deposit_val,
-                "low_stock": bool(entry.get("low_stock", False)),
-                "stock_left": int(entry.get("stock_left", 0) or 0),
-            }
-        )
-
-    subtotal, tax_total, deposit_total, grand_total, count = _build_cart_totals(cart)
+    totals = _build_cart_totals(cart)
 
     context = {
         "cart_items": items,
-        "subtotal": subtotal,
-        "tax_total": tax_total,
-        "deposit_total": deposit_total,
-        "grand_total": grand_total,
-        "count": count,
+        "subtotal": totals["subtotal"],
+        "tax_total": totals["tax_total"],
+        "deposit_total": totals["deposit_total"],
+        "grand_total": totals["grand_total"],
+        "count": totals["count"],
     }
+
     return render(request, "cart/cart_detail.html", context)
 
 
 @login_required(login_url="/user/login")
+@require_POST
+@csrf_protect
 def cart_update_quantity(request):
     """
-    AJAX / form endpoint to set a product quantity in cart.
-    Expects POST with 'barcode' and 'quantity' fields.
-    Returns JSON with new totals or 400 on bad input.
+    Manual quantity update from register screen.
     """
-    if request.method != "POST":
-        return HttpResponseBadRequest("POST required")
+    payload = _get_json_payload(request)
 
-    barcode = request.POST.get("barcode")
-    quantity = request.POST.get("quantity")
+    barcode = clean_barcode(
+        payload.get("barcode") or request.POST.get("barcode") or ""
+    )
 
-    if barcode is None or quantity is None:
-        return HttpResponseBadRequest("barcode and quantity required")
+    quantity = payload.get("quantity") or request.POST.get("quantity") or ""
+
+    if not barcode:
+        return JsonResponse({"success": False, "error": "Barcode required"}, status=400)
 
     try:
-        q = int(quantity)
-        if q < 0:
-            return HttpResponseBadRequest("quantity must be >= 0")
+        quantity = int(quantity)
     except Exception:
-        return HttpResponseBadRequest("invalid quantity")
+        return JsonResponse({"success": False, "error": "Invalid quantity"}, status=400)
 
     cart = Cart(request)
 
-    try:
-        product = Product.objects.get(barcode=barcode)
-    except Product.DoesNotExist:
-        return HttpResponseBadRequest("product not found")
+    # Use stored barcode if DB product exists.
+    product = find_product_by_barcode(barcode)
+    if product:
+        barcode = str(product.barcode)
 
-    # If q == 0 remove the product
-    if q == 0:
-        cart.remove(product)
-    else:
-        # set exact quantity using Cart.set_quantity if it exists (it returns status dict)
-        if hasattr(cart, "set_quantity"):
-            result = cart.set_quantity(product, q)
-            if isinstance(result, dict) and result.get("status") == "error":
-                # return JSON error so UI can show and play sound
-                request.session["stock_error"] = result.get("message", "Insufficient stock")
-                return JsonResponse({"error": result.get("message")}, status=400)
-        else:
-            # fallback: remove then add with desired quantity (best-effort)
-            cart.remove(product)
-            result = cart.add(product=product, quantity=q)
-            if isinstance(result, dict) and result.get("status") == "error":
-                request.session["stock_error"] = result.get("message", "Insufficient stock")
-                return JsonResponse({"error": result.get("message")}, status=400)
+    result = cart.set_quantity(barcode, quantity)
 
-    # Build and return new totals
-    subtotal, tax_total, deposit_total, grand_total, count = _build_cart_totals(cart)
+    if isinstance(result, dict) and result.get("status") == "error":
+        request.session["stock_error"] = result.get("message", "Failed to update quantity")
+        request.session.modified = True
+        return JsonResponse({
+            "success": False,
+            "error": result.get("message", "Failed to update quantity"),
+        }, status=400)
 
-    response = {
-        "subtotal": str(subtotal.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)),
-        "tax_total": str(tax_total),
-        "deposit_total": str(deposit_total),
-        "grand_total": str(grand_total),
-        "count": count,
-    }
-    return JsonResponse(response)
+    item = cart.to_dict().get(str(barcode))
+
+    removed = quantity <= 0 or not item or (isinstance(result, dict) and result.get("removed"))
+
+    return JsonResponse(
+        _cart_response_payload(cart, barcode=barcode, item=item, removed=removed)
+    )
 
 
-from django.views.decorators.http import require_GET
-from django.utils.html import escape
+@login_required(login_url="/user/login")
+@require_POST
+@csrf_protect
+def cart_void_item_ajax(request):
+    """
+    Remove one cart item using AJAX Void button.
+    """
+    payload = _get_json_payload(request)
+
+    barcode = clean_barcode(
+        payload.get("barcode") or request.POST.get("barcode") or ""
+    )
+
+    if not barcode:
+        return JsonResponse({"success": False, "error": "Barcode required"}, status=400)
+
+    cart = Cart(request)
+
+    product = find_product_by_barcode(barcode)
+    if product:
+        barcode = str(product.barcode)
+
+    cart.remove(barcode)
+
+    return JsonResponse(
+        _cart_response_payload(cart, barcode=barcode, item=None, removed=True)
+    )
+
 
 @require_GET
 @login_required(login_url="/user/login")
 def product_search(request):
     """
-    AJAX endpoint: ?q=search_text
-    Returns JSON list of matching products limited to 20 items.
-    Each item: { barcode, name, sales_price, qty }
+    AJAX product search:
+        /ajax/product_search/?q=milk
+    Scanner-safe.
     """
-    q = request.GET.get("q", "").strip()
+    q_raw = request.GET.get("q", "")
+    q = clean_barcode(q_raw)
+
     data = []
+
     if not q:
         return JsonResponse({"results": data})
 
-    # Basic heuristic search:
-    # - If the query looks numeric or short, prefer barcode startswith,
-    # - Otherwise search name icontains and barcode startswith too.
-    qs_by_barcode = Product.objects.none()
-    qs_by_name = Product.objects.none()
-
     try:
-        # search by barcode (starts with)
         qs_by_barcode = Product.objects.filter(barcode__istartswith=q)
-        # search by name anywhere (case-insensitive)
         qs_by_name = Product.objects.filter(name__icontains=q)
-    except Exception:
-        pass
 
-    # Combine results preserving order: barcode matches first, then name matches (avoid dupes)
+        # If exact/startswith barcode fails because DB barcode has hidden chars,
+        # add normalized candidates later.
+    except Exception:
+        qs_by_barcode = Product.objects.none()
+        qs_by_name = Product.objects.none()
+
     seen = set()
     limit = 20
-    for p in list(qs_by_barcode[:limit]):
-        seen.add(p.barcode)
+
+    def add_product(product):
+        barcode = str(getattr(product, "barcode", "") or "")
+        if barcode in seen:
+            return
+
+        seen.add(barcode)
         data.append({
-            "barcode": p.barcode,
-            "name": p.name,
-            "sales_price": str(getattr(p, "sales_price", "")),
-            "qty": int(getattr(p, "qty", 0) or 0),
+            "barcode": barcode,
+            "name": getattr(product, "name", ""),
+            "sales_price": str(getattr(product, "sales_price", "")),
+            "qty": int(getattr(product, "qty", 0) or 0),
         })
+
+    for product in qs_by_barcode[:limit]:
+        add_product(product)
         if len(data) >= limit:
             break
 
     if len(data) < limit:
-        for p in list(qs_by_name[:limit]):
-            if p.barcode in seen:
-                continue
-            seen.add(p.barcode)
-            data.append({
-                "barcode": p.barcode,
-                "name": p.name,
-                "sales_price": str(getattr(p, "sales_price", "")),
-                "qty": int(getattr(p, "qty", 0) or 0),
-            })
+        for product in qs_by_name[:limit]:
+            add_product(product)
+            if len(data) >= limit:
+                break
+
+    # Normalized fallback for barcode searches
+    if len(data) == 0 and len(q) >= 4:
+        q_norm = clean_barcode_for_compare(q)
+
+        for product in Product.objects.all()[:500]:
+            db_norm = clean_barcode_for_compare(getattr(product, "barcode", ""))
+            name_text = str(getattr(product, "name", "") or "").lower()
+
+            if q_norm and (db_norm.startswith(q_norm) or q_norm in db_norm):
+                add_product(product)
+            elif str(q_raw).strip().lower() in name_text:
+                add_product(product)
+
             if len(data) >= limit:
                 break
 
     return JsonResponse({"results": data})
 
-
-import json
-from django.views.decorators.http import require_POST
-from django.views.decorators.csrf import csrf_protect
 
 @require_POST
 @login_required(login_url="/user/login")
@@ -364,69 +513,61 @@ from django.views.decorators.csrf import csrf_protect
 def cart_add_ajax(request):
     """
     AJAX endpoint for barcode scanning.
-    Body: { "barcode": "...", "quantity": 1 }
-    Behaviour:
-      - If product already in cart → quantity increments
-      - If not → new line added
-    """
-    try:
-        payload = json.loads(request.body.decode("utf-8"))
-    except Exception:
-        return JsonResponse({"success": False, "error": "Invalid JSON"}, status=400)
 
-    barcode = str(payload.get("barcode", "")).strip()
+    Body:
+        {
+            "barcode": "123",
+            "quantity": 1
+        }
+
+    If product exists in cart, it increases quantity.
+    Scanner-safe.
+    """
+    payload = _get_json_payload(request)
+
+    scanned_barcode = clean_barcode(payload.get("barcode", ""))
     quantity = payload.get("quantity", 1)
 
-    if not barcode:
+    if not scanned_barcode:
         return JsonResponse({"success": False, "error": "Barcode missing"}, status=400)
 
     try:
-        qty = int(quantity)
+        quantity = int(quantity)
     except Exception:
-        qty = 1
+        quantity = 1
 
-    if qty <= 0:
-        qty = 1
+    if quantity <= 0:
+        quantity = 1
+
+    product = find_product_by_barcode(scanned_barcode)
+
+    if not product:
+        return JsonResponse({
+            "success": False,
+            "error": f"Product not found for barcode: {scanned_barcode}",
+        }, status=404)
+
+    # Use real stored barcode from DB so cart key is always consistent.
+    barcode = str(product.barcode)
 
     cart = Cart(request)
 
-    try:
-        product = Product.objects.get(barcode=barcode)
-    except Product.DoesNotExist:
-        return JsonResponse({"success": False, "error": "Product not found"}, status=404)
-
-    # 🔥 THIS IS THE IMPORTANT PART
-    # Your Cart.add already increments quantity correctly
-    result = cart.add(product=product, quantity=qty)
+    result = cart.add(product=product, quantity=quantity)
 
     if isinstance(result, dict) and result.get("status") == "error":
-        return JsonResponse(
-            {
-                "success": False,
-                "error": result.get("message", "Insufficient stock"),
-            },
-            status=400,
-        )
+        return JsonResponse({
+            "success": False,
+            "error": result.get("message", "Insufficient stock"),
+        }, status=400)
 
-    # Fetch updated item from cart session
-    item = cart.to_dict().get(str(barcode))
+    item = cart.to_dict().get(barcode)
+
     if not item:
-        return JsonResponse({"success": False, "error": "Cart update failed"}, status=500)
-
-    # Recalculate totals using your helper
-    subtotal, tax_total, deposit_total, grand_total, count = _build_cart_totals(cart)
+        return JsonResponse({
+            "success": False,
+            "error": "Cart update failed",
+        }, status=500)
 
     return JsonResponse(
-        {
-            "success": True,
-            "barcode": barcode,
-            "new_quantity": int(item.get("quantity", 0)),
-            "line_total": item.get("line_total"),
-            "line_total_formatted": item.get("line_total"),
-            "cart_subtotal_formatted": f"{subtotal:.2f}",
-            "cart_tax_formatted": f"{tax_total:.2f}",
-            "cart_deposit_formatted": f"{deposit_total:.2f}",
-            "cart_total_formatted": f"{grand_total:.2f}",
-            "count": count,
-        }
+        _cart_response_payload(cart, barcode=barcode, item=item, removed=False)
     )

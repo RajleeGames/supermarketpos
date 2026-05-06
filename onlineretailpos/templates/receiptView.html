@@ -1,83 +1,290 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    Transaction Receipt | Online Retail POS
+Transaction Receipt | Online Retail POS
 {% endblock %}
 
-{% block nav-item %}  
-    Receipt - {{ transNo }}  
+{% block nav-item %}
+<div class="mb-0 font-weight-bold h6 text-gray-600 text-uppercase p-3">
+    Receipt - {{ transNo }}
+</div>
 {% endblock %}
 
 {% block content %}
+<style>
+    .receipt-wrap {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        padding: 12px 0 30px 0;
+    }
 
-<button id="qzPrintBtn" class="btn-lg btn-success" style="width: 20%; margin-top: 10px; margin-left: 10px;">
-    Print Receipt
-</button>
+    .receipt-panel {
+        width: 100%;
+        max-width: 360px;
+    }
 
-<div style="text-align: center; padding-top: 30px;">
-    <pre id="receiptContent" style="font-family: 'Courier New', monospace; width: 42ch; margin: auto; text-align: left; white-space: pre-wrap;">{{ receipt }}</pre>
+    .receipt-actions {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 10px;
+    }
+
+    .receipt-actions .btn {
+        font-size: 12px;
+        padding: 7px 12px;
+        border-radius: 6px;
+        font-weight: 700;
+    }
+
+    .receipt-card {
+        width: 100%;
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        box-shadow: 0 8px 20px rgba(15, 23, 42, .08);
+        padding: 12px 10px;
+        overflow-x: auto;
+    }
+
+    #receiptContent {
+        margin: 0;
+        width: 42ch;
+        max-width: 42ch;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 11px;
+        line-height: 1.25;
+        color: #111;
+        text-align: left;
+        white-space: pre;
+    }
+
+    .print-status {
+        text-align: center;
+        font-size: 12px;
+        margin-top: 8px;
+        color: #6b7280;
+        min-height: 18px;
+    }
+
+    @media print {
+        .sidebar,
+        .navbar,
+        .topbar,
+        .receipt-actions,
+        .print-status,
+        .scroll-to-top {
+            display: none !important;
+        }
+
+        #content-wrapper,
+        #content {
+            margin: 0 !important;
+            padding: 0 !important;
+            width: 100% !important;
+        }
+
+        .receipt-wrap {
+            display: block;
+            padding: 0 !important;
+        }
+
+        .receipt-panel {
+            width: 80mm;
+            max-width: 80mm;
+            margin: 0;
+        }
+
+        .receipt-card {
+            border: 0;
+            box-shadow: none;
+            border-radius: 0;
+            padding: 0;
+            width: 80mm;
+        }
+
+        #receiptContent {
+            font-size: 11px;
+            line-height: 1.2;
+            white-space: pre;
+        }
+    }
+</style>
+
+<div class="receipt-wrap">
+    <div class="receipt-panel">
+
+        <div class="receipt-actions">
+            <button id="qzPrintBtn" type="button" class="btn btn-success">
+                <i class="fas fa-print"></i> Print ZKP8008
+            </button>
+        </div>
+
+        <div class="receipt-card">
+            <pre id="receiptContent">{{ receipt }}</pre>
+        </div>
+
+        <div id="printStatus" class="print-status"></div>
+
+    </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qz-tray/2.1.0/qz-tray.js"></script>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const printBtn = document.getElementById('qzPrintBtn');
-    const receiptText = document.getElementById('receiptContent').innerText || "";
+    const statusEl = document.getElementById('printStatus');
+    const receiptEl = document.getElementById('receiptContent');
+
+    const PRINTER_NAME = "ZKP8008";
+
+    function setStatus(message, isError) {
+        if (!statusEl) return;
+        statusEl.textContent = message || "";
+        statusEl.style.color = isError ? "#b02a37" : "#146c43";
+    }
+
+    function getReceiptText() {
+        if (!receiptEl) return "";
+        return receiptEl.innerText || receiptEl.textContent || "";
+    }
 
     function utf8ToBase64(str) {
         return btoa(unescape(encodeURIComponent(str)));
     }
 
     function buildPayload(text) {
-        // add space at bottom before cut
-        return text.trimEnd() + "\n\n\n\n\n\n\n\n";
+        return String(text || "").trimEnd() + "\n\n\n\n\n\n";
+    }
+
+    function setupQzSecurity() {
+        if (!window.qz || !qz.security) return;
+
+        qz.security.setCertificatePromise(function(resolve, reject) {
+            fetch("{% url 'qz_certificate' %}", {
+                cache: "no-store"
+            })
+            .then(function(response) {
+                if (!response.ok) {
+                    throw new Error("Could not load QZ certificate");
+                }
+                return response.text();
+            })
+            .then(resolve)
+            .catch(reject);
+        });
+
+        qz.security.setSignaturePromise(function(toSign) {
+            return function(resolve, reject) {
+                fetch("{% url 'qz_sign' %}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "text/plain"
+                    },
+                    body: toSign
+                })
+                .then(function(response) {
+                    if (!response.ok) {
+                        return response.text().then(function(text) {
+                            throw new Error(text || "Could not sign QZ request");
+                        });
+                    }
+                    return response.text();
+                })
+                .then(resolve)
+                .catch(reject);
+            };
+        });
     }
 
     function connectQz() {
+        if (!window.qz) {
+            return Promise.reject("QZ Tray script not loaded.");
+        }
+
+        setupQzSecurity();
+
         if (qz.websocket.isActive()) {
             return Promise.resolve();
         }
+
         return qz.websocket.connect();
     }
 
-    function autoPrint() {
-        const printerName = "ZKP8008";
-        const config = qz.configs.create(printerName, {
-            encoding: 'UTF-8',
-            margins: 0,
-            copies: 1
-        });
+    function findPrinter() {
+        return qz.printers.find(PRINTER_NAME).catch(function () {
+            return qz.printers.find().then(function (printers) {
+                const found = printers.find(function (p) {
+                    const name = String(p || "").toLowerCase();
+                    return name.includes("zkp8008") || name.includes("zkp") || name.includes("8008");
+                });
 
-        const payload = buildPayload(receiptText);
-        const base64 = utf8ToBase64(payload);
+                if (!found) {
+                    throw "Printer not found. Rename printer in Windows to ZKP8008 or check QZ Tray.";
+                }
 
-        const data = [
-            // initialize
-            { type: 'raw', format: 'hex', data: '1B40' },
-
-            // print text
-            { type: 'raw', format: 'base64', data: base64 },
-
-            // feed paper more so words are not cut
-            { type: 'raw', format: 'hex', data: '1B6408' },
-
-            // cut
-            { type: 'raw', format: 'hex', data: '1D5600' }
-        ];
-
-        connectQz().then(() => {
-            return qz.print(config, data);
-        }).then(() => {
-            console.log("Printed successfully!");
-        }).catch(err => {
-            console.error("Printing error:", err);
-            alert("Error printing: " + err);
+                return found;
+            });
         });
     }
 
-    printBtn.addEventListener('click', autoPrint);
+    function autoPrint() {
+        const receiptText = getReceiptText();
+
+        if (!receiptText.trim()) {
+            alert("Receipt is empty.");
+            return;
+        }
+
+        setStatus("Connecting to QZ Tray...", false);
+        printBtn.disabled = true;
+
+        connectQz()
+            .then(function () {
+                setStatus("Finding printer " + PRINTER_NAME + "...", false);
+                return findPrinter();
+            })
+            .then(function (printerName) {
+                setStatus("Printing to " + printerName + "...", false);
+
+                const config = qz.configs.create(printerName, {
+                    encoding: 'UTF-8',
+                    margins: 0,
+                    copies: 1,
+                    rasterize: false
+                });
+
+                const payload = buildPayload(receiptText);
+                const base64 = utf8ToBase64(payload);
+
+                const data = [
+                    { type: 'raw', format: 'hex', data: '1B40' },
+                    { type: 'raw', format: 'hex', data: '1B7410' },
+                    { type: 'raw', format: 'hex', data: '1B2100' },
+                    { type: 'raw', format: 'base64', data: base64 },
+                    { type: 'raw', format: 'hex', data: '1B6408' },
+                    { type: 'raw', format: 'hex', data: '1D5600' }
+                ];
+
+                return qz.print(config, data);
+            })
+            .then(function () {
+                setStatus("Printed successfully.", false);
+            })
+            .catch(function (err) {
+                console.error("QZ printing error:", err);
+                setStatus("Print failed: " + err, true);
+                alert("Printing error: " + err);
+            })
+            .finally(function () {
+                printBtn.disabled = false;
+            });
+    }
+
+    if (printBtn) {
+        printBtn.addEventListener('click', autoPrint);
+    }
 });
 </script>
-
 {% endblock content %}

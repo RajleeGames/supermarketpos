@@ -1,12 +1,16 @@
 # transaction/views.py
-
+import copy
 from datetime import datetime, timedelta, time as dt_time, timezone as py_timezone
 from decimal import Decimal, InvalidOperation, ROUND_HALF_UP, getcontext
 from urllib.parse import urlencode
 import traceback
-import hashlib
 import json
-
+import base64
+from django.http import Http404, HttpResponse, HttpResponseBadRequest, JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from Crypto.PublicKey import RSA
+from Crypto.Signature import pkcs1_15
+from Crypto.Hash import SHA256
 import pandas as pd
 
 from django import forms
@@ -29,13 +33,20 @@ from escpos.printer import Usb
 
 from cart.models import Cart
 from .forms import ExpenseForm
-from .models import transaction, productTransaction, Expense, Debt, DebtPayment
+from .models import (
+    transaction,
+    productTransaction,
+    Expense,
+    Debt,
+    DebtPayment,
+    DayClose,
+)
 
 getcontext().prec = 28
 
 
 # ============================================================
-# Helpers
+# General Helpers
 # ============================================================
 
 def currency_symbol():
@@ -77,10 +88,55 @@ def fmt_no_sym(amount, decimals=2):
         return f"{Decimal('0.00'):,.{decimals}f}"
 
 
+def _fmt_amount(value):
+    try:
+        return "{:,.2f}".format(float(value or 0))
+    except Exception:
+        return "0.00"
+
+
+def _money(value):
+    return safe_decimal(value)
+
+
+def _fmt_money(value):
+    return fmt_no_sym(value)
+
+
+def _today_local_date():
+    return dj_timezone.localtime(dj_timezone.now()).date()
+
+
+def _local_day_range_utc(day_date):
+    """
+    Build proper local-day range and convert to UTC-aware range.
+    This avoids wrong totals when DB stores aware datetimes.
+    """
+    local_tz = dj_timezone.get_current_timezone()
+
+    start_naive = datetime.combine(day_date, dt_time.min)
+    end_naive = datetime.combine(day_date + timedelta(days=1), dt_time.min)
+
+    start_local = dj_timezone.make_aware(start_naive, local_tz)
+    end_local = dj_timezone.make_aware(end_naive, local_tz)
+
+    return start_local.astimezone(py_timezone.utc), end_local.astimezone(py_timezone.utc)
+
+
+def _date_from_str(value, fallback=None):
+    try:
+        if value:
+            return datetime.strptime(str(value), "%Y-%m-%d").date()
+    except Exception:
+        pass
+    return fallback
+
+
+# ============================================================
+# Cart Helpers
+# ============================================================
+
 def get_cart_from_session(request):
-    """
-    Get cart from session safely.
-    """
     cart_key = getattr(settings, "CART_SESSION_ID", "cart")
     return request.session.get(cart_key, {})
 
@@ -96,10 +152,6 @@ def cart_is_empty(cart):
 
 
 def get_cart_items(cart):
-    """
-    Convert session cart to list of item dicts.
-    Supports dict cart and list cart.
-    """
     if cart is None:
         return []
 
@@ -174,9 +226,8 @@ def get_item_line_total(item):
 
 def sum_cart_field(cart, field_name="line_total"):
     """
-    Robust total calculator.
-    Fixes issue where transaction returns to barcode/register
-    because total becomes 0 due to wrong cart key.
+    The real payable cart total comes from line_total.
+    Do not add tax again because VAT is already inside selling price.
     """
     total = Decimal("0.00")
 
@@ -188,6 +239,10 @@ def sum_cart_field(cart, field_name="line_total"):
 
     return total.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
 
+
+# ============================================================
+# Receipt Helpers
+# ============================================================
 
 def format_qty(qty):
     try:
@@ -255,11 +310,12 @@ def build_receipt_text(
     phone_number=None,
 ):
     """
-    Receipt layout like your first image:
-    product name line,
-    qty @ price = amount line,
-    totals aligned,
-    footer not cut.
+    Builds receipt text saved inside transaction.receipt.
+
+    Layout requested:
+    - Header + Sales Receipt centered.
+    - TIN, VRN, Till No, Receipt No left aligned.
+    - DESCRIPTION / QTY PRICE AMOUNT left aligned.
     """
     receipt_width = 42
     separator = "-" * receipt_width
@@ -282,6 +338,7 @@ def build_receipt_text(
 
     lines = []
 
+    # Centered store header
     header = getattr(settings, "RECEIPT_HEADER", "")
     if header:
         for line in header.splitlines():
@@ -293,27 +350,36 @@ def build_receipt_text(
         lines.append("J.K. Nyerere Street".center(receipt_width))
         lines.append("+255744844699".center(receipt_width))
         lines.append("adamssupermarket@gmail.com".center(receipt_width))
-        lines.append("")
-        lines.append("*** Sales Receipt ***".center(receipt_width))
-        lines.append("TIN: 102-188-357".center(receipt_width))
-        lines.append("*** NON-FISCAL RECEIPT ***".center(receipt_width))
 
     lines.append("")
+    lines.append("*** SALES RECEIPT ***".center(receipt_width))
+    lines.append("")
+
+    # Left-aligned receipt meta
+    lines.append("TIN: 102-188-357")
+    lines.append("VRN: NON FISCAL RECEIPT")
+    lines.append("Till No: Till003")
     lines.append(f"Receipt No: {transaction_id}")
     lines.append("")
-    lines.append("DESCRIPTION".center(receipt_width))
-    lines.append("QTY   PRICE      AMOUNT".center(receipt_width))
+    lines.append(separator)
+
+    # Left-aligned item header
+    lines.append("DESCRIPTION")
+    lines.append("QTY   PRICE       AMOUNT")
     lines.append("")
 
     for row in enhanced_rows:
-        for name_line in split_product_name(row["name"], receipt_width):
+        item_name = str(row.get("name", "ITEM") or "ITEM").strip().upper()
+
+        for name_line in split_product_name(item_name, receipt_width):
             lines.append(name_line)
 
         qty_text = format_qty(row["qty"])
         price_text = fmt_no_sym(row["price"])
         amount_text = fmt_no_sym(row["amount"])
 
-        lines.append(f"{qty_text} @ {price_text} = {amount_text}")
+        # Left-aligned values
+        lines.append(f"{qty_text:<5}{price_text:<12}{amount_text}")
         lines.append("")
 
     lines.append(separator)
@@ -356,7 +422,6 @@ def build_receipt_text(
     lines.append("")
     lines.append(f"Served by: {username_str}".center(receipt_width))
 
-    # Space so cutter does not cut the footer text
     lines.append("")
     lines.append("")
     lines.append("")
@@ -372,8 +437,14 @@ def build_receipt_text(
 # ============================================================
 
 class DateSelector(forms.Form):
-    start_date = forms.DateField(widget=forms.SelectDateWidget(), required=False)
-    end_date = forms.DateField(widget=forms.SelectDateWidget(), required=False)
+    start_date = forms.DateField(
+        required=False,
+        widget=forms.DateInput(attrs={"type": "date", "class": "form-control"})
+    )
+    end_date = forms.DateField(
+        required=False,
+        widget=forms.DateInput(attrs={"type": "date", "class": "form-control"})
+    )
 
 
 class printer:
@@ -423,6 +494,186 @@ class printer:
         except Exception as e:
             print("Printer connection error:", e)
             printer.printer = None
+
+
+# ============================================================
+# End Day / Close Day Helpers
+# ============================================================
+
+def get_transaction_qs_for_day(day_date):
+    start_utc, end_utc = _local_day_range_utc(day_date)
+    return transaction.objects.filter(
+        transaction_dt__gte=start_utc,
+        transaction_dt__lt=end_utc
+    )
+
+
+def build_day_close_summary(close_date):
+    qs = get_transaction_qs_for_day(close_date)
+
+    cash_total = _money(
+        qs.filter(payment_type__iexact="CASH").aggregate(s=Sum("total_sale"))["s"]
+    )
+
+    ebt_total = _money(
+        qs.filter(payment_type__iexact="EBT").aggregate(s=Sum("total_sale"))["s"]
+    )
+
+    card_total = _money(
+        qs.filter(
+            Q(payment_type__iexact="DEBIT/CREDIT") |
+            Q(payment_type__iexact="DEBIT_CREDIT") |
+            Q(payment_type__iexact="CARD") |
+            Q(payment_type__iexact="BANK")
+        ).aggregate(s=Sum("total_sale"))["s"]
+    )
+
+    debt_total = _money(
+        qs.filter(payment_type__iexact="DEBT").aggregate(s=Sum("total_sale"))["s"]
+    )
+
+    total_sales = _money(qs.aggregate(s=Sum("total_sale"))["s"])
+    transaction_count = qs.count()
+
+    return {
+        "close_date": close_date,
+        "cash_total": cash_total,
+        "ebt_total": ebt_total,
+        "card_total": card_total,
+        "debt_total": debt_total,
+        "total_sales": total_sales,
+        "transaction_count": transaction_count,
+        "cash_total_display": _fmt_money(cash_total),
+        "ebt_total_display": _fmt_money(ebt_total),
+        "card_total_display": _fmt_money(card_total),
+        "debt_total_display": _fmt_money(debt_total),
+        "total_sales_display": _fmt_money(total_sales),
+    }
+
+
+def get_unclosed_previous_sales_date():
+    """
+    Finds the oldest previous sales day that has transactions but has not been closed.
+    Register must block selling if this returns a date.
+    """
+    today = _today_local_date()
+    local_tz = dj_timezone.get_current_timezone()
+
+    qs = transaction.objects.filter(transaction_dt__date__lt=today).order_by("transaction_dt")
+
+    seen_dates = []
+    seen_set = set()
+
+    for tx in qs.only("transaction_dt"):
+        try:
+            local_date = dj_timezone.localtime(tx.transaction_dt, local_tz).date()
+        except Exception:
+            local_date = tx.transaction_dt.date()
+
+        if local_date >= today:
+            continue
+
+        if local_date not in seen_set:
+            seen_dates.append(local_date)
+            seen_set.add(local_date)
+
+    for day in seen_dates:
+        if not DayClose.objects.filter(close_date=day).exists():
+            return day
+
+    return None
+
+
+def can_sell_today():
+    return get_unclosed_previous_sales_date() is None
+
+
+def _block_if_previous_day_not_closed(request):
+    unclosed_date = get_unclosed_previous_sales_date()
+    if unclosed_date:
+        messages.error(
+            request,
+            f"Sales are blocked. Please close day {unclosed_date} before selling today."
+        )
+        return redirect(f"{reverse('end_day_home')}?date={unclosed_date}")
+    return None
+
+
+# ============================================================
+# End Day / Close Day Views
+# ============================================================
+
+@login_required(login_url="/user/login/")
+def end_day_home(request):
+    today = _today_local_date()
+    unclosed_date = get_unclosed_previous_sales_date()
+
+    selected_date = _date_from_str(
+        request.GET.get("date"),
+        fallback=unclosed_date or today
+    )
+
+    summary = build_day_close_summary(selected_date)
+    already_closed = DayClose.objects.filter(close_date=selected_date).select_related("closed_by").first()
+
+    recent_closes = DayClose.objects.select_related("closed_by").order_by("-close_date")[:30]
+
+    return render(request, "end_day.html", {
+        "summary": summary,
+        "selected_date": selected_date,
+        "today": today,
+        "unclosed_date": unclosed_date,
+        "already_closed": already_closed,
+        "recent_closes": recent_closes,
+        "currency": currency_symbol(),
+    })
+
+
+@login_required(login_url="/user/login/")
+@require_POST
+def close_day_action(request):
+    close_date = _date_from_str(request.POST.get("close_date"))
+
+    if not close_date:
+        messages.error(request, "Invalid close date.")
+        return redirect("end_day_home")
+
+    summary = build_day_close_summary(close_date)
+
+    if summary["transaction_count"] <= 0:
+        messages.error(request, "No transactions found for this date.")
+        return redirect(f"{reverse('end_day_home')}?date={close_date}")
+
+    obj, created = DayClose.objects.get_or_create(
+        close_date=close_date,
+        defaults={
+            "cash_total": summary["cash_total"],
+            "ebt_total": summary["ebt_total"],
+            "card_total": summary["card_total"],
+            "debt_total": summary["debt_total"],
+            "total_sales": summary["total_sales"],
+            "transaction_count": summary["transaction_count"],
+            "closed_by": request.user,
+            "note": (request.POST.get("note") or "").strip(),
+        }
+    )
+
+    if not created:
+        messages.warning(request, f"{close_date} is already closed.")
+        return redirect(f"{reverse('end_day_home')}?date={close_date}")
+
+    messages.success(request, f"Day {close_date} closed successfully.")
+    return redirect(f"{reverse('end_day_home')}?date={close_date}")
+
+
+@login_required(login_url="/user/login/")
+def day_close_history(request):
+    closes = DayClose.objects.select_related("closed_by").order_by("-close_date")
+
+    return render(request, "end_day_history.html", {
+        "closes": closes,
+        "currency": currency_symbol(),
+    })
 
 
 # ============================================================
@@ -490,13 +741,6 @@ def transactionPrintReceipt(request, transNo):
 # Transactions List
 # ============================================================
 
-def _fmt_amount(value):
-    try:
-        return "{:,.2f}".format(float(value or 0))
-    except Exception:
-        return "0.00"
-
-
 @login_required(login_url="/user/login/")
 def transactionView(request):
     local_tz = dj_timezone.get_current_timezone()
@@ -505,30 +749,30 @@ def transactionView(request):
     default_start_local = now_local.replace(hour=0, minute=0, second=0, microsecond=0)
     default_end_local = now_local.replace(hour=23, minute=59, second=59, microsecond=999999)
 
-    form = DateSelector(request.GET or None)
-
     start_local = default_start_local
     end_local = default_end_local
     start_date_val = None
     end_date_val = None
 
-    if form.is_valid():
-        sd = form.cleaned_data.get("start_date")
-        ed = form.cleaned_data.get("end_date")
+    start_raw = request.GET.get("start_date", "")
+    end_raw = request.GET.get("end_date", "")
 
-        if sd:
-            start_naive = datetime.combine(sd, dt_time.min)
-            start_local = dj_timezone.make_aware(start_naive, local_tz)
-            start_date_val = sd
+    start_date = _date_from_str(start_raw)
+    end_date = _date_from_str(end_raw)
 
-        if ed:
-            end_naive = datetime.combine(ed, dt_time.max)
-            end_local = dj_timezone.make_aware(end_naive, local_tz)
-            end_date_val = ed
+    if start_date:
+        start_naive = datetime.combine(start_date, dt_time.min)
+        start_local = dj_timezone.make_aware(start_naive, local_tz)
+        start_date_val = start_date
 
-        if end_local < start_local:
-            start_local, end_local = end_local, start_local
-            start_date_val, end_date_val = end_date_val, start_date_val
+    if end_date:
+        end_naive = datetime.combine(end_date, dt_time.max)
+        end_local = dj_timezone.make_aware(end_naive, local_tz)
+        end_date_val = end_date
+
+    if end_local < start_local:
+        start_local, end_local = end_local, start_local
+        start_date_val, end_date_val = end_date_val, start_date_val
 
     start_utc = start_local.astimezone(py_timezone.utc)
     end_utc = end_local.astimezone(py_timezone.utc)
@@ -553,7 +797,7 @@ def transactionView(request):
 
     return render(request, "transactions.html", {
         "transactions": transactions,
-        "form": form,
+        "form": DateSelector(request.GET or None),
         "start_date": start_date_val,
         "end_date": end_date_val,
         "is_filtered": bool(start_date_val or end_date_val),
@@ -566,42 +810,101 @@ def transactionView(request):
 
 @login_required(login_url="/user/login/")
 def returnsTransaction(request):
+    block_response = _block_if_previous_day_not_closed(request)
+    if block_response:
+        return block_response
+
     Cart(request).returns()
     return redirect("register")
 
 
 @login_required(login_url="/user/login/")
 def suspendTransaction(request):
-    if Cart(request).isNotEmpty():
-        key = datetime.now().strftime("%Y%m%d%H%M%S%f")
-        cart_key = getattr(settings, "CART_SESSION_ID", "cart")
+    """
+    Save current cart safely for later recall.
+    """
+    cart_key = getattr(settings, "CART_SESSION_ID", "cart")
+    current_cart = request.session.get(cart_key, {})
 
-        if "Cart_Sessions" not in request.session:
-            request.session["Cart_Sessions"] = {}
+    if not isinstance(current_cart, dict) or len(current_cart) <= 0:
+        messages.info(request, "No items to suspend.")
+        return redirect("register")
 
-        request.session["Cart_Sessions"][key] = request.session.get(cart_key, {})
-        request.session.modified = True
+    key = datetime.now().strftime("%Y%m%d%H%M%S%f")
 
-    return redirect("cart_clear")
+    suspended = request.session.get("Cart_Sessions", {})
+    if not isinstance(suspended, dict):
+        suspended = {}
+
+    suspended[key] = copy.deepcopy(current_cart)
+
+    request.session["Cart_Sessions"] = suspended
+    request.session[cart_key] = {}
+    request.session.pop("stock_error", None)
+    request.session.modified = True
+
+    try:
+        request.session.save()
+    except Exception:
+        pass
+
+    messages.success(request, f"Transaction suspended successfully. ID: {key}")
+    return redirect("register")
 
 
 @login_required(login_url="/user/login/")
 def recallTransaction(request, recallTransNo=None):
+    """
+    Restore suspended cart safely.
+    """
     cart_key = getattr(settings, "CART_SESSION_ID", "cart")
 
-    if Cart(request).isNotEmpty():
-        return redirect("suspend_transaction")
+    suspended = request.session.get("Cart_Sessions", {})
+    if not isinstance(suspended, dict):
+        suspended = {}
+
+    current_cart = request.session.get(cart_key, {})
 
     if recallTransNo:
-        request.session[cart_key] = request.session["Cart_Sessions"][recallTransNo]
-        del request.session["Cart_Sessions"][recallTransNo]
+        recall_key = str(recallTransNo)
+
+        if recall_key not in suspended:
+            messages.error(request, f"Suspended transaction not found: {recall_key}")
+            return redirect("register")
+
+        # If current cart has items, save it first as another suspended transaction.
+        if isinstance(current_cart, dict) and len(current_cart) > 0:
+            new_key = datetime.now().strftime("%Y%m%d%H%M%S%f")
+            suspended[new_key] = copy.deepcopy(current_cart)
+
+        recalled_cart = copy.deepcopy(suspended.get(recall_key, {}))
+        if not isinstance(recalled_cart, dict):
+            recalled_cart = {}
+
+        try:
+            del suspended[recall_key]
+        except Exception:
+            pass
+
+        request.session.pop("stock_error", None)
+        request.session[cart_key] = recalled_cart
+        request.session["Cart_Sessions"] = suspended
         request.session.modified = True
 
-    elif "Cart_Sessions" in request.session and len(request.session["Cart_Sessions"]):
+        try:
+            request.session.save()
+        except Exception:
+            pass
+
+        messages.success(request, "Suspended transaction recalled successfully.")
+        return redirect("register")
+
+    if suspended and len(suspended) > 0:
         return render(request, "recallTransaction.html", {
-            "obj_rt": request.session["Cart_Sessions"].keys()
+            "obj_rt": list(suspended.keys())
         })
 
+    messages.info(request, "No suspended transactions found.")
     return redirect("register")
 
 
@@ -679,13 +982,13 @@ def endTransactionReceipt(request, transNo):
 def endTransaction(request, type, value):
     """
     Complete sale.
-    FIXED:
-    - No fingerprint blocking.
-    - No pending session loop.
-    - Robust cart total.
-    - Cash/EBT/Card all complete sale.
+    Also blocks selling if previous sales day is not closed.
     """
     try:
+        block_response = _block_if_previous_day_not_closed(request)
+        if block_response:
+            return block_response
+
         cart = get_cart_from_session(request)
 
         if cart_is_empty(cart):
@@ -739,7 +1042,6 @@ def endTransaction(request, type, value):
             )
 
         else:
-            # Fallback for URLs that pass EBT/CASH directly as type
             payment_type = str(type or "").strip().upper()
 
             if payment_type in ["EBT", "DEBIT_CREDIT", "DEBIT/CREDIT", "CARD"]:
@@ -787,18 +1089,17 @@ def endTransaction(request, type, value):
         return redirect("register")
 
 
-def addTransaction(user,
-                   payment_type,
-                   total=None,
-                   cart=None,
-                   value=None,
-                   paid_amount=Decimal("0.00"),
-                   debtor_name=None,
-                   debt_due_date=None,
-                   phone_number=None):
-    """
-    Create transaction + receipt.
-    """
+def addTransaction(
+    user,
+    payment_type,
+    total=None,
+    cart=None,
+    value=None,
+    paid_amount=Decimal("0.00"),
+    debtor_name=None,
+    debt_due_date=None,
+    phone_number=None
+):
     transaction_id = datetime.now().strftime("%Y%m%d%H%M%S%f")
 
     try:
@@ -1032,14 +1333,14 @@ def profit_loss(request):
         transaction_dt__lt=end_date
     ).aggregate(total_revenue=Sum("total_sale"))
 
-    total_revenue = revenue_agg["total_revenue"] or Decimal("0.00")
+    total_revenue = safe_decimal(revenue_agg["total_revenue"] or Decimal("0.00"))
 
     tax_agg = transaction.objects.filter(
         transaction_dt__gte=start_date,
         transaction_dt__lt=end_date
     ).aggregate(total_tax=Sum("tax_total"))
 
-    total_tax = tax_agg["total_tax"] or Decimal("0.00")
+    total_tax = safe_decimal(tax_agg["total_tax"] or Decimal("0.00"))
 
     expr = ExpressionWrapper(
         F("cost_price") * F("qty"),
@@ -1051,19 +1352,14 @@ def profit_loss(request):
         transaction_date_time__lt=end_date
     ).aggregate(total_cogs=Sum(expr))
 
-    total_cogs = cogs_agg["total_cogs"] or Decimal("0.00")
+    total_cogs = safe_decimal(cogs_agg["total_cogs"] or Decimal("0.00"))
 
     expenses_agg = Expense.objects.filter(
         created_at__gte=start_date,
         created_at__lt=end_date
     ).aggregate(total_expenses=Sum("amount"))
 
-    total_expenses = expenses_agg["total_expenses"] or Decimal("0.00")
-
-    total_revenue = safe_decimal(total_revenue)
-    total_cogs = safe_decimal(total_cogs)
-    total_tax = safe_decimal(total_tax)
-    total_expenses = safe_decimal(total_expenses)
+    total_expenses = safe_decimal(expenses_agg["total_expenses"] or Decimal("0.00"))
 
     gross_profit = total_revenue - total_cogs
     net_profit = gross_profit - total_expenses - total_tax
@@ -1087,6 +1383,10 @@ def profit_loss(request):
 @login_required(login_url="/user/login/")
 def endDebtTransaction(request):
     try:
+        block_response = _block_if_previous_day_not_closed(request)
+        if block_response:
+            return block_response
+
         if request.method != "POST":
             return HttpResponseBadRequest("POST required")
 
@@ -1326,3 +1626,62 @@ def debt_payments_history(request, debt_id):
     debt = get_object_or_404(Debt, pk=debt_id)
     payments = debt.payments.select_related("paid_by").order_by("-created_at")
     return render(request, "debt_payments_history.html", {"debt": debt, "payments": payments})
+
+
+def qz_certificate(request):
+    """
+    Sends public QZ certificate to browser/QZ Tray.
+    """
+    try:
+        with open(settings.QZ_CERT_PATH, "r", encoding="utf-8") as f:
+            cert = f.read()
+
+        return HttpResponse(cert, content_type="text/plain")
+
+    except Exception as e:
+        return HttpResponse(
+            f"Certificate error: {e}",
+            status=500,
+            content_type="text/plain"
+        )
+
+
+@csrf_exempt
+def qz_sign(request):
+    """
+    Signs QZ Tray request using private-key.pem.
+    Uses pycryptodome to avoid cryptography/PyO3 Windows issue.
+    """
+    if request.method != "POST":
+        return HttpResponseBadRequest("POST required")
+
+    data_to_sign = request.body
+
+    if not data_to_sign:
+        return HttpResponseBadRequest("No data to sign")
+
+    try:
+        with open(settings.QZ_PRIVATE_KEY_PATH, "rb") as key_file:
+            private_key = RSA.import_key(key_file.read())
+
+        digest = SHA256.new(data_to_sign)
+        signature = pkcs1_15.new(private_key).sign(digest)
+
+        return HttpResponse(
+            base64.b64encode(signature).decode("utf-8"),
+            content_type="text/plain"
+        )
+
+    except FileNotFoundError:
+        return HttpResponse(
+            "Private key not found. Put it at qz_keys/private-key.pem",
+            status=500,
+            content_type="text/plain"
+        )
+
+    except Exception as e:
+        return HttpResponse(
+            f"Signing error: {e}",
+            status=500,
+            content_type="text/plain"
+        )

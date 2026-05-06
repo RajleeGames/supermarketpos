@@ -1,11 +1,71 @@
+# =========================
+# Secrets / environment
+# =========================
 .env
-.DS_Store
+.env.*
+!.env.sample
+!.env.example
+
+# QZ private key - never push this
+qz_keys/private-key.pem
+*.pem
+*.key
+
+# =========================
+# Python / Django
+# =========================
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
 *.sqlite
 *.sqlite3
-*.pyc
-__pycache__
-__pycache__/
+db.sqlite3
+
+# =========================
+# Virtual environments
+# =========================
 venv/
 env/
+.venv/
+ENV/
+
+# =========================
+# Django generated files
+# =========================
+staticfiles/
+media/
+app_data/
+
+# =========================
+# Database / docker data
+# =========================
 postgres_data/
-!.env.sample
+
+# =========================
+# OS files
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# IDE / editor
+# =========================
+.vscode/
+.idea/
+
+# =========================
+# Logs / backups
+# =========================
+*.log
+logs/
+*.bak
+*.backup
+backups/
+
+# =========================
+# Build / packaging
+# =========================
+build/
+dist/
+*.spec

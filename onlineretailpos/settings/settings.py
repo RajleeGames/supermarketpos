@@ -31,7 +31,7 @@ EXE_DATA_DIR.mkdir(parents=True, exist_ok=True)
 # -------------------------------------------------
 SECRET_KEY = "django_live_secret_key_adamsmini_change_later_2026"
 
-DEBUG = False
+DEBUG = True
 
 ROOT_URLCONF = "onlineretailpos.urls"
 WSGI_APPLICATION = "onlineretailpos.wsgi.application"
@@ -191,6 +191,24 @@ USE_TZ = True
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # -------------------------------------------------
+# QZ Tray certificate signing paths
+# -------------------------------------------------
+# Put files like this:
+# OnlineRetailPOS/
+#   qz_keys/
+#       digital-certificate.txt
+#       private-key.pem
+#
+# If running as EXE, keep qz_keys beside the EXE.
+if IS_FROZEN:
+    QZ_KEYS_DIR = Path(sys.executable).resolve().parent / "qz_keys"
+else:
+    QZ_KEYS_DIR = BASE_DIR / "qz_keys"
+
+QZ_CERT_PATH = QZ_KEYS_DIR / "digital-certificate.txt"
+QZ_PRIVATE_KEY_PATH = QZ_KEYS_DIR / "private-key.pem"
+
+# -------------------------------------------------
 # Receipt/store settings
 # -------------------------------------------------
 RECEIPT_CHAR_COUNT = 42
@@ -209,14 +227,19 @@ INCLUDE_PHONE_IN_HEADING = True
 INCLUDE_EMAIL_IN_HEADING = True
 
 RECEIPT_FOOTER = "You are Welcomed !"
-RECEIPT_SALES_TITLE = "*** Sales Receipt ***"
-RECEIPT_NONFISCAL_TEXT = "*** NON-FISCAL RECEIPT ***"
+RECEIPT_SALES_TITLE = "*** SALES RECEIPT ***"
+RECEIPT_NONFISCAL_TEXT = "NON FISCAL RECEIPT"
+RECEIPT_TILL_NO = "Till003"
 
 PRINTER_VENDOR_ID = ""
 PRINTER_PRODUCT_ID = ""
 PRINT_RECEIPT = True
 CASH_DRAWER = False
 
+# IMPORTANT:
+# Keep RECEIPT_HEADER as store/header only.
+# Do not include TIN, VRN, NON-FISCAL, Receipt No, or item headings here.
+# Those are arranged in transaction/views.py build_receipt_text().
 _receipt_header_lines = [STORE_NAME]
 
 if STORE_ADDRESS:
@@ -233,19 +256,9 @@ if INCLUDE_EMAIL_IN_HEADING and STORE_EMAIL:
 if RECEIPT_ADDITIONAL_HEADING:
     _receipt_header_lines.append(RECEIPT_ADDITIONAL_HEADING)
 
-_receipt_header_lines += ["", RECEIPT_SALES_TITLE]
-
-if STORE_TIN:
-    _receipt_header_lines.append(f"TIN: {STORE_TIN}")
-
-if STORE_VRN:
-    _receipt_header_lines.append(f"VRN: {STORE_VRN}")
-
-_receipt_header_lines += [RECEIPT_NONFISCAL_TEXT, ""]
-
 RECEIPT_HEADER = "\n".join(_receipt_header_lines)
 RECEIPT_SEPARATOR = "-" * RECEIPT_CHAR_COUNT
-RECEIPT_COLUMN_HEADER = "DESCRIPTION\nQTY   PRICE      AMOUNT"
+RECEIPT_COLUMN_HEADER = "DESCRIPTION\nQTY   PRICE       AMOUNT"
 
 # -------------------------------------------------
 # Login/session settings
@@ -260,13 +273,13 @@ SESSION_SAVE_EVERY_REQUEST = True
 # -------------------------------------------------
 # Security production settings
 # -------------------------------------------------
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-SECURE_SSL_REDIRECT = True
-SECURE_HSTS_SECONDS = 120
-SECURE_HSTS_PRELOAD = True
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+SECURE_SSL_REDIRECT = False
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False
+SECURE_HSTS_SECONDS = 0
+SECURE_HSTS_PRELOAD = False
+SECURE_HSTS_INCLUDE_SUBDOMAINS = False
+# SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 # -------------------------------------------------
 # Console debug prints for server logs
@@ -280,3 +293,5 @@ print(
     f"[settings] RECEIPT: char_count={RECEIPT_CHAR_COUNT} | "
     f"store='{STORE_NAME}' | print={PRINT_RECEIPT}"
 )
+print(f"[settings] QZ_CERT_PATH={QZ_CERT_PATH}")
+print(f"[settings] QZ_PRIVATE_KEY_PATH={QZ_PRIVATE_KEY_PATH}")

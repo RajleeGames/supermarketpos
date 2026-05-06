@@ -1,20 +1,32 @@
 # cart/models.py
-from decimal import Decimal, ROUND_HALF_UP, InvalidOperation
-from django.db import models
+import re
+from decimal import Decimal, ROUND_HALF_UP, InvalidOperation, getcontext
+from typing import Tuple, Dict, Any
+
 from django.conf import settings
 from django.core.exceptions import ValidationError
+from django.db import models
 from colorfield.fields import ColorField
 
-# Attempt to import the Product model (local app). If your import path differs, adjust it.
-from inventory.models import Product as Product
+from inventory.models import Product
 
-# Session key used for cart storage
-DEFAULT_CART_SESSION_KEY = getattr(settings, "CART_SESSION_ID", "cart")
+getcontext().prec = 28
+
+DEFAULT_CART_SESSION_KEY = "cart"
 
 
-def _to_decimal(value):
-    """Safely convert value to Decimal quantized to 2 decimal places."""
+# ============================================================
+# Helpers
+# ============================================================
+
+def _to_decimal(value) -> Decimal:
+    """
+    Safely convert value to Decimal.
+    Keep calculations accurate for POS money values.
+    """
     try:
+        if value is None or value == "":
+            return Decimal("0.00")
         if isinstance(value, Decimal):
             d = value
         else:
@@ -23,107 +35,407 @@ def _to_decimal(value):
     except (InvalidOperation, TypeError, ValueError):
         return Decimal("0.00")
 
-# cart/cart.py  (or wherever your Cart class lives)
-from decimal import Decimal, ROUND_HALF_UP, InvalidOperation, getcontext
-from typing import Optional, Tuple, Dict, Any
 
-from django.conf import settings
+def clean_barcode(value) -> str:
+    """
+    Scanner-safe barcode cleaner.
 
-# Try to import your Product model (your model class is named `product` in inventory.models)
-try:
-    from inventory.models import Product as ProductModel
-except Exception:
-    ProductModel = None  # best-effort: DB lookups will be skipped if import fails
+    Fixes:
+    - spaces
+    - tabs/newlines
+    - hidden scanner characters
+    - Excel-style 12345.0
+    """
+    raw = str(value or "")
 
-# ensure Decimal precision is generous
-getcontext().prec = 28
+    raw = raw.strip()
+    raw = raw.replace("\r", "")
+    raw = raw.replace("\n", "")
+    raw = raw.replace("\t", "")
+    raw = raw.replace(" ", "")
 
-DEFAULT_CART_SESSION_KEY = "cart"  # keep the same key you used before (change if needed)
+    raw = raw.replace("\ufeff", "")
+    raw = raw.replace("\u200b", "")
+    raw = raw.replace("\u200c", "")
+    raw = raw.replace("\u200d", "")
+
+    raw = "".join(ch for ch in raw if ch.isprintable())
+
+    if raw.endswith(".0") and raw[:-2].isdigit():
+        raw = raw[:-2]
+
+    return raw
 
 
-def _to_decimal(value) -> Decimal:
-    """Safe conversion to Decimal with fallback to 0.00"""
-    try:
-        if value is None:
-            return Decimal("0.00")
-        if isinstance(value, Decimal):
-            return value
-        return Decimal(str(value))
-    except (InvalidOperation, ValueError, TypeError):
-        return Decimal("0.00")
+def normalize_barcode_compare(value) -> str:
+    raw = clean_barcode(value)
+    return re.sub(r"[^A-Za-z0-9]", "", raw).upper()
 
+
+# ============================================================
+# Session Cart
+# ============================================================
 
 class Cart:
     """
     Session-backed cart.
 
-    Usage:
-        cart = Cart(request)
-        result = cart.add(product, quantity=1, variable_price=None)
-        if result.get("status") == "error": handle
+    Important rule:
+    - price is VAT-inclusive selling price.
+    - tax_value is extracted VAT for display/reporting only.
+    - line_total is the actual amount customer pays.
+    - Do NOT add tax_value again to line_total.
     """
 
     def __init__(self, request):
         self.request = request
         self.session = request.session
-        self.key = getattr(settings, "DEFAULT_CART_SESSION_KEY", DEFAULT_CART_SESSION_KEY)
+
+        # IMPORTANT: all views must use same key.
+        self.key = getattr(settings, "CART_SESSION_ID", DEFAULT_CART_SESSION_KEY)
+
         cart = self.session.get(self.key)
+
         if not isinstance(cart, dict):
             cart = {}
-            self.session[self.key] = cart
-        # self._cart stores raw session dict (values are stored as strings for session safety)
-        self._cart = cart
 
-    def _format_str(self, d: Decimal) -> str:
-        """Format Decimal to string with 2 decimal places for session storage."""
-        d = _to_decimal(d)
-        return f"{d:.2f}"
+        self._cart = self._clean_existing_cart(cart)
+        self.session[self.key] = self._cart
+        self.session.modified = True
+
+    def _clean_existing_cart(self, cart: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Cleans old session cart data.
+
+        This fixes cases where suspended/recalled carts have barcode keys with
+        hidden characters, spaces, or stored barcode not matching item['barcode'].
+        """
+        clean_cart = {}
+
+        if not isinstance(cart, dict):
+            return clean_cart
+
+        for raw_key, raw_item in cart.items():
+            if not isinstance(raw_item, dict):
+                continue
+
+            item = dict(raw_item)
+
+            key_from_item = item.get("barcode") or raw_key
+            clean_key = clean_barcode(key_from_item)
+
+            if not clean_key:
+                continue
+
+            # Try to align with actual stored barcode in DB.
+            product = self._find_product_for_barcode(clean_key)
+            if product is not None:
+                clean_key = clean_barcode(getattr(product, "barcode", clean_key))
+
+            item["barcode"] = clean_key
+
+            try:
+                item["quantity"] = int(item.get("quantity", 1) or 1)
+            except Exception:
+                item["quantity"] = 1
+
+            if item["quantity"] == 0:
+                continue
+
+            item["price"] = self._format_str(item.get("price", 0))
+            item["tax_percentage"] = self._format_str(item.get("tax_percentage", 0))
+            item["tax_value"] = self._format_str(item.get("tax_value", 0))
+            item["deposit_value"] = self._format_str(item.get("deposit_value", 0))
+            item["profit_value"] = self._format_str(item.get("profit_value", 0))
+            item["line_total"] = self._format_str(item.get("line_total", 0))
+            item["variable_price"] = bool(item.get("variable_price", False))
+            item["low_stock"] = bool(item.get("low_stock", False))
+
+            try:
+                item["stock_left"] = int(item.get("stock_left", 0) or 0)
+            except Exception:
+                item["stock_left"] = 0
+
+            # If duplicate cleaned keys exist, merge quantities and recalc.
+            if clean_key in clean_cart:
+                existing_qty = int(clean_cart[clean_key].get("quantity", 0) or 0)
+                new_qty = existing_qty + int(item.get("quantity", 0) or 0)
+                clean_cart[clean_key]["quantity"] = new_qty
+                temp_cart_before = self.__dict__.get("_cart")
+                self._cart = clean_cart
+                self._recalculate_item(clean_key, product=product, quantity=new_qty)
+                if temp_cart_before is not None:
+                    self._cart = temp_cart_before
+            else:
+                clean_cart[clean_key] = item
+
+        return clean_cart
+
+    def _format_str(self, value) -> str:
+        return f"{_to_decimal(value):.2f}"
+
+    def _find_product_for_barcode(self, barcode):
+        barcode = clean_barcode(barcode)
+
+        if not barcode:
+            return None
+
+        try:
+            product = Product.objects.filter(barcode=barcode).first()
+            if product:
+                return product
+
+            product = Product.objects.filter(barcode__iexact=barcode).first()
+            if product:
+                return product
+
+            norm = normalize_barcode_compare(barcode)
+            norm_no_zero = norm.lstrip("0")
+
+            candidates = (
+                Product.objects.filter(barcode__icontains=barcode[:6])[:50]
+                if len(barcode) >= 6
+                else Product.objects.all()[:200]
+            )
+
+            for product in candidates:
+                db_norm = normalize_barcode_compare(getattr(product, "barcode", ""))
+
+                if db_norm == norm:
+                    return product
+
+                if norm_no_zero and db_norm.lstrip("0") == norm_no_zero:
+                    return product
+
+        except Exception:
+            return None
+
+        return None
 
     def _resolve_tax_pct_and_applicability(self, product) -> Tuple[Decimal, bool]:
         """
-        Return (tax_pct_decimal, is_taxable_bool).
-        Preference order:
-          - product.is_vat_applicable (if present) controls applicability
-          - product.tax_percentage if present (use that percent)
-          - fallback to product.tax_category.tax_percentage if exists
-          - default for Tanzania: tax_pct = 18 and is_taxable = True
-        """
-        # detect applicability flag
-        is_vat_flag = getattr(product, "is_vat_applicable", None)
-        # fallback to older flags
-        if is_vat_flag is None:
-            is_vat_flag = getattr(product, "is_taxable", True) and bool(getattr(product, "tax_category", None))
+        Returns:
+            tax_pct, is_taxable
 
-        # tax percentage resolution
-        tax_pct = None
-        # direct field
+        Supports different product model styles:
+        - product.is_vat_applicable
+        - product.is_taxable
+        - product.tax_percentage
+        - product.tax_category.tax_percentage
+        """
+        is_taxable = True
+
         try:
-            tax_pct_val = getattr(product, "tax_percentage", None)
-            if tax_pct_val is not None:
-                tax_pct = _to_decimal(tax_pct_val)
+            is_vat_applicable = getattr(product, "is_vat_applicable", None)
+            if is_vat_applicable is not None:
+                is_taxable = bool(is_vat_applicable)
+            else:
+                is_taxable = bool(getattr(product, "is_taxable", True))
         except Exception:
-            tax_pct = None
+            is_taxable = True
 
-        # try tax_category.tax_percentage
-        if tax_pct is None:
+        tax_pct = Decimal("0.00")
+
+        try:
+            direct_pct = getattr(product, "tax_percentage", None)
+            if direct_pct is not None:
+                tax_pct = _to_decimal(direct_pct)
+        except Exception:
+            tax_pct = Decimal("0.00")
+
+        if tax_pct == Decimal("0.00"):
             try:
-                tc = getattr(product, "tax_category", None)
-                tax_pct = _to_decimal(getattr(tc, "tax_percentage", None) if tc is not None else None)
+                tax_category = getattr(product, "tax_category", None)
+                if tax_category is not None:
+                    tax_pct = _to_decimal(getattr(tax_category, "tax_percentage", 0))
             except Exception:
-                tax_pct = None
+                tax_pct = Decimal("0.00")
 
-        # final fallback: Tanzania default 18% when taxable
-        if tax_pct is None or tax_pct == Decimal("0.00"):
-            tax_pct = Decimal("18.00") if is_vat_flag else Decimal("0.00")
+        if not is_taxable:
+            tax_pct = Decimal("0.00")
 
-        return tax_pct, bool(is_vat_flag)
+        return tax_pct, is_taxable
 
-    # ----- Core operations -----
-    def add(self, product: ProductModel, quantity: int = 1, variable_price=None) -> Dict[str, Any]:
+    def _get_unit_price(self, product, variable_price=None) -> Tuple[Decimal, bool]:
+        if variable_price is not None and str(variable_price).strip() != "":
+            return _to_decimal(variable_price), True
+
+        price = _to_decimal(
+            getattr(
+                product,
+                "sales_price",
+                getattr(product, "selling_price", getattr(product, "price", 0)),
+            )
+        )
+        return price, False
+
+    def _get_unit_deposit(self, product) -> Decimal:
+        deposit = Decimal("0.00")
+
+        try:
+            deposit_category = getattr(product, "deposit_category", None)
+            if deposit_category is not None:
+                deposit = _to_decimal(getattr(deposit_category, "deposit_value", 0))
+        except Exception:
+            deposit = Decimal("0.00")
+
+        return deposit
+
+    def _get_cost_price(self, product) -> Decimal:
+        try:
+            return _to_decimal(
+                getattr(
+                    product,
+                    "cost_price",
+                    getattr(product, "purchase_price", getattr(product, "buying_price", 0)),
+                )
+            )
+        except Exception:
+            return Decimal("0.00")
+
+    def _extract_vat_from_gross(self, gross_amount: Decimal, tax_pct: Decimal) -> Decimal:
         """
-        Add a product or increase its quantity.
-        Returns dict with status:
-            {"status":"ok"} or {"status":"error","message": "..."}
+        VAT-inclusive formula:
+        VAT = Gross * tax_pct / (100 + tax_pct)
+        """
+        gross_amount = _to_decimal(gross_amount)
+        tax_pct = _to_decimal(tax_pct)
+
+        if gross_amount <= 0 or tax_pct <= 0:
+            return Decimal("0.00")
+
+        vat = gross_amount * tax_pct / (Decimal("100.00") + tax_pct)
+        return vat.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+
+    def _recalculate_item(self, barcode: str, product=None, quantity=None, variable_price=None) -> Dict[str, Any]:
+        """
+        Recalculate one cart item cleanly.
+
+        line_total = unit_price * qty + deposit_total
+        tax_value is NOT added again because price is VAT-inclusive.
+        """
+        barcode = clean_barcode(barcode)
+
+        if barcode not in self._cart:
+            return {"status": "error", "message": "Item not in cart."}
+
+        existing = dict(self._cart[barcode])
+
+        if product is None:
+            product = self._find_product_for_barcode(barcode)
+
+        if product is not None:
+            real_barcode = clean_barcode(getattr(product, "barcode", barcode))
+            if real_barcode and real_barcode != barcode:
+                self._cart[real_barcode] = self._cart.pop(barcode)
+                barcode = real_barcode
+                existing = dict(self._cart[barcode])
+
+        try:
+            qty = int(quantity if quantity is not None else existing.get("quantity", 1))
+        except Exception:
+            qty = 1
+
+        if qty <= 0:
+            del self._cart[barcode]
+            self.save()
+            return {"status": "ok", "removed": True}
+
+        # Stock check
+        if product is not None:
+            available_stock = int(getattr(product, "qty", 0) or 0)
+            if qty > available_stock:
+                return {
+                    "status": "error",
+                    "message": f"Insufficient stock. Available: {available_stock}",
+                }
+        else:
+            available_stock = None
+
+        # Price
+        if variable_price is not None and str(variable_price).strip() != "":
+            unit_price = _to_decimal(variable_price)
+            variable_flag = True
+        else:
+            unit_price = _to_decimal(existing.get("price", 0))
+            variable_flag = bool(existing.get("variable_price", False))
+
+            if unit_price <= 0 and product is not None:
+                unit_price, variable_flag = self._get_unit_price(product)
+
+        # Deposit per unit
+        if product is not None:
+            unit_deposit = self._get_unit_deposit(product)
+        else:
+            old_qty = int(existing.get("quantity", 1) or 1)
+            old_deposit_total = _to_decimal(existing.get("deposit_value", 0))
+            unit_deposit = (
+                old_deposit_total / Decimal(old_qty)
+                if old_qty > 0
+                else Decimal("0.00")
+            ).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+
+        # Tax
+        if product is not None:
+            tax_pct, is_taxable = self._resolve_tax_pct_and_applicability(product)
+        else:
+            tax_pct = _to_decimal(existing.get("tax_percentage", 0))
+            is_taxable = tax_pct > 0
+
+        qty_dec = Decimal(qty)
+
+        goods_total = (unit_price * qty_dec).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+        deposit_total = (unit_deposit * qty_dec).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+
+        tax_value = self._extract_vat_from_gross(goods_total, tax_pct) if is_taxable else Decimal("0.00")
+
+        # IMPORTANT:
+        # Customer pays goods_total + deposit only.
+        # Tax is already inside goods_total.
+        line_total = (goods_total + deposit_total).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+
+        if product is not None:
+            cost_price = self._get_cost_price(product)
+        else:
+            cost_price = Decimal("0.00")
+
+        profit_value = (goods_total - (cost_price * qty_dec) - tax_value).quantize(
+            Decimal("0.01"),
+            rounding=ROUND_HALF_UP,
+        )
+
+        if available_stock is not None:
+            remaining = available_stock - qty
+            low_stock_threshold = int(getattr(product, "low_stock_threshold", 5) or 5)
+            low_stock = remaining <= low_stock_threshold
+            stock_left = max(0, remaining)
+        else:
+            low_stock = bool(existing.get("low_stock", False))
+            stock_left = int(existing.get("stock_left", 0) or 0)
+
+        existing.update({
+            "barcode": barcode,
+            "name": existing.get("name", getattr(product, "name", "") if product else ""),
+            "price": self._format_str(unit_price),
+            "quantity": int(qty),
+            "tax_percentage": self._format_str(tax_pct),
+            "tax_value": self._format_str(tax_value),
+            "deposit_value": self._format_str(deposit_total),
+            "profit_value": self._format_str(profit_value),
+            "line_total": self._format_str(line_total),
+            "variable_price": bool(variable_flag),
+            "low_stock": bool(low_stock),
+            "stock_left": int(stock_left),
+        })
+
+        self._cart[barcode] = existing
+        self.save()
+
+        return {"status": "ok", "removed": False}
+
+    def add(self, product: Product, quantity: int = 1, variable_price=None) -> Dict[str, Any]:
+        """
+        Add product or increase existing quantity.
         """
         if product is None:
             return {"status": "error", "message": "No product provided."}
@@ -132,465 +444,276 @@ class Cart:
             qty = int(quantity)
         except Exception:
             qty = 1
-        if qty == 0:
+
+        if qty <= 0:
             return {"status": "noop"}
 
-        barcode = str(getattr(product, "barcode", "")).strip()
+        barcode = clean_barcode(getattr(product, "barcode", ""))
+
         if not barcode:
             return {"status": "error", "message": "Product barcode missing."}
 
-        # per-unit (selling) price (Decimal)
-        if variable_price is not None:
-            unit_price = _to_decimal(variable_price)
-            var_flag = True
-        else:
-            unit_price = _to_decimal(getattr(product, "sales_price", getattr(product, "selling_price", "0")))
-            var_flag = False
-
-        # deposit (if you use deposit categories; optional)
-        deposit_val = Decimal("0.00")
-        if getattr(product, "deposit_category", None):
-            try:
-                deposit_val = _to_decimal(getattr(product.deposit_category, "deposit_value", 0))
-            except Exception:
-                deposit_val = Decimal("0.00")
-
-        # STOCK CHECK (prevent oversell)
         available_stock = int(getattr(product, "qty", 0) or 0)
-        current_in_cart = int(self._cart.get(barcode, {}).get("quantity", 0) or 0)
-        requested_total = current_in_cart + qty
-        if requested_total > available_stock:
+
+        # Handle old dirty key if it exists in cart under normalized version.
+        current_qty = int(self._cart.get(barcode, {}).get("quantity", 0) or 0)
+
+        # If barcode not found but normalized match exists, merge it.
+        if barcode not in self._cart:
+            norm = normalize_barcode_compare(barcode)
+            for old_key in list(self._cart.keys()):
+                if normalize_barcode_compare(old_key) == norm:
+                    self._cart[barcode] = self._cart.pop(old_key)
+                    self._cart[barcode]["barcode"] = barcode
+                    current_qty = int(self._cart[barcode].get("quantity", 0) or 0)
+                    break
+
+        new_qty = current_qty + qty
+
+        if new_qty > available_stock:
             return {
                 "status": "error",
-                "message": f"Insufficient stock. Available: {available_stock}, Requested in cart: {requested_total}"
+                "message": f"Insufficient stock. Available: {available_stock}, Requested in cart: {new_qty}",
             }
 
-        # Determine tax percentage & applicability (per product)
-        tax_pct, is_vat_applicable = self._resolve_tax_pct_and_applicability(product)
+        unit_price, variable_flag = self._get_unit_price(product, variable_price)
 
-        # VAT should be calculated from the selling price (VAT-inclusive extraction)
-        # We compute per-line totals and per-line VAT below.
-
-        # Merge with existing entry if present
-        if barcode in self._cart:
-            existing = self._cart[barcode].copy()
-            existing_qty = int(existing.get("quantity", 0) or 0)
-            new_qty = existing_qty + qty
-
-            if new_qty <= 0:
-                # remove entirely
-                del self._cart[barcode]
-                self.save()
-                return {"status": "ok"}
-
-            # Determine unit price to use: if caller provided variable_price use that, otherwise keep stored one
-            stored_price = _to_decimal(existing.get("price", unit_price))
-            unit_price_used = unit_price if var_flag else stored_price
-
-            # deposit total for new_qty
-            deposit_total = (deposit_val * Decimal(new_qty)).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
-
-            # recompute line_total (what customer pays for this line)
-            line_total = (unit_price_used * Decimal(new_qty) + deposit_total).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
-
-            # compute VAT on this line by extracting from line_total (if taxable)
-            if is_vat_applicable and tax_pct > 0:
-                denom = (Decimal("100.00") + tax_pct)
-                raw_line_vat = (unit_price_used * Decimal(new_qty) * tax_pct) / denom
-                total_vat = raw_line_vat.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
-            else:
-                total_vat = Decimal("0.00")
-
-            # cost price for profit calc (if available)
-            cost_price_val = _to_decimal(getattr(product, "cost_price", getattr(product, "purchase_price", 0)))
-
-            # profit per line = SP*qty - (CP*qty + total_vat)
-            profit_per_line = (unit_price_used * Decimal(new_qty) - (cost_price_val * Decimal(new_qty) + total_vat)).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
-
-            existing["quantity"] = int(new_qty)
-            existing["price"] = self._format_str(unit_price_used)
-            existing["tax_value"] = self._format_str(total_vat)
-            existing["deposit_value"] = self._format_str(deposit_total)
-            existing["profit_value"] = self._format_str(profit_per_line)
-            existing["line_total"] = self._format_str(line_total)
-            existing["variable_price"] = bool(var_flag) or bool(existing.get("variable_price", False))
-
-            # compute remaining stock after this addition
-            remaining = available_stock - new_qty
-            existing["low_stock"] = bool(remaining <= getattr(product, "low_stock_threshold", 5))
-            existing["stock_left"] = int(max(0, remaining))
-
-            self._cart[barcode] = existing
-        else:
-            # New entry
-            deposit_total = (deposit_val * Decimal(qty)).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
-            # line_total is what the customer pays for this line
-            line_total = (unit_price * Decimal(qty) + deposit_total).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
-
-            # compute VAT by extracting from line_total (VAT-inclusive)
-            if is_vat_applicable and tax_pct > 0:
-                denom = (Decimal("100.00") + tax_pct)
-                raw_line_vat = (unit_price * Decimal(qty) * tax_pct) / denom
-                total_vat = raw_line_vat.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
-            else:
-                total_vat = Decimal("0.00")
-
-            # get cost price for profit calc
-            cost_price_val = _to_decimal(getattr(product, "cost_price", getattr(product, "purchase_price", 0)))
-            profit_per_line = (unit_price * Decimal(qty) - (cost_price_val * Decimal(qty) + total_vat)).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
-
-            remaining = available_stock - qty
-
+        if barcode not in self._cart:
             self._cart[barcode] = {
                 "barcode": barcode,
                 "name": str(getattr(product, "name", "") or getattr(product, "display_name", "")),
-                "price": self._format_str(unit_price),         # per-unit price as string
+                "price": self._format_str(unit_price),
                 "quantity": int(qty),
-                "tax_value": self._format_str(total_vat),      # total tax for the line (string)
-                "deposit_value": self._format_str(deposit_total), # total deposit for the line (string)
-                "profit_value": self._format_str(profit_per_line), # profit for the line
-                "line_total": self._format_str(line_total),
-                "variable_price": bool(var_flag),
-                # stock metadata
-                "low_stock": bool(remaining <= getattr(product, "low_stock_threshold", 5)),
-                "stock_left": int(max(0, remaining)),
+                "tax_percentage": "0.00",
+                "tax_value": "0.00",
+                "deposit_value": "0.00",
+                "profit_value": "0.00",
+                "line_total": "0.00",
+                "variable_price": bool(variable_flag),
+                "low_stock": False,
+                "stock_left": 0,
             }
+        else:
+            if variable_price is not None and str(variable_price).strip() != "":
+                self._cart[barcode]["price"] = self._format_str(unit_price)
+                self._cart[barcode]["variable_price"] = True
 
-        self.save()
-        return {"status": "ok"}
+        return self._recalculate_item(
+            barcode=barcode,
+            product=product,
+            quantity=new_qty,
+            variable_price=variable_price if variable_price is not None else None,
+        )
 
-    def save(self):
-        """Persist cart to session and mark modified."""
-        self.session[self.key] = self._cart
-        self.session.modified = True
+    def set_quantity(self, product_or_barcode, quantity):
+        """
+        Set exact quantity manually.
+        """
+        barcode = clean_barcode(getattr(product_or_barcode, "barcode", product_or_barcode))
+
+        if barcode not in self._cart:
+            norm = normalize_barcode_compare(barcode)
+            for old_key in list(self._cart.keys()):
+                if normalize_barcode_compare(old_key) == norm:
+                    self._cart[barcode] = self._cart.pop(old_key)
+                    self._cart[barcode]["barcode"] = barcode
+                    break
+
+        if barcode not in self._cart:
+            return {"status": "error", "message": "Item not in cart."}
+
+        try:
+            q = int(quantity)
+        except Exception:
+            return {"status": "error", "message": "Invalid quantity."}
+
+        if q <= 0:
+            del self._cart[barcode]
+            self.save()
+            return {"status": "ok", "removed": True}
+
+        product = self._find_product_for_barcode(barcode)
+
+        return self._recalculate_item(barcode=barcode, product=product, quantity=q)
+
+    def decrement(self, product_or_barcode, amount=1):
+        barcode = clean_barcode(getattr(product_or_barcode, "barcode", product_or_barcode))
+
+        if barcode not in self._cart:
+            norm = normalize_barcode_compare(barcode)
+            for old_key in list(self._cart.keys()):
+                if normalize_barcode_compare(old_key) == norm:
+                    barcode = old_key
+                    break
+
+        if barcode not in self._cart:
+            return {"status": "error", "message": "Item not in cart."}
+
+        try:
+            amount = int(amount)
+        except Exception:
+            amount = 1
+
+        if amount <= 0:
+            return {"status": "noop"}
+
+        old_qty = int(self._cart[barcode].get("quantity", 0) or 0)
+        new_qty = old_qty - amount
+
+        return self.set_quantity(barcode, new_qty)
 
     def remove(self, product_or_barcode):
-        """Remove item entirely by product instance or barcode string."""
-        barcode = str(getattr(product_or_barcode, "barcode", product_or_barcode)).strip()
+        barcode = clean_barcode(getattr(product_or_barcode, "barcode", product_or_barcode))
+
+        if barcode not in self._cart:
+            norm = normalize_barcode_compare(barcode)
+            for old_key in list(self._cart.keys()):
+                if normalize_barcode_compare(old_key) == norm:
+                    barcode = old_key
+                    break
+
         if barcode in self._cart:
             del self._cart[barcode]
             self.save()
 
-    def decrement(self, product_or_barcode, amount=1):
-        """Decrease quantity by `amount` (default 1). Removes item if quantity <= 0."""
-        barcode = str(getattr(product_or_barcode, "barcode", product_or_barcode)).strip()
-        if barcode not in self._cart:
-            return {"status": "error", "message": "Item not in cart."}
-        try:
-            amt = int(amount)
-        except Exception:
-            amt = 1
-        if amt <= 0:
-            return {"status": "noop"}
-
-        existing = self._cart[barcode].copy()
-        existing_qty = int(existing.get("quantity", 0) or 0)
-        new_qty = existing_qty - amt
-        if new_qty <= 0:
-            del self._cart[barcode]
-            self.save()
-            return {"status": "ok"}
-
-        # recalc totals based on stored unit price
-        unit_price = _to_decimal(existing.get("price", 0))
-
-        # attempt to compute tax rate per item from previous tax_value if present
-        try:
-            prev_tax_total = _to_decimal(existing.get("tax_value", "0"))
-            prev_qty = Decimal(existing_qty)
-            tax_per_item = (prev_tax_total / prev_qty) if prev_qty > 0 else Decimal("0.00")
-            new_tax_total = (tax_per_item * Decimal(new_qty)).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
-        except Exception:
-            # fallback: recompute based on unit price and product info if product exists
-            new_tax_total = Decimal("0.00")
-            try:
-                prod = ProductModel.objects.filter(barcode=barcode).first() if ProductModel else None
-                if prod:
-                    tax_pct, is_vat = self._resolve_tax_pct_and_applicability(prod)
-                    if is_vat and tax_pct > 0:
-                        denom = (Decimal("100.00") + tax_pct)
-                        raw_vat = (unit_price * Decimal(new_qty) * tax_pct) / denom
-                        new_tax_total = raw_vat.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
-            except Exception:
-                new_tax_total = Decimal("0.00")
-
-        # deposit per item proportional (if present)
-        try:
-            prev_deposit_total = _to_decimal(existing.get("deposit_value", "0"))
-            prev_qty = Decimal(existing_qty)
-            deposit_per_item = (prev_deposit_total / prev_qty) if prev_qty > 0 else Decimal("0.00")
-            new_deposit_total = (deposit_per_item * Decimal(new_qty)).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
-        except Exception:
-            new_deposit_total = Decimal("0.00")
-
-        # Try to estimate cost_price to update profit proportionally if we can find product model
-        try:
-            prod = None
-            if ProductModel is not None:
-                prod = ProductModel.objects.filter(barcode=barcode).first()
-            if prod is not None:
-                cost_price_val = _to_decimal(getattr(prod, "cost_price", getattr(prod, "purchase_price", 0)))
-            else:
-                # fallback: estimate from previous profit if present
-                prev_profit = _to_decimal(existing.get("profit_value", "0"))
-                prev_qty_dec = Decimal(existing_qty) if existing_qty > 0 else Decimal("1")
-                profit_per_item_prev = (prev_profit / prev_qty_dec) if prev_qty_dec > 0 else Decimal("0.00")
-                # estimate cost per item = unit_price - profit_per_item_prev - tax_per_item (approximate)
-                cost_price_val = (unit_price - profit_per_item_prev - tax_per_item).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
-        except Exception:
-            cost_price_val = Decimal("0.00")
-
-        new_line_total = (unit_price * Decimal(new_qty) + new_tax_total + new_deposit_total).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
-
-        # recalc profit: (SP*qty) - (CP*qty + total_vat)
-        new_profit = (unit_price * Decimal(new_qty) - (cost_price_val * Decimal(new_qty) + new_tax_total)).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
-
-        existing["quantity"] = int(new_qty)
-        existing["tax_value"] = f"{new_tax_total:.2f}"
-        existing["deposit_value"] = f"{new_deposit_total:.2f}"
-        existing["line_total"] = f"{new_line_total:.2f}"
-        existing["profit_value"] = f"{new_profit:.2f}"
-
-        # update low_stock and stock_left if product exists
-        if ProductModel is not None:
-            try:
-                prod = ProductModel.objects.filter(barcode=barcode).first()
-                if prod:
-                    available_stock = int(getattr(prod, "qty", 0) or 0)
-                    remaining = available_stock - new_qty
-                    existing["low_stock"] = bool(remaining <= getattr(prod, "low_stock_threshold", 5))
-                    existing["stock_left"] = int(max(0, remaining))
-            except Exception:
-                pass
-
-        self._cart[barcode] = existing
-        self.save()
-        return {"status": "ok"}
-
-    def set_quantity(self, product_or_barcode, quantity):
-        """Set exact quantity for an item. If quantity <=0 remove it. Returns status dict."""
-        barcode = str(getattr(product_or_barcode, "barcode", product_or_barcode)).strip()
-        if barcode not in self._cart:
-            return {"status": "error", "message": "Item not in cart."}
-        try:
-            q = int(quantity)
-        except Exception:
-            q = 0
-        if q <= 0:
-            del self._cart[barcode]
-            self.save()
-            return {"status": "ok"}
-
-        # If product model is available, enforce stock check when increasing quantity
-        if ProductModel is not None:
-            try:
-                prod = ProductModel.objects.filter(barcode=barcode).first()
-            except Exception:
-                prod = None
-            if prod:
-                available_stock = int(getattr(prod, "qty", 0) or 0)
-                if q > available_stock:
-                    return {"status": "error", "message": f"Insufficient stock. Available: {available_stock}"}
-            else:
-                # cannot validate stock without product; best-effort proceed
-                pass
-
-        existing = self._cart[barcode].copy()
-        unit_price = _to_decimal(existing.get("price", 0))
-
-        prev_qty = int(existing.get("quantity", 0) or 0)
-
-        # estimate tax/deposit proportionally as in decrement/add
-        try:
-            prev_tax_total = _to_decimal(existing.get("tax_value", "0"))
-            tax_per_item = (prev_tax_total / Decimal(prev_qty)) if prev_qty > 0 else Decimal("0.00")
-            new_tax_total = (tax_per_item * Decimal(q)).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
-        except Exception:
-            new_tax_total = Decimal("0.00")
-        try:
-            prev_dep_total = _to_decimal(existing.get("deposit_value", "0"))
-            dep_per_item = (prev_dep_total / Decimal(prev_qty)) if prev_qty > 0 else Decimal("0.00")
-            new_dep_total = (dep_per_item * Decimal(q)).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
-        except Exception:
-            new_dep_total = Decimal("0.00")
-
-        # attempt to fetch product for cost_price to compute profit exactly
-        try:
-            prod = None
-            if ProductModel is not None:
-                prod = ProductModel.objects.filter(barcode=barcode).first()
-            if prod:
-                cost_price_val = _to_decimal(getattr(prod, "cost_price", getattr(prod, "purchase_price", 0)))
-                # check VAT applicability on product
-                tax_pct, is_vat = self._resolve_tax_pct_and_applicability(prod)
-                if is_vat and tax_pct > 0:
-                    denom = (Decimal("100.00") + tax_pct)
-                    raw_vat = (unit_price * Decimal(q) * tax_pct) / denom
-                    new_tax_total = raw_vat.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
-                else:
-                    new_tax_total = Decimal("0.00")
-            else:
-                # fallback: use proportional tax we computed earlier
-                pass
-        except Exception:
-            cost_price_val = Decimal("0.00")
-
-        new_line_total = (unit_price * Decimal(q) + new_tax_total + new_dep_total).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
-
-        # recalc profit: (SP*qty) - (CP*qty + total_vat)
-        try:
-            new_profit = (unit_price * Decimal(q) - (cost_price_val * Decimal(q) + new_tax_total)).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
-        except Exception:
-            new_profit = Decimal("0.00")
-
-        existing["quantity"] = int(q)
-        existing["tax_value"] = f"{new_tax_total:.2f}"
-        existing["deposit_value"] = f"{new_dep_total:.2f}"
-        existing["line_total"] = f"{new_line_total:.2f}"
-        existing["profit_value"] = f"{new_profit:.2f}"
-
-        # update low_stock and stock_left if product exists
-        if ProductModel is not None:
-            try:
-                prod = ProductModel.objects.filter(barcode=barcode).first()
-                if prod:
-                    available_stock = int(getattr(prod, "qty", 0) or 0)
-                    remaining = available_stock - q
-                    existing["low_stock"] = bool(remaining <= getattr(prod, "low_stock_threshold", 5))
-                    existing["stock_left"] = int(max(0, remaining))
-            except Exception:
-                pass
-
-        self._cart[barcode] = existing
-        self.save()
         return {"status": "ok"}
 
     def clear(self):
-        """Empty cart entirely."""
         self.session[self.key] = {}
         self._cart = {}
         self.session.modified = True
 
+    def save(self):
+        self.session[self.key] = self._cart
+        self.session.modified = True
+
     def isNotEmpty(self):
-        """Return True if cart has any items."""
         return bool(self._cart and len(self._cart) > 0)
 
     def cart_total(self):
-        """Return total sum of line_total for all items as Decimal."""
         total = Decimal("0.00")
-        for v in self._cart.values():
-            total += _to_decimal(v.get("line_total", "0"))
+        for item in self._cart.values():
+            total += _to_decimal(item.get("line_total", 0))
         return total.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
 
-    def get_total_vat(self) -> Decimal:
-        """Return total VAT for the cart (sum of tax_value)."""
-        total_vat = Decimal("0.00")
-        for v in self._cart.values():
-            total_vat += _to_decimal(v.get("tax_value", "0"))
-        return total_vat.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+    def get_total_price(self):
+        return self.cart_total()
 
-    def get_total_profit(self) -> Decimal:
-        """Return total profit for the cart (sum of profit_value)."""
-        total_profit = Decimal("0.00")
-        for v in self._cart.values():
-            total_profit += _to_decimal(v.get("profit_value", "0"))
-        return total_profit.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+    def get_total_vat(self):
+        total = Decimal("0.00")
+        for item in self._cart.values():
+            total += _to_decimal(item.get("tax_value", 0))
+        return total.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+
+    def get_total_deposit(self):
+        total = Decimal("0.00")
+        for item in self._cart.values():
+            total += _to_decimal(item.get("deposit_value", 0))
+        return total.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+
+    def get_subtotal_without_tax(self):
+        subtotal = self.cart_total() - self.get_total_vat()
+        if subtotal < Decimal("0.00"):
+            subtotal = Decimal("0.00")
+        return subtotal.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+
+    def get_total_profit(self):
+        total = Decimal("0.00")
+        for item in self._cart.values():
+            total += _to_decimal(item.get("profit_value", 0))
+        return total.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
 
     def returns(self):
-        """
-        Convert current cart into return-typed items (negate quantities and numeric fields).
-        Useful for processing refunds/returns. This mutates the session cart.
-        """
-        for k, v in list(self._cart.items()):
-            qty = int(v.get("quantity", 0) or 0)
-            v["quantity"] = -abs(qty)
-            v["tax_value"] = f"{(-_to_decimal(v.get('tax_value', '0'))):.2f}"
-            v["line_total"] = f"{(-_to_decimal(v.get('line_total', '0'))):.2f}"
-            v["profit_value"] = f"{(-_to_decimal(v.get('profit_value', '0'))):.2f}"
-            # keep per-unit price positive (common practice)
-            self._cart[k] = v
+        for barcode, item in list(self._cart.items()):
+            qty = abs(int(item.get("quantity", 0) or 0))
+
+            item["quantity"] = -qty
+            item["tax_value"] = self._format_str(-_to_decimal(item.get("tax_value", 0)))
+            item["deposit_value"] = self._format_str(-_to_decimal(item.get("deposit_value", 0)))
+            item["line_total"] = self._format_str(-_to_decimal(item.get("line_total", 0)))
+            item["profit_value"] = self._format_str(-_to_decimal(item.get("profit_value", 0)))
+
+            self._cart[barcode] = item
+
         self.save()
 
-    # ----- Iteration & helpers for templates -----
     def __len__(self):
-        """Number of items (sum of quantities)."""
-        return sum(int(v.get("quantity", 0) or 0) for v in self._cart.values())
+        total_qty = 0
+        for item in self._cart.values():
+            try:
+                total_qty += int(item.get("quantity", 0) or 0)
+            except Exception:
+                pass
+        return total_qty
 
     def __iter__(self):
-        """
-        Iterate over typed item dicts for convenience:
-        yields dicts with Decimal price/line_total and ints for quantity.
-        """
         for barcode, raw in list(self._cart.items()):
             yield {
                 "barcode": barcode,
                 "name": raw.get("name", ""),
                 "quantity": int(raw.get("quantity", 0) or 0),
-                "price": _to_decimal(raw.get("price", "0")),
-                "tax_value": _to_decimal(raw.get("tax_value", "0")),
-                "deposit_value": _to_decimal(raw.get("deposit_value", "0")),
-                "profit_value": _to_decimal(raw.get("profit_value", "0")),
-                "line_total": _to_decimal(raw.get("line_total", "0")),
+                "price": _to_decimal(raw.get("price", 0)),
+                "tax_percentage": _to_decimal(raw.get("tax_percentage", 0)),
+                "tax_value": _to_decimal(raw.get("tax_value", 0)),
+                "deposit_value": _to_decimal(raw.get("deposit_value", 0)),
+                "profit_value": _to_decimal(raw.get("profit_value", 0)),
+                "line_total": _to_decimal(raw.get("line_total", 0)),
                 "variable_price": bool(raw.get("variable_price", False)),
                 "low_stock": bool(raw.get("low_stock", False)),
                 "stock_left": int(raw.get("stock_left", 0) or 0),
             }
 
-    def get_total_price(self):
-        """Return Decimal total of cart (line totals)."""
-        return self.cart_total()
-
-    def to_dict(self):
-        """Return a deep-copied dict of the raw session cart (strings)"""
-        return {k: dict(v) for k, v in self._cart.items()}
-
-    # Provide .items property so templates using `cart.items` work (returns typed values)
     @property
     def items(self):
-        """
-        Return a list of (barcode, typed_dict) pairs suitable for Django templates:
-            {% for key, value in cart.items %}
-        """
         out = []
+
         for barcode, raw in self._cart.items():
             typed = {
                 "barcode": barcode,
                 "name": raw.get("name", ""),
                 "quantity": int(raw.get("quantity", 0) or 0),
-                "price": _to_decimal(raw.get("price", "0")),
-                "tax_value": _to_decimal(raw.get("tax_value", "0")),
-                "deposit_value": _to_decimal(raw.get("deposit_value", "0")),
-                "profit_value": _to_decimal(raw.get("profit_value", "0")),
-                "line_total": _to_decimal(raw.get("line_total", "0")),
+                "price": _to_decimal(raw.get("price", 0)),
+                "tax_percentage": _to_decimal(raw.get("tax_percentage", 0)),
+                "tax_value": _to_decimal(raw.get("tax_value", 0)),
+                "deposit_value": _to_decimal(raw.get("deposit_value", 0)),
+                "profit_value": _to_decimal(raw.get("profit_value", 0)),
+                "line_total": _to_decimal(raw.get("line_total", 0)),
                 "variable_price": bool(raw.get("variable_price", False)),
                 "low_stock": bool(raw.get("low_stock", False)),
                 "stock_left": int(raw.get("stock_left", 0) or 0),
             }
             out.append((barcode, typed))
+
         return out
 
-# ------------------------------
-# DISPLAYED ITEMS MODEL
-# ------------------------------
+    def to_dict(self):
+        return {barcode: dict(item) for barcode, item in self._cart.items()}
+
+
+# ============================================================
+# Display Buttons Model
+# ============================================================
+
 class displayed_items(models.Model):
-    """
-    Simple model for buttons/display items on the POS screen.
-    Must reference an existing product barcode (prevents orphan button entries).
-    """
     barcode = models.CharField(unique=True, max_length=64, blank=False, null=False)
     display_name = models.CharField(max_length=125, blank=False, null=False)
     display_info = models.CharField(max_length=125, blank=True, null=False, default="")
     display_color = ColorField(default="#575757")
-    variable_price = models.BooleanField(default=False)  # allow variable-price buttons
+    variable_price = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.display_name} ({self.barcode})"
 
     def save(self, *args, **kwargs):
-        """Prevent saving a displayed item for a non-existent product barcode."""
-        if Product.objects.filter(barcode=self.barcode).exists():
+        barcode = clean_barcode(self.barcode)
+        self.barcode = barcode
+
+        if Product.objects.filter(barcode=barcode).exists():
             return super().save(*args, **kwargs)
-        raise ValidationError(f"Cannot save displayed item: no product with barcode '{self.barcode}' exists.")
+
+        raise ValidationError(
+            f"Cannot save displayed item: no product with barcode '{barcode}' exists."
+        )
 
     class Meta:
         verbose_name_plural = "Displayed Items"
