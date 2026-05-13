@@ -6,10 +6,6 @@
 !.env.sample
 !.env.example
 
-# QZ private key - never push this
-qz_keys/private-key.pem
-*.pem
-*.key
 
 # =========================
 # Python / Django
