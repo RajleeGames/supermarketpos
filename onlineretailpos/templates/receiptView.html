@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}
 Transaction Receipt | Online Retail POS
@@ -27,7 +28,9 @@ Transaction Receipt | Online Retail POS
     .receipt-actions {
         display: flex;
         justify-content: center;
+        gap: 8px;
         margin-bottom: 10px;
+        flex-wrap: wrap;
     }
 
     .receipt-actions .btn {
@@ -65,6 +68,7 @@ Transaction Receipt | Online Retail POS
         margin-top: 8px;
         color: #6b7280;
         min-height: 18px;
+        line-height: 1.4;
     }
 
     @media print {
@@ -116,7 +120,11 @@ Transaction Receipt | Online Retail POS
 
         <div class="receipt-actions">
             <button id="qzPrintBtn" type="button" class="btn btn-success">
-                <i class="fas fa-print"></i> Print 
+                <i class="fas fa-print"></i> QZ Print
+            </button>
+
+            <button id="browserPrintBtn" type="button" class="btn btn-secondary">
+                Browser Print
             </button>
         </div>
 
@@ -129,15 +137,16 @@ Transaction Receipt | Online Retail POS
     </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qz-tray/2.1.0/qz-tray.js"></script>
+<script src="{% static 'vendor/qz/qz-tray.js' %}"></script>
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const printBtn = document.getElementById('qzPrintBtn');
+    const browserPrintBtn = document.getElementById('browserPrintBtn');
     const statusEl = document.getElementById('printStatus');
     const receiptEl = document.getElementById('receiptContent');
 
-    const PRINTER_NAME = "TS-M420";
+    const PRINTER_NAME = "ZKP8008";
 
     function setStatus(message, isError) {
         if (!statusEl) return;
@@ -154,13 +163,6 @@ document.addEventListener('DOMContentLoaded', function () {
         return btoa(unescape(encodeURIComponent(str)));
     }
 
-    /*
-        ZKP8008 spacing fix:
-        - trim old extra empty lines from receipt text
-        - add only 2 new lines
-        - feed 3 lines before cut
-        This prevents cutting "Sale Datetime" / "Served by" while avoiding huge blank paper.
-    */
     function buildPayload(text) {
         return String(text || "").trimEnd() + "\n\n";
     }
@@ -174,7 +176,7 @@ document.addEventListener('DOMContentLoaded', function () {
             })
             .then(function(response) {
                 if (!response.ok) {
-                    throw new Error("Could not load QZ certificate");
+                    throw new Error("Could not load QZ certificate. Check qz_keys/digital-certificate.txt");
                 }
                 return response.text();
             })
@@ -194,7 +196,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 .then(function(response) {
                     if (!response.ok) {
                         return response.text().then(function(text) {
-                            throw new Error(text || "Could not sign QZ request");
+                            throw new Error(text || "Could not sign QZ request. Check qz_keys/private-key.pem");
                         });
                     }
                     return response.text();
@@ -207,7 +209,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function connectQz() {
         if (!window.qz) {
-            return Promise.reject("QZ Tray script not loaded.");
+            return Promise.reject("QZ Tray script not loaded. Confirm file exists at /static/vendor/qz/qz-tray.js");
         }
 
         setupQzSecurity();
@@ -224,7 +226,7 @@ document.addEventListener('DOMContentLoaded', function () {
             return qz.printers.find().then(function (printers) {
                 const found = printers.find(function (p) {
                     const name = String(p || "").toLowerCase();
-                    return name.includes("TS-M420") || name.includes("TS") || name.includes("M420");
+                    return name.includes("zkp") || name.includes("ts") || name.includes("8008");
                 });
 
                 if (!found) {
@@ -256,7 +258,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 setStatus("Printing to " + printerName + "...", false);
 
                 const config = qz.configs.create(printerName, {
-                    encoding: 'UTF-8',
+                    encoding: "UTF-8",
                     margins: 0,
                     copies: 1,
                     rasterize: false
@@ -267,22 +269,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 const data = [
                     // Initialize printer
-                    { type: 'raw', format: 'hex', data: '1B40' },
+                    { type: "raw", format: "hex", data: "1B40" },
 
-                    // Code page
-                    { type: 'raw', format: 'hex', data: '1B7410' },
+                    // Set code page
+                    { type: "raw", format: "hex", data: "1B7410" },
 
                     // Normal font
-                    { type: 'raw', format: 'hex', data: '1B2100' },
+                    { type: "raw", format: "hex", data: "1B2100" },
 
                     // Print receipt text
-                    { type: 'raw', format: 'base64', data: base64 },
+                    { type: "raw", format: "base64", data: base64 },
 
                     // Feed 3 lines before cut
-                    { type: 'raw', format: 'hex', data: '1B6403' },
+                    { type: "raw", format: "hex", data: "1B6403" },
 
                     // Full cut
-                    { type: 'raw', format: 'hex', data: '1D5600' }
+                    { type: "raw", format: "hex", data: "1D5600" }
                 ];
 
                 return qz.print(config, data);
@@ -301,7 +303,13 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     if (printBtn) {
-        printBtn.addEventListener('click', autoPrint);
+        printBtn.addEventListener("click", autoPrint);
+    }
+
+    if (browserPrintBtn) {
+        browserPrintBtn.addEventListener("click", function () {
+            window.print();
+        });
     }
 });
 </script>
