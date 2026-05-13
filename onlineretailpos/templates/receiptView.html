@@ -116,7 +116,7 @@ Transaction Receipt | Online Retail POS
 
         <div class="receipt-actions">
             <button id="qzPrintBtn" type="button" class="btn btn-success">
-                <i class="fas fa-print"></i> Print ZKP8008
+                <i class="fas fa-print"></i> Print 
             </button>
         </div>
 
@@ -137,7 +137,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const statusEl = document.getElementById('printStatus');
     const receiptEl = document.getElementById('receiptContent');
 
-    const PRINTER_NAME = "ZKP8008";
+    const PRINTER_NAME = "TS-M420";
 
     function setStatus(message, isError) {
         if (!statusEl) return;
@@ -224,7 +224,7 @@ document.addEventListener('DOMContentLoaded', function () {
             return qz.printers.find().then(function (printers) {
                 const found = printers.find(function (p) {
                     const name = String(p || "").toLowerCase();
-                    return name.includes("zkp8008") || name.includes("zkp") || name.includes("8008");
+                    return name.includes("TS-M420") || name.includes("TS") || name.includes("M420");
                 });
 
                 if (!found) {
