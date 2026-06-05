@@ -79,33 +79,64 @@ from .models import InventoryHistory
 @login_required(login_url="/user/login")
 def inventoryAdd(request):
     context = {}
+
     if request.method == "POST":
         form = AddProduct(request.POST)
+
         if form.is_valid():
             try:
-                obj = Product.objects.get(barcode=form.cleaned_data['barcode'])
-                context['p_qty'] = obj.qty
-                context['n_qty'] = int(form.cleaned_data['qty'])
-                obj.qty = obj.qty + context['n_qty']
-                obj.save()
+                barcode = form.cleaned_data["barcode"].strip()
+                add_qty = int(form.cleaned_data["qty"])
 
-                # --- save history ---
+                obj = Product.objects.get(barcode=barcode)
+
+                previous_qty = int(obj.qty or 0)
+                new_qty = previous_qty + add_qty
+
+                # Use posted unit_cost if you later add it to the form,
+                # otherwise fall back to product.cost_price.
+                unit_cost_raw = request.POST.get("unit_cost", "")
+                if unit_cost_raw not in ("", None):
+                    unit_cost = decimal.Decimal(str(unit_cost_raw))
+                else:
+                    unit_cost = decimal.Decimal(str(obj.cost_price or 0))
+
+                unit_cost = unit_cost.quantize(decimal.Decimal("0.01"), rounding=decimal.ROUND_HALF_UP)
+                total_cost = (unit_cost * decimal.Decimal(add_qty)).quantize(decimal.Decimal("0.01"), rounding=decimal.ROUND_HALF_UP)
+
+                obj.qty = new_qty
+                obj.save(update_fields=["qty"])
+
                 InventoryHistory.objects.create(
                     product=obj,
                     added_by=request.user,
-                    previous_qty=context['p_qty'],
-                    added_qty=context['n_qty'],
-                    total_qty=obj.qty,
-                    phone_number=request.POST.get('phone_number')  # optional if you add field in form
+                    previous_qty=previous_qty,
+                    added_qty=add_qty,
+                    total_qty=new_qty,
+                    unit_cost=unit_cost,
+                    total_cost=total_cost,
+                    reference=(request.POST.get("reference") or "").strip()[:100],
+                    phone_number=(request.POST.get("phone_number") or "").strip()[:20] or None,
                 )
 
+                messages.success(
+                    request,
+                    f"Stock added successfully: {add_qty} x {obj.name}. "
+                    f"Purchase worth: {total_cost:,.2f}"
+                )
+                return redirect("inventory_history_product", product_id=obj.pk)
+
             except Product.DoesNotExist:
-                obj = None
-                context['notFound'] = form.cleaned_data['barcode']
-            context['obj'] = obj
-    form = AddProduct(initial={'qty': 1})
-    context['form'] = form
-    return render(request, 'addInventory.html', context=context)
+                context["notFound"] = form.cleaned_data["barcode"]
+            except Exception as e:
+                messages.error(request, f"Failed to add inventory: {e}")
+        else:
+            messages.error(request, "Please correct the form errors.")
+    else:
+        form = AddProduct(initial={"qty": 1})
+
+    context["form"] = form
+    return render(request, "addInventory.html", context=context)
 
 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger

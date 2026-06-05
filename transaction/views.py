@@ -12,7 +12,7 @@ from Crypto.PublicKey import RSA
 from Crypto.Signature import pkcs1_15
 from Crypto.Hash import SHA256
 import pandas as pd
-
+from inventory.models import Product, InventoryHistory
 from django import forms
 from django.conf import settings
 from django.contrib import messages
@@ -346,18 +346,18 @@ def build_receipt_text(
             lines.append(clean.center(receipt_width) if clean else "")
     else:
         lines.append("ADAMS MINI SUPERMARKET".center(receipt_width))
-        lines.append("PO BOX 942 MOSHI".center(receipt_width))
+        lines.append("PO BOX 542 MOSHI".center(receipt_width))
         lines.append("J.K. Nyerere Street".center(receipt_width))
         lines.append("+255744844699".center(receipt_width))
         lines.append("adamssupermarket@gmail.com".center(receipt_width))
 
     lines.append("")
-    lines.append("*** SALES RECEIPT ***".center(receipt_width))
+    lines.append("*** NON FISCAL RECEIPT ***".center(receipt_width))
     lines.append("")
 
     # Left-aligned receipt meta
     lines.append("TIN: 102-188-357")
-    lines.append("VRN: NON FISCAL RECEIPT")
+    lines.append("VRN: 40-318362-M")
     lines.append("Till No: Till003")
     lines.append(f"Receipt No: {transaction_id}")
     lines.append("")
@@ -431,6 +431,180 @@ def build_receipt_text(
 
     return "\n".join(lines), transaction_dt_obj, merchant_sub_total
 
+
+from decimal import Decimal, ROUND_HALF_UP
+from django.db.models import Sum, F, DecimalField, ExpressionWrapper
+
+
+def get_current_stock_value():
+    """
+    Current stock value = sum of qty * cost_price for all products.
+    Extra guards are added so insane values do not poison the report.
+    """
+    total = Decimal("0.00")
+
+    products = Product.objects.all().only("qty", "cost_price")
+
+    for p in products:
+        try:
+            qty = safe_decimal(getattr(p, "qty", 0) or 0)
+            cost = safe_decimal(getattr(p, "cost_price", 0) or 0)
+
+            # block insane values
+            if qty > Decimal("1000000"):
+                qty = Decimal("0.00")
+            if cost > Decimal("100000000"):
+                cost = Decimal("0.00")
+
+            item_total = qty * cost
+
+            if item_total.is_nan():
+                item_total = Decimal("0.00")
+
+            if item_total > Decimal("999999999999"):
+                item_total = Decimal("0.00")
+
+            total += item_total
+
+        except Exception as e:
+            print("get_current_stock_value error:", e)
+            continue
+
+    try:
+        total = total.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+    except Exception:
+        total = Decimal("0.00")
+
+    if total < Decimal("0.00"):
+        total = Decimal("0.00")
+
+    return total
+
+
+def get_previous_close_stock_value(day_date):
+    """
+    Get the latest previous day's closing stock.
+    If anything is wrong, fall back to current stock value.
+    """
+    try:
+        previous_close = (
+            DayClose.objects.filter(close_date__lt=day_date)
+            .order_by("-close_date")
+            .only("closing_stock_value")
+            .first()
+        )
+
+        if previous_close:
+            value = safe_decimal(previous_close.closing_stock_value)
+            if value < Decimal("0.00"):
+                return Decimal("0.00")
+            return value
+
+    except Exception as e:
+        print("get_previous_close_stock_value error:", e)
+
+    return get_current_stock_value()
+
+
+def calculate_day_stock_summary(day_date):
+    """
+    Build the daily stock summary for DayClose.
+    """
+    start_utc, end_utc = _local_day_range_utc(day_date)
+
+    tx_qs = transaction.objects.filter(
+        transaction_dt__gte=start_utc,
+        transaction_dt__lt=end_utc
+    )
+
+    # Sales incl VAT
+    try:
+        sales_incl_vat = safe_decimal(
+            tx_qs.aggregate(total=Sum("total_sale"))["total"] or Decimal("0.00")
+        )
+    except Exception as e:
+        print("calculate_day_stock_summary sales_incl_vat error:", e)
+        sales_incl_vat = Decimal("0.00")
+
+    # VAT
+    try:
+        vat_total = safe_decimal(
+            tx_qs.aggregate(total=Sum("tax_total"))["total"] or Decimal("0.00")
+        )
+    except Exception as e:
+        print("calculate_day_stock_summary vat_total error:", e)
+        vat_total = Decimal("0.00")
+
+    # Sales excl VAT
+    sales_excl_vat = (sales_incl_vat - vat_total).quantize(
+        Decimal("0.01"),
+        rounding=ROUND_HALF_UP
+    )
+    if sales_excl_vat < Decimal("0.00"):
+        sales_excl_vat = Decimal("0.00")
+
+    # COGS
+    try:
+        expr = ExpressionWrapper(
+            F("cost_price") * F("qty"),
+            output_field=DecimalField(max_digits=20, decimal_places=2)
+        )
+        cogs = safe_decimal(
+            productTransaction.objects.filter(
+                transaction_date_time__gte=start_utc,
+                transaction_date_time__lt=end_utc
+            ).aggregate(total=Sum(expr))["total"] or Decimal("0.00")
+        )
+    except Exception as e:
+        print("calculate_day_stock_summary cogs error:", e)
+        cogs = Decimal("0.00")
+
+    if cogs < Decimal("0.00"):
+        cogs = Decimal("0.00")
+
+    # Purchases
+    try:
+        purchases_value = safe_decimal(
+            InventoryHistory.objects.filter(
+                timestamp__date=day_date
+            ).aggregate(total=Sum("total_cost"))["total"] or Decimal("0.00")
+        )
+    except Exception as e:
+        print("calculate_day_stock_summary purchases error:", e)
+        purchases_value = Decimal("0.00")
+
+    if purchases_value < Decimal("0.00"):
+        purchases_value = Decimal("0.00")
+
+    # Opening stock
+    opening_stock_value = get_previous_close_stock_value(day_date)
+    if opening_stock_value < Decimal("0.00"):
+        opening_stock_value = Decimal("0.00")
+
+    # Gross profit
+    gross_profit = (sales_excl_vat - cogs).quantize(
+        Decimal("0.01"),
+        rounding=ROUND_HALF_UP
+    )
+
+    # Closing stock
+    closing_stock_value = (opening_stock_value + purchases_value - cogs).quantize(
+        Decimal("0.01"),
+        rounding=ROUND_HALF_UP
+    )
+    if closing_stock_value < Decimal("0.00"):
+        closing_stock_value = Decimal("0.00")
+
+    return {
+        "opening_stock_value": opening_stock_value,
+        "purchases_value": purchases_value,
+        "sales_excl_vat": sales_excl_vat,
+        "sales_incl_vat": sales_incl_vat,
+        "vat_total": vat_total,
+        "cogs": cogs,
+        "gross_profit": gross_profit,
+        "closing_stock_value": closing_stock_value,
+    }
 
 # ============================================================
 # Forms / Printer
@@ -603,6 +777,10 @@ def _block_if_previous_day_not_closed(request):
 # End Day / Close Day Views
 # ============================================================
 
+from types import SimpleNamespace
+from decimal import InvalidOperation
+from django.db import connection
+
 @login_required(login_url="/user/login/")
 def end_day_home(request):
     today = _today_local_date()
@@ -614,9 +792,61 @@ def end_day_home(request):
     )
 
     summary = build_day_close_summary(selected_date)
-    already_closed = DayClose.objects.filter(close_date=selected_date).select_related("closed_by").first()
 
-    recent_closes = DayClose.objects.select_related("closed_by").order_by("-close_date")[:30]
+    already_closed_exists = DayClose.objects.filter(
+        close_date=selected_date
+    ).exists()
+
+    already_closed = None
+    if already_closed_exists:
+        try:
+            already_closed = DayClose.objects.select_related("closed_by").get(
+                close_date=selected_date
+            )
+        except InvalidOperation:
+            messages.error(
+                request,
+                "That DayClose row has invalid decimal data. Delete old DayClose records and close the day again."
+            )
+            already_closed = None
+            already_closed_exists = False
+        except Exception as e:
+            print("end_day_home already_closed error:", e)
+            already_closed = None
+            already_closed_exists = False
+
+    try:
+        recent_closes = list(
+            DayClose.objects.select_related("closed_by")
+            .order_by("-close_date")[:30]
+        )
+    except InvalidOperation:
+        table = DayClose._meta.db_table
+        with connection.cursor() as cursor:
+            cursor.execute(f"""
+                SELECT id, close_date,
+                       cash_total, ebt_total, card_total,
+                       debt_total, total_sales,
+                       transaction_count, closed_at, note,
+                       closed_by_id
+                FROM {table}
+                ORDER BY close_date DESC
+                LIMIT 30
+            """)
+            cols = [c[0] for c in cursor.description]
+            recent_closes = []
+
+            for rec in cursor.fetchall():
+                data = dict(zip(cols, rec))
+                for field in [
+                    "cash_total", "ebt_total", "card_total",
+                    "debt_total", "total_sales"
+                ]:
+                    data[field] = safe_decimal(data.get(field))
+                recent_closes.append(SimpleNamespace(**data))
+    except Exception as e:
+        print("end_day_home recent_closes error:", e)
+        recent_closes = []
 
     return render(request, "end_day.html", {
         "summary": summary,
@@ -624,6 +854,7 @@ def end_day_home(request):
         "today": today,
         "unclosed_date": unclosed_date,
         "already_closed": already_closed,
+        "already_closed_exists": already_closed_exists,
         "recent_closes": recent_closes,
         "currency": currency_symbol(),
     })
@@ -638,33 +869,141 @@ def close_day_action(request):
         messages.error(request, "Invalid close date.")
         return redirect("end_day_home")
 
-    summary = build_day_close_summary(close_date)
-
-    if summary["transaction_count"] <= 0:
-        messages.error(request, "No transactions found for this date.")
-        return redirect(f"{reverse('end_day_home')}?date={close_date}")
-
-    obj, created = DayClose.objects.get_or_create(
-        close_date=close_date,
-        defaults={
-            "cash_total": summary["cash_total"],
-            "ebt_total": summary["ebt_total"],
-            "card_total": summary["card_total"],
-            "debt_total": summary["debt_total"],
-            "total_sales": summary["total_sales"],
-            "transaction_count": summary["transaction_count"],
-            "closed_by": request.user,
-            "note": (request.POST.get("note") or "").strip(),
+    try:
+        sales_summary = build_day_close_summary(close_date)
+    except Exception as e:
+        print("close_day_action sales_summary error:", e)
+        sales_summary = {
+            "cash_total": Decimal("0.00"),
+            "ebt_total": Decimal("0.00"),
+            "card_total": Decimal("0.00"),
+            "debt_total": Decimal("0.00"),
+            "total_sales": Decimal("0.00"),
+            "transaction_count": 0,
         }
-    )
 
-    if not created:
-        messages.warning(request, f"{close_date} is already closed.")
-        return redirect(f"{reverse('end_day_home')}?date={close_date}")
+    try:
+        stock_summary = calculate_day_stock_summary(close_date)
+    except Exception as e:
+        print("close_day_action stock_summary error:", e)
+        stock_summary = {
+            "opening_stock_value": Decimal("0.00"),
+            "purchases_value": Decimal("0.00"),
+            "sales_excl_vat": Decimal("0.00"),
+            "sales_incl_vat": Decimal("0.00"),
+            "vat_total": Decimal("0.00"),
+            "cogs": Decimal("0.00"),
+            "gross_profit": Decimal("0.00"),
+            "closing_stock_value": Decimal("0.00"),
+        }
+
+    db_values = {
+        "cash_total": safe_decimal(sales_summary["cash_total"]),
+        "ebt_total": safe_decimal(sales_summary["ebt_total"]),
+        "card_total": safe_decimal(sales_summary["card_total"]),
+        "debt_total": safe_decimal(sales_summary["debt_total"]),
+        "total_sales": safe_decimal(sales_summary["total_sales"]),
+        "transaction_count": int(sales_summary["transaction_count"] or 0),
+        "opening_stock_value": safe_decimal(stock_summary["opening_stock_value"]),
+        "purchases_value": safe_decimal(stock_summary["purchases_value"]),
+        "sales_excl_vat": safe_decimal(stock_summary["sales_excl_vat"]),
+        "sales_incl_vat": safe_decimal(stock_summary["sales_incl_vat"]),
+        "vat_total": safe_decimal(stock_summary["vat_total"]),
+        "cogs": safe_decimal(stock_summary["cogs"]),
+        "gross_profit": safe_decimal(stock_summary["gross_profit"]),
+        "closing_stock_value": safe_decimal(stock_summary["closing_stock_value"]),
+        "closed_by_id": request.user.id,
+        "note": (request.POST.get("note") or "").strip(),
+    }
+
+    # Update without loading the row first.
+    updated = DayClose.objects.filter(close_date=close_date).update(**db_values)
+
+    if not updated:
+        DayClose.objects.create(
+            close_date=close_date,
+            cash_total=db_values["cash_total"],
+            ebt_total=db_values["ebt_total"],
+            card_total=db_values["card_total"],
+            debt_total=db_values["debt_total"],
+            total_sales=db_values["total_sales"],
+            transaction_count=db_values["transaction_count"],
+            opening_stock_value=db_values["opening_stock_value"],
+            purchases_value=db_values["purchases_value"],
+            sales_excl_vat=db_values["sales_excl_vat"],
+            sales_incl_vat=db_values["sales_incl_vat"],
+            vat_total=db_values["vat_total"],
+            cogs=db_values["cogs"],
+            gross_profit=db_values["gross_profit"],
+            closing_stock_value=db_values["closing_stock_value"],
+            closed_by=request.user,
+            note=db_values["note"],
+        )
 
     messages.success(request, f"Day {close_date} closed successfully.")
     return redirect(f"{reverse('end_day_home')}?date={close_date}")
 
+
+
+
+from types import SimpleNamespace
+from django.db import connection
+from decimal import InvalidOperation
+
+
+
+
+@login_required(login_url="/user/login/")
+def stock_report(request):
+    start_raw = request.GET.get("start_date", "")
+    end_raw = request.GET.get("end_date", "")
+
+    start_date = _date_from_str(start_raw)
+    end_date = _date_from_str(end_raw)
+
+    qs = DayClose.objects.select_related("closed_by").order_by("-close_date")
+    is_filtered = False
+
+    if start_date and end_date:
+        if end_date < start_date:
+            start_date, end_date = end_date, start_date
+        qs = qs.filter(close_date__range=(start_date, end_date))
+        is_filtered = True
+    elif start_date:
+        qs = qs.filter(close_date__gte=start_date)
+        is_filtered = True
+    elif end_date:
+        qs = qs.filter(close_date__lte=end_date)
+        is_filtered = True
+
+    paginator = Paginator(qs, 25)
+    page_number = request.GET.get("page", 1)
+
+    try:
+        page_obj = paginator.page(page_number)
+    except PageNotAnInteger:
+        page_obj = paginator.page(1)
+    except EmptyPage:
+        page_obj = paginator.page(paginator.num_pages)
+
+    get_copy = request.GET.copy()
+    if "page" in get_copy:
+        del get_copy["page"]
+
+    extra_qs = ""
+    if get_copy:
+        extra_qs = "&" + urlencode(get_copy)
+
+    return render(request, "transaction/stock_report.html", {
+        "rows": page_obj.object_list,
+        "page_obj": page_obj,
+        "paginator": paginator,
+        "start_date": start_date,
+        "end_date": end_date,
+        "is_filtered": is_filtered,
+        "extra_qs": extra_qs,
+        "total_rows": qs.count(),
+    })
 
 @login_required(login_url="/user/login/")
 def day_close_history(request):
@@ -1685,3 +2024,5 @@ def qz_sign(request):
             status=500,
             content_type="text/plain"
         )
+    
+    

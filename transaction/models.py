@@ -582,6 +582,16 @@ class Expense(models.Model):
 class DayClose(models.Model):
     close_date = models.DateField(unique=True)
 
+    # NEW: stock report fields
+    opening_stock_value = models.DecimalField(max_digits=15, decimal_places=2, default=Decimal("0.00"))
+    purchases_value = models.DecimalField(max_digits=15, decimal_places=2, default=Decimal("0.00"))
+    sales_excl_vat = models.DecimalField(max_digits=15, decimal_places=2, default=Decimal("0.00"))
+    sales_incl_vat = models.DecimalField(max_digits=15, decimal_places=2, default=Decimal("0.00"))
+    vat_total = models.DecimalField(max_digits=15, decimal_places=2, default=Decimal("0.00"))
+    cogs = models.DecimalField(max_digits=15, decimal_places=2, default=Decimal("0.00"))
+    gross_profit = models.DecimalField(max_digits=15, decimal_places=2, default=Decimal("0.00"))
+    closing_stock_value = models.DecimalField(max_digits=15, decimal_places=2, default=Decimal("0.00"))
+
     cash_total = models.DecimalField(max_digits=15, decimal_places=2, default=Decimal("0.00"))
     ebt_total = models.DecimalField(max_digits=15, decimal_places=2, default=Decimal("0.00"))
     card_total = models.DecimalField(max_digits=15, decimal_places=2, default=Decimal("0.00"))

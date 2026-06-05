@@ -26,7 +26,6 @@ urlpatterns = [
     # ============================================================
     path("user/login/", views.user_login, name="user_login"),
     path("user/logout/", views.user_logout, name="user_logout"),
-
     path(
         "user/change-password/",
         auth_views.PasswordChangeView.as_view(
@@ -49,14 +48,12 @@ urlpatterns = [
     # Inventory
     # ============================================================
     path("inventory/", inventory_views.inventoryAdd, name="inventory_add"),
-
     path("inventory/history/", inventory_views.inventory_history, name="inventory_history"),
     path(
         "inventory/history/<int:product_id>/",
         inventory_views.inventory_history,
         name="inventory_history_product",
     ),
-
     path("inventory/adjust/", inventory_views.stock_adjustment, name="stock_adjustment"),
     path(
         "inventory/adjustments/",
@@ -89,51 +86,44 @@ urlpatterns = [
     # ============================================================
     path("register/", views.register, name="register"),
     path("register/ProductNotFound/", views.register, name="ProductNotFound"),
-
     path("register/cart_clear/", cart_views.cart_clear, name="cart_clear"),
-
     path(
         "register/returns_transaction/",
         transaction_views.returnsTransaction,
         name="returns_transaction",
     ),
-
     path(
         "register/suspend_transaction/",
         transaction_views.suspendTransaction,
         name="suspend_transaction",
     ),
-
     path(
         "register/recall_transaction/",
         transaction_views.recallTransaction,
         name="recall_transaction",
     ),
-
     path(
         "register/recall_transaction/<str:recallTransNo>/",
         transaction_views.recallTransaction,
         name="recall_transaction_no",
     ),
 
+    path("transaction/stock-report/", transaction_views.stock_report, name="stock_report"),
+
     # ============================================================
     # Cart
     # ============================================================
     path("cart/add/<str:id>/<int:qty>/", cart_views.cart_add, name="cart_add"),
     path("cart/item_clear/<str:id>/", cart_views.item_clear, name="item_clear"),
-
     path("cart/item_increment/<str:id>/", cart_views.item_increment, name="item_increment"),
     path("cart/item_decrement/<str:id>/", cart_views.item_decrement, name="item_decrement"),
-
     path("ajax/product_search/", cart_views.product_search, name="product_search"),
     path("cart/add_ajax/", cart_views.cart_add_ajax, name="cart_add_ajax"),
-
     path(
         "cart/update_quantity/",
         cart_views.cart_update_quantity,
         name="cart_update_quantity",
     ),
-
     path(
         "cart/void_item_ajax/",
         cart_views.cart_void_item_ajax,
@@ -148,38 +138,31 @@ urlpatterns = [
         transaction_views.endDebtTransaction,
         name="end_debt_transaction",
     ),
-
     path(
         "endTransaction/<str:type>/<str:value>/",
         transaction_views.endTransaction,
         name="endTransaction",
     ),
-
     path(
         "endTransaction/<str:transNo>/",
         transaction_views.endTransactionReceipt,
         name="endTransactionReceipt",
     ),
-
     path("transaction/", transaction_views.transactionView, name="transactionView"),
-
+    path(
+        "transaction/view/<str:transNo>/",
+        transaction_views.transactionView,
+        name="transactionView_id",
+    ),
     path(
         "transaction_receipt/<str:transNo>/",
         transaction_views.transactionReceipt,
         name="transactionReceipt",
     ),
-
     path(
         "transaction_receipt/<str:transNo>/print/",
         transaction_views.transactionPrintReceipt,
         name="transactionPrintReceipt",
-    ),
-
-    # Keep this transaction catch-all AFTER the specific transaction routes above.
-    path(
-        "transaction/<str:transNo>/",
-        transaction_views.transactionView,
-        name="transactionView_id",
     ),
 
     # ============================================================
@@ -187,19 +170,16 @@ urlpatterns = [
     # ============================================================
     path("transaction/debts/", transaction_views.debts_list, name="debts_list"),
     path("transaction/debt/<int:debt_id>/", transaction_views.debt_detail, name="debt_detail"),
-
     path(
         "transaction/debt/<int:debt_id>/payment/",
         transaction_views.debt_payment,
         name="debt_payment",
     ),
-
     path(
         "transaction/debt/<int:debt_id>/payments/",
         transaction_views.debt_payments_history,
         name="debt_payments_history",
     ),
-
     path(
         "transaction/debt/<int:debt_id>/pay/",
         transaction_views.pay_debt,
@@ -225,9 +205,8 @@ urlpatterns = [
     # ============================================================
     path("retail_display/", views.retail_display, name="retail_display"),
     path("retail_display/<str:values>/", views.retail_display, name="retail_display_values"),
-
     path("qz/cert/", transaction_views.qz_certificate, name="qz_certificate"),
-path("qz/sign/", transaction_views.qz_sign, name="qz_sign"),
+    path("qz/sign/", transaction_views.qz_sign, name="qz_sign"),
 
     # ============================================================
     # Misc

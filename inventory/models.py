@@ -415,14 +415,19 @@ class StockAdjustment(models.Model):
 
 from django.db import models
 from django.contrib.auth.models import User
-
 class InventoryHistory(models.Model):
     product = models.ForeignKey('Product', on_delete=models.CASCADE)
     added_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     previous_qty = models.IntegerField()
     added_qty = models.IntegerField()
     total_qty = models.IntegerField()
-    phone_number = models.CharField(max_length=20, blank=True, null=True)  # if debtor
+
+    # NEW: stock worth tracking
+    unit_cost = models.DecimalField(max_digits=15, decimal_places=2, default=Decimal("0.00"))
+    total_cost = models.DecimalField(max_digits=15, decimal_places=2, default=Decimal("0.00"))
+    reference = models.CharField(max_length=100, blank=True, null=True)
+
+    phone_number = models.CharField(max_length=20, blank=True, null=True)
     timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
