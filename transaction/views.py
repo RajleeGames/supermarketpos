@@ -433,13 +433,19 @@ def build_receipt_text(
 
 
 from decimal import Decimal, ROUND_HALF_UP
+from types import SimpleNamespace
 from django.db.models import Sum, F, DecimalField, ExpressionWrapper
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from urllib.parse import urlencode
+
+# Make sure InventoryHistory is imported in this file:
+# from inventory.models import Product, InventoryHistory
 
 
 def get_current_stock_value():
     """
     Current stock value = sum of qty * cost_price for all products.
-    Extra guards are added so insane values do not poison the report.
+    This is the live snapshot only.
     """
     total = Decimal("0.00")
 
@@ -450,7 +456,6 @@ def get_current_stock_value():
             qty = safe_decimal(getattr(p, "qty", 0) or 0)
             cost = safe_decimal(getattr(p, "cost_price", 0) or 0)
 
-            # block insane values
             if qty > Decimal("1000000"):
                 qty = Decimal("0.00")
             if cost > Decimal("100000000"):
@@ -481,10 +486,10 @@ def get_current_stock_value():
     return total
 
 
-def get_previous_close_stock_value(day_date):
+def get_previous_close_stock_value(day_date, allow_live_fallback=True):
     """
     Get the latest previous day's closing stock.
-    If anything is wrong, fall back to current stock value.
+    If none exists, fall back to live stock only when allow_live_fallback=True.
     """
     try:
         previous_close = (
@@ -503,21 +508,26 @@ def get_previous_close_stock_value(day_date):
     except Exception as e:
         print("get_previous_close_stock_value error:", e)
 
-    return get_current_stock_value()
+    if allow_live_fallback:
+        return get_current_stock_value()
+
+    return Decimal("0.00")
 
 
 def calculate_day_stock_summary(day_date):
     """
     Build the daily stock summary for DayClose.
+    Formula:
+        closing = opening + purchases - cogs
     """
     start_utc, end_utc = _local_day_range_utc(day_date)
 
+    # Sales transactions for the day
     tx_qs = transaction.objects.filter(
         transaction_dt__gte=start_utc,
         transaction_dt__lt=end_utc
     )
 
-    # Sales incl VAT
     try:
         sales_incl_vat = safe_decimal(
             tx_qs.aggregate(total=Sum("total_sale"))["total"] or Decimal("0.00")
@@ -526,7 +536,6 @@ def calculate_day_stock_summary(day_date):
         print("calculate_day_stock_summary sales_incl_vat error:", e)
         sales_incl_vat = Decimal("0.00")
 
-    # VAT
     try:
         vat_total = safe_decimal(
             tx_qs.aggregate(total=Sum("tax_total"))["total"] or Decimal("0.00")
@@ -535,7 +544,6 @@ def calculate_day_stock_summary(day_date):
         print("calculate_day_stock_summary vat_total error:", e)
         vat_total = Decimal("0.00")
 
-    # Sales excl VAT
     sales_excl_vat = (sales_incl_vat - vat_total).quantize(
         Decimal("0.01"),
         rounding=ROUND_HALF_UP
@@ -543,7 +551,7 @@ def calculate_day_stock_summary(day_date):
     if sales_excl_vat < Decimal("0.00"):
         sales_excl_vat = Decimal("0.00")
 
-    # COGS
+    # COGS for the day
     try:
         expr = ExpressionWrapper(
             F("cost_price") * F("qty"),
@@ -562,11 +570,13 @@ def calculate_day_stock_summary(day_date):
     if cogs < Decimal("0.00"):
         cogs = Decimal("0.00")
 
-    # Purchases
+    # Purchases / stock additions for the day
+    # IMPORTANT: use the same UTC day range, not timestamp__date
     try:
         purchases_value = safe_decimal(
             InventoryHistory.objects.filter(
-                timestamp__date=day_date
+                timestamp__gte=start_utc,
+                timestamp__lt=end_utc
             ).aggregate(total=Sum("total_cost"))["total"] or Decimal("0.00")
         )
     except Exception as e:
@@ -576,18 +586,16 @@ def calculate_day_stock_summary(day_date):
     if purchases_value < Decimal("0.00"):
         purchases_value = Decimal("0.00")
 
-    # Opening stock
-    opening_stock_value = get_previous_close_stock_value(day_date)
+    # Opening stock = previous day's closing stock
+    opening_stock_value = get_previous_close_stock_value(day_date, allow_live_fallback=True)
     if opening_stock_value < Decimal("0.00"):
         opening_stock_value = Decimal("0.00")
 
-    # Gross profit
     gross_profit = (sales_excl_vat - cogs).quantize(
         Decimal("0.01"),
         rounding=ROUND_HALF_UP
     )
 
-    # Closing stock
     closing_stock_value = (opening_stock_value + purchases_value - cogs).quantize(
         Decimal("0.01"),
         rounding=ROUND_HALF_UP
@@ -605,6 +613,118 @@ def calculate_day_stock_summary(day_date):
         "gross_profit": gross_profit,
         "closing_stock_value": closing_stock_value,
     }
+
+
+def build_stock_report_rows(start_date=None, end_date=None):
+    """
+    Rebuild the displayed report as a running chain.
+    This protects the view even if an old DayClose row had a wrong opening stock.
+    """
+    qs = DayClose.objects.select_related("closed_by").order_by("close_date")
+
+    if start_date and end_date:
+        if end_date < start_date:
+            start_date, end_date = end_date, start_date
+        qs = qs.filter(close_date__range=(start_date, end_date))
+    elif start_date:
+        qs = qs.filter(close_date__gte=start_date)
+    elif end_date:
+        qs = qs.filter(close_date__lte=end_date)
+
+    rows = list(qs)
+
+    # Baseline opening for the first displayed row:
+    # previous close before the range, or live stock if nothing exists.
+    baseline_opening = None
+    if rows:
+        first_date = rows[0].close_date
+        baseline_opening = get_previous_close_stock_value(first_date, allow_live_fallback=True)
+
+    rebuilt = []
+    running_opening = baseline_opening if baseline_opening is not None else Decimal("0.00")
+
+    for row in rows:
+        opening = safe_decimal(running_opening)
+        purchases = safe_decimal(row.purchases_value)
+        cogs = safe_decimal(row.cogs)
+
+        sales_excl_vat = safe_decimal(row.sales_excl_vat)
+        sales_incl_vat = safe_decimal(row.sales_incl_vat)
+        vat_total = safe_decimal(row.vat_total)
+        gross_profit = safe_decimal(row.gross_profit)
+
+        closing = (opening + purchases - cogs).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+        if closing < Decimal("0.00"):
+            closing = Decimal("0.00")
+
+        rebuilt.append(SimpleNamespace(
+            close_date=row.close_date,
+            opening_stock_value=opening,
+            purchases_value=purchases,
+            sales_excl_vat=sales_excl_vat,
+            sales_incl_vat=sales_incl_vat,
+            vat_total=vat_total,
+            cogs=cogs,
+            gross_profit=gross_profit,
+            closing_stock_value=closing,
+            closed_by=row.closed_by,
+            closed_at=row.closed_at,
+            note=row.note,
+            cash_total=safe_decimal(row.cash_total),
+            ebt_total=safe_decimal(row.ebt_total),
+            card_total=safe_decimal(row.card_total),
+            debt_total=safe_decimal(row.debt_total),
+            total_sales=safe_decimal(row.total_sales),
+            transaction_count=row.transaction_count,
+        ))
+
+        running_opening = closing
+
+    return rebuilt
+
+
+@login_required(login_url="/user/login/")
+def stock_report(request):
+    start_raw = request.GET.get("start_date", "")
+    end_raw = request.GET.get("end_date", "")
+
+    start_date = _date_from_str(start_raw)
+    end_date = _date_from_str(end_raw)
+
+    # Rebuild rows in a proper running chain
+    rebuilt_rows = build_stock_report_rows(start_date=start_date, end_date=end_date)
+
+    paginator = Paginator(rebuilt_rows, 25)
+    page_number = request.GET.get("page", 1)
+
+    try:
+        page_obj = paginator.page(page_number)
+    except PageNotAnInteger:
+        page_obj = paginator.page(1)
+    except EmptyPage:
+        page_obj = paginator.page(paginator.num_pages)
+
+    get_copy = request.GET.copy()
+    if "page" in get_copy:
+        del get_copy["page"]
+
+    extra_qs = ""
+    if get_copy:
+        extra_qs = "&" + urlencode(get_copy)
+
+    return render(request, "transaction/stock_report.html", {
+        "rows": page_obj.object_list,
+        "page_obj": page_obj,
+        "paginator": paginator,
+        "start_date": start_date,
+        "end_date": end_date,
+        "is_filtered": bool(start_date or end_date),
+        "extra_qs": extra_qs,
+        "total_rows": len(rebuilt_rows),
+    })
+
+
+
 
 # ============================================================
 # Forms / Printer
@@ -951,59 +1071,6 @@ from django.db import connection
 from decimal import InvalidOperation
 
 
-
-
-@login_required(login_url="/user/login/")
-def stock_report(request):
-    start_raw = request.GET.get("start_date", "")
-    end_raw = request.GET.get("end_date", "")
-
-    start_date = _date_from_str(start_raw)
-    end_date = _date_from_str(end_raw)
-
-    qs = DayClose.objects.select_related("closed_by").order_by("-close_date")
-    is_filtered = False
-
-    if start_date and end_date:
-        if end_date < start_date:
-            start_date, end_date = end_date, start_date
-        qs = qs.filter(close_date__range=(start_date, end_date))
-        is_filtered = True
-    elif start_date:
-        qs = qs.filter(close_date__gte=start_date)
-        is_filtered = True
-    elif end_date:
-        qs = qs.filter(close_date__lte=end_date)
-        is_filtered = True
-
-    paginator = Paginator(qs, 25)
-    page_number = request.GET.get("page", 1)
-
-    try:
-        page_obj = paginator.page(page_number)
-    except PageNotAnInteger:
-        page_obj = paginator.page(1)
-    except EmptyPage:
-        page_obj = paginator.page(paginator.num_pages)
-
-    get_copy = request.GET.copy()
-    if "page" in get_copy:
-        del get_copy["page"]
-
-    extra_qs = ""
-    if get_copy:
-        extra_qs = "&" + urlencode(get_copy)
-
-    return render(request, "transaction/stock_report.html", {
-        "rows": page_obj.object_list,
-        "page_obj": page_obj,
-        "paginator": paginator,
-        "start_date": start_date,
-        "end_date": end_date,
-        "is_filtered": is_filtered,
-        "extra_qs": extra_qs,
-        "total_rows": qs.count(),
-    })
 
 @login_required(login_url="/user/login/")
 def day_close_history(request):
