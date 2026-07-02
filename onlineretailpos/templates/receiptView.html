@@ -136,7 +136,11 @@ Transaction Receipt | Online Retail POS
 
     </div>
 </div>
+{% endblock content %}
 
+
+{% block script %}
+<!-- OFFLINE LOCAL QZ TRAY SCRIPT ONLY -->
 <script src="{% static 'vendor/qz/qz-tray.js' %}"></script>
 
 <script>
@@ -247,7 +251,10 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         setStatus("Connecting to QZ Tray...", false);
-        printBtn.disabled = true;
+
+        if (printBtn) {
+            printBtn.disabled = true;
+        }
 
         connectQz()
             .then(function () {
@@ -298,7 +305,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 alert("Printing error: " + err);
             })
             .finally(function () {
-                printBtn.disabled = false;
+                if (printBtn) {
+                    printBtn.disabled = false;
+                }
             });
     }
 
@@ -313,4 +322,4 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 </script>
-{% endblock content %}
+{% endblock script %}

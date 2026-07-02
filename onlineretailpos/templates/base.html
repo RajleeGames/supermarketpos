@@ -11,25 +11,24 @@
 
     <title>{% block title %}Online Retail POS{% endblock %}</title>
 
-    <!-- Custom fonts for this template-->
+    <!-- OFFLINE LOCAL CSS ONLY -->
     <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
-
-    <!-- Custom styles for this template-->
     <link href="{% static 'css/sb-admin-2.min.css' %}" rel="stylesheet">
+
+    <!-- Optional local DataTables CSS.
+         This is local, not internet. Safe for offline. -->
     <link href="{% static 'vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
 
-    <link href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.12.1/datatables.min.css"/>
-
-    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.12.1/datatables.min.js"></script>
+    {% block extra_css %}
+    {% endblock %}
 
     <style>
         * {
             box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
         }
 
         .openBtn {
@@ -114,17 +113,27 @@
         .endday-link i {
             color: #ffe08a;
         }
+
+        /* Helps POS/register pages feel better on small screens */
+        #content-wrapper {
+            min-width: 0;
+        }
+
+        #content {
+            min-width: 0;
+        }
     </style>
 </head>
 
 <body id="page-top">
 
-    <audio id="notification-audio" preload="auto" autoplay>
+    <audio id="notification-audio" preload="auto">
         <source src="{% static 'note.mp3' %}" type="audio/mpeg">
     </audio>
 
     <!-- Page Wrapper -->
     <div id="wrapper">
+
         {% block sidebar %}
         <!-- Sidebar -->
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion toggled" id="accordionSidebar">
@@ -208,6 +217,7 @@
 
                 <div id="collapseFinancials" class="collapse" aria-labelledby="headingFinancials" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
+
                         <a class="collapse-item" href="{% url 'expenses_add' %}">
                             <i class="fas fa-fw fa-plus-circle"></i>
                             <span class="menu-text">Add Expense</span>
@@ -219,9 +229,9 @@
                         </a>
 
                         <a class="collapse-item" href="{% url 'stock_report' %}">
-            <i class="fas fa-fw fa-warehouse text-primary"></i>
-            <span class="menu-text">Stock Report</span>
-        </a>
+                            <i class="fas fa-fw fa-warehouse text-primary"></i>
+                            <span class="menu-text">Stock Report</span>
+                        </a>
 
                         <a class="collapse-item" href="{% url 'debts_list' %}">
                             <i class="fas fa-fw fa-file-invoice"></i>
@@ -232,6 +242,7 @@
                             <i class="fas fa-fw fa-history"></i>
                             <span class="menu-text">End Day History</span>
                         </a>
+
                     </div>
                 </div>
             </li>
@@ -270,14 +281,18 @@
 
             <hr class="sidebar-divider">
             {% endif %}
+
         </ul>
         {% endblock %}
 
         <div id="content-wrapper" class="d-flex flex-column">
+
             <!-- Main Content -->
             <div id="content">
+
                 {% block navbar %}
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
                     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                         <i class="fa fa-bars"></i>
                     </button>
@@ -286,8 +301,10 @@
                     {% endblock %}
 
                     <ul class="navbar-nav ml-auto">
+
                         {% if user.is_authenticated %}
                         <li class="nav-item dropdown no-arrow">
+
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-800 md-primary">
@@ -298,6 +315,7 @@
 
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in p-1"
                                  aria-labelledby="userDropdown" style="background:#e0e0e0">
+
                                 <hr class="m-1">
 
                                 <a class="h6 dropdown-item p-3 text-dark m-0" href="{% url 'change_password' %}" style="min-width:200px">
@@ -313,10 +331,14 @@
                                 </a>
 
                                 <hr class="m-1">
+
                             </div>
+
                         </li>
                         {% endif %}
+
                     </ul>
+
                 </nav>
                 {% endblock %}
 
@@ -324,33 +346,29 @@
                     {% block content %}
                     {% endblock %}
                 </div>
+
             </div>
         </div>
+
     </div>
 
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
 
-    <!-- Bootstrap core JavaScript-->
+    <!-- OFFLINE LOCAL JAVASCRIPT ONLY -->
     <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
     <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-
-    <!-- Core plugin JavaScript-->
     <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
-
-    <!-- Custom scripts for all pages-->
     <script src="{% static 'js/sb-admin-2.min.js' %}"></script>
 
-    <!-- Data Table plugins -->
+    <!-- Optional local DataTables JS.
+         This is local, not internet. Safe for offline. -->
     <script src="{% static 'vendor/datatables/jquery.dataTables.min.js' %}"></script>
     <script src="{% static 'vendor/datatables/dataTables.bootstrap4.min.js' %}"></script>
 
-    <!-- Page level custom scripts -->
-    <script src="{% static 'js/demo/datatables-demo.js' %}"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/qz-tray@2.2.4/qz-tray.js"></script>
-
+    <!-- Page-specific scripts go here.
+         Put QZ Tray, Plotly, JQuery UI, or dashboard scripts inside the page that needs them only. -->
     {% block script %}
     {% endblock %}
 
