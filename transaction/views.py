@@ -6,11 +6,12 @@ from urllib.parse import urlencode
 import traceback
 import json
 import base64
+from pathlib import Path
+
 from django.http import Http404, HttpResponse, HttpResponseBadRequest, JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 from Crypto.PublicKey import RSA
 from Crypto.Signature import pkcs1_15
-from Crypto.Hash import SHA256
+from Crypto.Hash import SHA512
 import pandas as pd
 from inventory.models import Product, InventoryHistory
 from django import forms
@@ -27,7 +28,8 @@ from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse
 from django.utils import timezone as dj_timezone
 from django.utils.safestring import mark_safe
-from django.views.decorators.http import require_POST
+from django.views.decorators.cache import never_cache
+from django.views.decorators.http import require_GET, require_POST
 
 from escpos.printer import Usb
 
@@ -1086,11 +1088,21 @@ def day_close_history(request):
 # Receipt Views
 # ============================================================
 
+@login_required(login_url="/user/login/")
 def transactionReceipt(request, transNo):
+    """
+    Display one saved receipt and provide the configured Windows printer
+    name to receiptView.html for QZ Tray printing.
+    """
+    context = {
+        "transNo": transNo,
+        "qz_printer_name": getattr(settings, "QZ_PRINTER_NAME", "ZKP8008"),
+    }
+
     try:
         obj = transaction.objects.get(transaction_id=transNo)
-        receipt = getattr(obj, "receipt", "")
-        return render(request, "receiptView.html", {"receipt": receipt, "transNo": transNo})
+        context["receipt"] = getattr(obj, "receipt", "")
+        return render(request, "receiptView.html", context)
 
     except transaction.DoesNotExist:
         raise Http404("No Transactions Found!!!")
@@ -1102,6 +1114,7 @@ def transactionReceipt(request, transNo):
         try:
             table = transaction._meta.db_table
             sql = "SELECT receipt FROM %s WHERE transaction_id = ? LIMIT 1" % table
+
             with connection.cursor() as cursor:
                 cursor.execute(sql, [transNo])
                 row = cursor.fetchone()
@@ -1109,7 +1122,11 @@ def transactionReceipt(request, transNo):
             if not row:
                 raise Http404("No Transactions Found!!!")
 
-            return render(request, "receiptView.html", {"receipt": row[0], "transNo": transNo})
+            context["receipt"] = row[0]
+            return render(request, "receiptView.html", context)
+
+        except Http404:
+            raise
 
         except Exception as e:
             print("transactionReceipt raw fallback error:", e)
@@ -2034,62 +2051,158 @@ def debt_payments_history(request, debt_id):
     return render(request, "debt_payments_history.html", {"debt": debt, "payments": payments})
 
 
+# ============================================================
+# QZ Tray certificate and signing endpoints
+# ============================================================
+
+@never_cache
+@require_GET
 def qz_certificate(request):
     """
-    Sends public QZ certificate to browser/QZ Tray.
+    Return the public QZ Tray certificate.
+
+    The certificate is safe to send to the browser. The matching
+    private key must remain on the Django server and must never be
+    placed inside static files, templates, media, or public Git.
     """
-    try:
-        with open(settings.QZ_CERT_PATH, "r", encoding="utf-8") as f:
-            cert = f.read()
+    cert_path = Path(settings.QZ_CERT_PATH)
 
-        return HttpResponse(cert, content_type="text/plain")
-
-    except Exception as e:
+    if not cert_path.is_file():
         return HttpResponse(
-            f"Certificate error: {e}",
+            (
+                "QZ certificate was not found.\n"
+                f"Expected location:\n{cert_path}"
+            ),
             status=500,
-            content_type="text/plain"
+            content_type="text/plain; charset=utf-8",
+        )
+
+    try:
+        certificate = cert_path.read_text(encoding="utf-8").strip()
+
+        if not certificate:
+            return HttpResponse(
+                "QZ certificate file is empty.",
+                status=500,
+                content_type="text/plain; charset=utf-8",
+            )
+
+        if "BEGIN CERTIFICATE" not in certificate:
+            return HttpResponse(
+                "The QZ certificate does not appear to be a valid PEM certificate.",
+                status=500,
+                content_type="text/plain; charset=utf-8",
+            )
+
+        response = HttpResponse(
+            certificate + "\n",
+            content_type="text/plain; charset=utf-8",
+        )
+        response["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+        response["Pragma"] = "no-cache"
+        response["Expires"] = "0"
+        return response
+
+    except UnicodeDecodeError:
+        return HttpResponse(
+            "The QZ certificate must be a UTF-8 text file.",
+            status=500,
+            content_type="text/plain; charset=utf-8",
+        )
+
+    except OSError as exc:
+        return HttpResponse(
+            f"Could not read QZ certificate: {exc}",
+            status=500,
+            content_type="text/plain; charset=utf-8",
         )
 
 
-@csrf_exempt
+@login_required(login_url="/user/login/")
+@require_POST
+@never_cache
 def qz_sign(request):
     """
-    Signs QZ Tray request using private-key.pem.
-    Uses pycryptodome to avoid cryptography/PyO3 Windows issue.
-    """
-    if request.method != "POST":
-        return HttpResponseBadRequest("POST required")
+    Sign one QZ Tray request using the configured private RSA key.
 
+    The SHA512 algorithm here must match:
+        qz.security.setSignatureAlgorithm("SHA512")
+    inside receiptView.html.
+    """
+    private_key_path = Path(settings.QZ_PRIVATE_KEY_PATH)
     data_to_sign = request.body
 
+    try:
+        maximum_bytes = int(
+            getattr(settings, "QZ_MAX_SIGNING_BYTES", 1024 * 1024)
+        )
+    except (TypeError, ValueError):
+        maximum_bytes = 1024 * 1024
+
     if not data_to_sign:
-        return HttpResponseBadRequest("No data to sign")
+        return HttpResponseBadRequest(
+            "No QZ data was supplied for signing.",
+            content_type="text/plain; charset=utf-8",
+        )
+
+    if len(data_to_sign) > maximum_bytes:
+        return HttpResponse(
+            "QZ signing request is too large.",
+            status=413,
+            content_type="text/plain; charset=utf-8",
+        )
+
+    if not private_key_path.is_file():
+        return HttpResponse(
+            (
+                "QZ private key was not found.\n"
+                f"Expected location:\n{private_key_path}"
+            ),
+            status=500,
+            content_type="text/plain; charset=utf-8",
+        )
 
     try:
-        with open(settings.QZ_PRIVATE_KEY_PATH, "rb") as key_file:
-            private_key = RSA.import_key(key_file.read())
+        private_key = RSA.import_key(private_key_path.read_bytes())
 
-        digest = SHA256.new(data_to_sign)
+        if not private_key.has_private():
+            return HttpResponse(
+                "The configured QZ key is not a private RSA key.",
+                status=500,
+                content_type="text/plain; charset=utf-8",
+            )
+
+        digest = SHA512.new(data_to_sign)
         signature = pkcs1_15.new(private_key).sign(digest)
+        encoded_signature = base64.b64encode(signature).decode("ascii")
 
-        return HttpResponse(
-            base64.b64encode(signature).decode("utf-8"),
-            content_type="text/plain"
+        response = HttpResponse(
+            encoded_signature,
+            content_type="text/plain; charset=utf-8",
         )
+        response["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+        response["Pragma"] = "no-cache"
+        response["Expires"] = "0"
+        return response
 
-    except FileNotFoundError:
+    except (ValueError, IndexError, TypeError) as exc:
         return HttpResponse(
-            "Private key not found. Put it at qz_keys/private-key.pem",
+            f"Invalid QZ private key: {exc}",
             status=500,
-            content_type="text/plain"
+            content_type="text/plain; charset=utf-8",
         )
 
-    except Exception as e:
+    except OSError as exc:
         return HttpResponse(
-            f"Signing error: {e}",
+            f"Could not read QZ private key: {exc}",
             status=500,
-            content_type="text/plain"
+            content_type="text/plain; charset=utf-8",
         )
-    
-    
+
+    except Exception as exc:
+        return HttpResponse(
+            f"QZ signing failed: {exc}",
+            status=500,
+            content_type="text/plain; charset=utf-8",
+        )
+

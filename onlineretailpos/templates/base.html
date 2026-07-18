@@ -150,7 +150,7 @@
 
             <!-- Dashboards -->
             <li class="nav-item" style="padding-top:20px;padding-bottom:20px">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseDashboards" aria-expanded="true" aria-controls="collapseDashboards">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseDashboards" aria-expanded="false" aria-controls="collapseDashboards">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span class="menu-text">Dashboards</span>
                 </a>
@@ -210,7 +210,7 @@
             </div>
 
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFinancials" aria-expanded="true" aria-controls="collapseFinancials">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFinancials" aria-expanded="false" aria-controls="collapseFinancials">
                     <i class="fas fa-fw fa-file-invoice-dollar"></i>
                     <span class="menu-text">Financials</span>
                 </a>
@@ -366,6 +366,97 @@
          This is local, not internet. Safe for offline. -->
     <script src="{% static 'vendor/datatables/jquery.dataTables.min.js' %}"></script>
     <script src="{% static 'vendor/datatables/dataTables.bootstrap4.min.js' %}"></script>
+
+    <!--
+        OFFLINE SIDEBAR COLLAPSE FIX
+
+        This keeps the original SB Admin 2 design and markup. It handles only
+        sidebar collapse links with native JavaScript, so Dashboards and
+        Financials still work even when Bootstrap's collapse plugin is blocked,
+        cached incorrectly, or unavailable in the packaged EXE.
+    -->
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        "use strict";
+
+        const sidebar = document.getElementById("accordionSidebar");
+
+        if (!sidebar) {
+            return;
+        }
+
+        const collapseToggles = sidebar.querySelectorAll(
+            'a[data-toggle="collapse"][data-target]'
+        );
+
+        function closeCollapse(toggle, target) {
+            target.classList.remove("show");
+            toggle.classList.add("collapsed");
+            toggle.setAttribute("aria-expanded", "false");
+        }
+
+        function openCollapse(toggle, target) {
+            target.classList.add("show");
+            toggle.classList.remove("collapsed");
+            toggle.setAttribute("aria-expanded", "true");
+        }
+
+        collapseToggles.forEach(function (toggle) {
+            toggle.setAttribute("aria-expanded", "false");
+            toggle.classList.add("collapsed");
+
+            toggle.addEventListener(
+                "click",
+                function (event) {
+                    /*
+                     * Stop Bootstrap's delegated collapse listener from also
+                     * toggling the same menu. This prevents a double-toggle.
+                     */
+                    event.preventDefault();
+                    event.stopPropagation();
+                    event.stopImmediatePropagation();
+
+                    const selector = toggle.getAttribute("data-target");
+                    const target = selector
+                        ? document.querySelector(selector)
+                        : null;
+
+                    if (!target) {
+                        return;
+                    }
+
+                    const shouldOpen = !target.classList.contains("show");
+
+                    /* Keep the original accordion behaviour: one open menu. */
+                    sidebar.querySelectorAll(".collapse.show").forEach(
+                        function (openTarget) {
+                            if (openTarget === target) {
+                                return;
+                            }
+
+                            const openToggle = sidebar.querySelector(
+                                'a[data-target="#' + openTarget.id + '"]'
+                            );
+
+                            if (openToggle) {
+                                closeCollapse(openToggle, openTarget);
+                            } else {
+                                openTarget.classList.remove("show");
+                            }
+                        }
+                    );
+
+                    if (shouldOpen) {
+                        openCollapse(toggle, target);
+                    } else {
+                        closeCollapse(toggle, target);
+                    }
+                },
+                true
+            );
+        });
+    });
+    </script>
 
     <!-- Page-specific scripts go here.
          Put QZ Tray, Plotly, JQuery UI, or dashboard scripts inside the page that needs them only. -->
